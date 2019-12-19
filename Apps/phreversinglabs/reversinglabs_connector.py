@@ -49,7 +49,7 @@ class ReversinglabsConnector(BaseConnector):
         # Create a hash of a random string
         random_string = phantom.get_random_chars(size=10)
 
-        md5_hash = hashlib.md5(random_string).hexdigest()
+        md5_hash = hashlib.md5(random_string.encode('utf-8')).hexdigest()
 
         self.save_progress(REVERSINGLABS_GENERATED_RANDOM_HASH)
 
