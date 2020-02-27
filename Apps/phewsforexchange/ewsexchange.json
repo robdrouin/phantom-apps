@@ -1,0 +1,1480 @@
+{
+    "product_version_regex": ".*",
+    "python_version": "2.7",
+    "package_name": "phantom_ewsexchange",
+    "actions": [{
+            "read_only": true,
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "parameters": {},
+            "versions": "EQ(*)",
+            "action": "test connectivity",
+            "output": [],
+            "identifier": "test_asset_connectivity",
+            "type": "test"
+        }, {
+            "read_only": true,
+            "description": "Search emails",
+            "parameters": {
+                "body": {
+                    "required": false,
+                    "primary": false,
+                    "description": "Substring to search in Body",
+                    "data_type": "string",
+                    "order": 4
+                },
+                "internet_message_id": {
+                    "required": false,
+                    "description": "Internet Message ID",
+                    "data_type": "string",
+                    "contains": ["internet message id"],
+                    "primary": true,
+                    "order": 5
+                },
+                "sender": {
+                    "contains": ["email"],
+                    "description": "Sender Email address to match",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 3
+                },
+                "ignore_subfolders": {
+                    "description": "Ignore subfolders",
+                    "data_type": "boolean",
+                    "order": 7
+                },
+                "range": {
+                    "default": "0-10",
+                    "description": "Email range to return (min_offset-max_offset)",
+                    "data_type": "string",
+                    "order": 6
+                },
+                "is_public_folder": {
+                    "default": false,
+                    "required": false,
+                    "description": "Mailbox folder is a public folder",
+                    "data_type": "boolean",
+                    "order": 8
+                },
+                "query": {
+                    "required": false,
+                    "primary": true,
+                    "description": "AQS string",
+                    "data_type": "string",
+                    "order": 5
+                },
+                "folder": {
+                    "required": false,
+                    "description": "Folder Name/Path (to search in)",
+                    "data_type": "string",
+                    "default": "Inbox",
+                    "contains": ["mail folder", "mail folder path"],
+                    "order": 1
+                },
+                "email": {
+                    "contains": ["email"],
+                    "description": "User's Email (Mailbox to search in)",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "subject": {
+                    "required": false,
+                    "description": "Substring to search in Subject",
+                    "data_type": "string",
+                    "order": 2
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Run Query"
+            },
+            "action": "run query",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.body",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string"
+                }, {
+                    "contains": ["mail folder", "mail folder path"],
+                    "data_path": "action_result.parameter.folder",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.ignore_subfolders",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["internet message id"],
+                    "data_path": "action_result.parameter.internet_message_id",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.is_public_folder",
+                    "data_type": "boolean"
+                }, {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.range",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.sender",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.subject",
+                    "data_type": "string"
+                }, {
+                    "contains": ["mail folder"],
+                    "column_order": 3,
+                    "data_path": "action_result.data.*.folder",
+                    "data_type": "string",
+                    "column_name": "Folder"
+                }, {
+                    "contains": ["mail folder path"],
+                    "column_order": 4,
+                    "data_path": "action_result.data.*.folder_path",
+                    "data_type": "string",
+                    "column_name": "Folder Path"
+                }, {
+                    "column_order": 2,
+                    "data_path": "action_result.data.*.t_DateTimeReceived",
+                    "data_type": "string",
+                    "column_name": "Received Time"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_MailboxType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_Name",
+                    "data_type": "string"
+                }, {
+                    "column_order": 5,
+                    "contains": ["internet message id"],
+                    "data_path": "action_result.data.*.t_InternetMessageId",
+                    "data_type": "string",
+                    "column_name": "Internet Message ID"
+                }, {
+                    "data_path": "action_result.data.*.t_ItemId.@ChangeKey",
+                    "data_type": "string"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 6,
+                    "data_path": "action_result.data.*.t_ItemId.@Id",
+                    "data_type": "string",
+                    "column_name": "Message ID"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_MailboxType",
+                    "data_type": "string"
+                }, {
+                    "column_order": 1,
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_Name",
+                    "data_type": "string",
+                    "column_name": "Sender"
+                }, {
+                    "column_order": 0,
+                    "data_path": "action_result.data.*.t_Subject",
+                    "data_type": "string",
+                    "column_name": "Subject"
+                }, {
+                    "data_path": "action_result.summary.emails_matched",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "run_query",
+            "type": "investigate",
+            "verbose": "The <b>run query</b> action provides more than one method to search a user's mailbox:<br><ul><li>Simple Search<br>Use the <b>subject</b> and <b>body</b> parameters to search for substring matches. The <b>sender</b> parameter can be used to search for emails from a specific address. However it has been noticed that a match with the <b>sender</b> email address fails for emails that have been never sent or received, but instead have been created manually as a draft and copied to the searched mailbox. In such cases an AQS is a better option. If more than one parameter is specified, the search is an <b>And</b> of the given values including the <b>internet_message_id</b>.<br> <b>Simple Search</b> implements search filters. More details regarding search filters can be found on this <a href=\"https://msdn.microsoft.com/en-us/library/office/dn579422(v=exchg.150).aspx\">MSDN Link</a>.<br></li><li>Query Search<br>For a more fine-grained email search, the use of the <b>query</b> parameter is recommended. If this parameter is specified, the <b>subject</b>, <b>sender</b>, <b>internet_message_id</b> and <b>body</b> parmeters are ignored.<br>This parameter supports AQS queries to search in a Mailbox. More details regarding AQS keywords supported by Exchange can be found on this <a href=\"https://msdn.microsoft.com/en-us/library/office/dn579420(v=exchg.150).aspx\">MSDN Link.</a><br>Searching with AQS strings does have one notable restriction, however. The AQS search string will only match substrings from the start of a word. If a substring needs to be found in the middle of a word, use a <b>Simple Search</b>.<br>Some examples:<br><ul><li>All emails from user1@contoso.com or user2@contoso.com<br>from:user1@contoso.com OR from:user2@contoso.com</li><li>All emails containing the string <i>free vacations</i><br>body: free vacations</li><li>This will match an email with subject containing the word <i>Details</i> but not <i>Cadet</i><br>subject:det</li></li></ul></ul>If the <b>folder</b> parameter is not specified, each email based folder such as Inbox, Sent etc. will be searched, including the children (nested) folders.<br>The action supports searching a folder that is nested within another.<br>To search in such a folder, specify the complete path using the <b>'/'</b> (forward slash) as the separator.<br>For e.g. to search in a folder named <i>phishing</i> which is nested within (a child of) <i>Inbox</i>, set the value as <b>Inbox/phishing</b>.<br>NOTE: In some cases search results may return more emails than are visible in an email client. This is due to emails that have been just deleted, but not yet completely cleaned by the server.<br><br>The action supports limiting the number of emails returned using the <b>range</b> parameter. The input should be of the form <i>min_offset</i>-<i>max_offset</i>. The results are always sorted in <i>descending</i> order to place the latest emails at the top. For example to get the latest 10 emails that matched the filter, specify the range as 0-9. If multiple folders are searched for, then the range will be applied for each folder.<br>So if the folder being searched for example <i>Inbox</i> has a child (nested) folder called <i>phishing</i> and the range specified is 2-10, then the action will return 9 max emails for each folder. If the range parameter is not specified by default the action will use <b>0-10</b>.<br><br>NOTE: The <b>email</b> parameter is required.<br><br>Many actions such as <b>delete email</b> and <b>copy email</b> require the <b>exchange email ID</b> as input. Many times this value is not easily available, since not many email clients display it. However every email header has a value called <b>Message-ID</b> assigned to it. It's usually something like &lt;tS10Ncty2SyeJsjdNMsxV+dguQ+jd7RwiFgmZsLN@contoso.com&gt;. Use this as the value (including the &lt; and &gt; chars if present) of <b>internet_message_id</b> parameter and execute the action. The results will contain the <b>exchange email ID</b> of an email, which can be used as input for other actions."
+        }, {
+            "read_only": false,
+            "description": "Delete emails",
+            "parameters": {
+                "id": {
+                    "allow_list": true,
+                    "contains": ["exchange email id"],
+                    "description": "Message IDs to delete (comma separated values supported)",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "email": {
+                    "contains": ["email"],
+                    "description": "Email of the mailbox owner (used during impersonation)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 1
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Delete Email"
+            },
+            "action": "delete email",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 0,
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "column_name": "Message ID"
+                }, {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }, {
+                    "column_order": 1,
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Status Message"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "delete_email",
+            "type": "contain",
+            "verbose": "This action supports a comma separated list of message IDs as input. This results in multiple emails getting deleted in a single call to the server. If impersonation is enabled on the asset, the <b>email</b> parameter is required, else <b>email</b> will be ignored.<br>The action requires the exchange email ID as input. Many times this value is not easily available, since not many email clients display it. However every email header has a value called <b>Message-ID</b> assigned to it. It's usually something like &lt;tS10Ncty2SyeJsjdNMsxV+dguQ+jd7RwiFgmZsLN@contoso.com&gt;. Use this <b>Internet Message ID</b> as input to the <b>run query</b> action to get the <b>exchange email ID</b> of an email."
+        }, {
+            "read_only": false,
+            "description": "Copy an email to a folder",
+            "parameters": {
+                "is_public_folder": {
+                    "default": false,
+                    "required": false,
+                    "description": "Mailbox folder is a public folder",
+                    "data_type": "boolean",
+                    "order": 6
+                },
+                "id": {
+                    "contains": ["exchange email id"],
+                    "description": "Message ID to copy",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "email": {
+                    "contains": ["email"],
+                    "description": "Destination Mailbox (Email)",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 2
+                },
+                "dont_impersonate": {
+                    "description": "Don't use impersonation",
+                    "data_type": "boolean",
+                    "default": false,
+                    "required": false,
+                    "primary": false,
+                    "order": 5
+                },
+                "impersonate_email": {
+                    "required": false,
+                    "description": "Impersonation Email",
+                    "data_type": "string",
+                    "contains": ["email"],
+                    "primary": false,
+                    "order": 4
+                },
+                "ph": {
+                    "order": 1,
+                    "data_type": "ph"
+                },
+                "folder": {
+                    "required": true,
+                    "description": "Destination Mail Folder Name/Path",
+                    "data_type": "string",
+                    "contains": ["mail folder", "mail folder path"],
+                    "primary": true,
+                    "order": 3
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Copy Email"
+            },
+            "action": "copy email",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.dont_impersonate",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["email"],
+                    "column_order": 0,
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string",
+                    "column_name": "User Email"
+                }, {
+                    "contains": ["mail folder", "mail folder path"],
+                    "column_order": 1,
+                    "data_path": "action_result.parameter.folder",
+                    "data_type": "string",
+                    "column_name": "Folder"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 2,
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "column_name": "Source Message ID"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.impersonate_email",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.is_public_folder",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 3,
+                    "data_path": "action_result.data.*.new_email_id",
+                    "data_type": "string",
+                    "column_name": "Destination Message ID"
+                }, {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }, {
+                    "column_order": 4,
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Status Message"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "copy_email",
+            "type": "generic",
+            "verbose": "The action supports copying to a folder that is nested within another.<br>To copy to such a folder, specify the complete path using the <b>'/'</b> (forward slash) as the separator.<br>For example, to copy email to a folder named <i>phishing</i> which is nested within <i>Inbox</i>, set the value as <b>Inbox/phishing</b>.<br>The action requires the exchange email ID as input. Many times this value is not easily available, since not many email clients display it. However every email header has a value called <b>Message-ID</b> assigned to it. It's usually something like &lt;tS10Ncty2SyeJsjdNMsxV+dguQ+jd7RwiFgmZsLN@contoso.com&gt;. Use this <b>Internet Message ID</b> as input to the <b>run query</b> action to get the <b>exchange email ID</b> of an email.<br>The action will return the ID of the newly copied email in the data path <b>action_result.data.*.new_email_id</b>, however this value is not available for cross-mailbox or mailbox to public folder <b>copy email</b> actions (please see the documentation of the <a href=\"https://msdn.microsoft.com/en-us/library/office/aa565012(v=exchg.150).aspx\">CopyItem operation on MSDN</a>). However in such scenarios, do a <b>run query</b> on the new mailbox plus folder with a specific parameter like <b>Internet Message ID</b> to get the <b>Exchange email ID</b>.<br><br><b>Impersonation</b><p>Impersonation plays a big role in the <b>copy email</b> action, for reasons explained in this section, <b>copy email</b> is the only action that overrides the asset config parameter <b>use_impersonation</b>. By default, the action will <i>impersonate</i> the user specified in the <b>email</b> parameter, if impersonation is enabled (by setting the <b>dont_impersonate</b> action parameter to False or Unchecked).<br>However depending on the server configuration, this action might fail with an <i>Access Denied</i> error. If an email is being copied from one folder to another in the same mailbox, the action will succeed, however if the email is being copied from one mailbox's folder to a different mailbox, the impersonated user will require access to both the mailboxes. In this case the action might require to impersonate a user other than the one specified in the <b>email</b> parameter. In such a scenario use the <b>impersonate_email</b> to specify an alternate email to <i>impersonate</i>.<br>Set the <b>dont_impersonate</b> parameter to <b>True</b> to disable impersonation all together. This value will override the one configured on the asset. The default value of this param is <b>False</b>.</p>"
+        }, {
+            "read_only": false,
+            "description": "Move an email to a folder",
+            "parameters": {
+                "is_public_folder": {
+                    "default": false,
+                    "required": false,
+                    "description": "Mailbox folder is a public folder",
+                    "data_type": "boolean",
+                    "order": 6
+                },
+                "id": {
+                    "contains": ["exchange email id"],
+                    "description": "Message ID to move",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "email": {
+                    "contains": ["email"],
+                    "description": "Destination Mailbox (Email)",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 2
+                },
+                "dont_impersonate": {
+                    "description": "Don't use impersonation",
+                    "data_type": "boolean",
+                    "default": false,
+                    "required": false,
+                    "primary": false,
+                    "order": 5
+                },
+                "impersonate_email": {
+                    "required": false,
+                    "description": "Impersonation Email",
+                    "data_type": "string",
+                    "contains": ["email"],
+                    "primary": false,
+                    "order": 4
+                },
+                "ph": {
+                    "order": 1,
+                    "data_type": "ph"
+                },
+                "folder": {
+                    "required": true,
+                    "description": "Destination Mail Folder Name/Path",
+                    "data_type": "string",
+                    "contains": ["mail folder", "mail folder path"],
+                    "primary": true,
+                    "order": 3
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "Copy Email"
+            },
+            "action": "move email",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.dont_impersonate",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["email"],
+                    "column_order": 0,
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string",
+                    "column_name": "User Email"
+                }, {
+                    "contains": ["mail folder", "mail folder path"],
+                    "column_order": 1,
+                    "data_path": "action_result.parameter.folder",
+                    "data_type": "string",
+                    "column_name": "Folder"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 2,
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "column_name": "Source Message ID"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.impersonate_email",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.is_public_folder",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 3,
+                    "data_path": "action_result.data.*.new_email_id",
+                    "data_type": "string",
+                    "column_name": "Destination Message ID"
+                }, {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                }, {
+                    "column_order": 4,
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Status Message"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "move_email",
+            "type": "generic",
+            "verbose": "The action supports moving an email to a folder that is nested within another.<br>To move to such a folder, specify the complete path using the <b>'/'</b> (forward slash) as the separator.<br>For example, to move email to a folder named <i>phishing</i> which is nested within <i>Inbox</i>, set the value as <b>Inbox/phishing</b>.<br>The action requires the exchange email ID as input. Many times this value is not easily available, since not many email clients display it. However every email header has a value called <b>Message-ID</b> assigned to it. It's usually something like &lt;tS10Ncty2SyeJsjdNMsxV+dguQ+jd7RwiFgmZsLN@contoso.com&gt;. Use this <b>Internet Message ID</b> as input to the <b>run query</b> action to get the <b>exchange email ID</b> of an email.<br>The action will return the ID of the newly copied email in the data path <b>action_result.data.*.new_email_id</b>, however this value is not available for cross-mailbox or mailbox to public folder <b>move email</b> actions (please see the documentation of the <a href=\"https://msdn.microsoft.com/en-us/library/office/aa565012(v=exchg.150).aspx\">MoveItem operation on MSDN</a>). However in such scenarios, do a <b>run query</b> on the new mailbox plus folder with a specific parameter like <b>Internet Message ID</b> to get the <b>Exchange email ID</b>.<br><br><b>Impersonation</b><p>Impersonation plays a big role in the <b>move email</b> action, for reasons explained in this section, <b>move email</b> is the only action that overrides the asset config parameter <b>use_impersonation</b>. By default, the action will <i>impersonate</i> the user specified in the <b>email</b> parameter, if impersonation is enabled (by setting the <b>dont_impersonate</b> action parameter to False or Unchecked).<br>However depending on the server configuration, this action might fail with an <i>Access Denied</i> error. If an email is being copied from one folder to another in the same mailbox, the action will succeed, however if the email is being copied from one mailbox's folder to a different mailbox, the impersonated user will require access to both the mailboxes. In this case the action might require to impersonate a user other than the one specified in the <b>email</b> parameter. In such a scenario use the <b>impersonate_email</b> to specify an alternate email to <i>impersonate</i>.<br>Set the <b>dont_impersonate</b> parameter to <b>True</b> to disable impersonation all together. This value will override the one configured on the asset. The default value of this param is <b>False</b>.</p>"
+        }, {
+            "read_only": true,
+            "description": "Get an email from the server",
+            "parameters": {
+                "ingest_email": {
+                    "description": "Create containers and artifacts",
+                    "data_type": "boolean",
+                    "default": false,
+                    "required": false,
+                    "primary": false,
+                    "order": 4
+                },
+                "use_current_container": {
+                    "description": "Create artifacts in the same container",
+                    "data_type": "boolean",
+                    "default": false,
+                    "required": false,
+                    "primary": false,
+                    "order": 5
+                },
+                "container_id": {
+                    "allow_list": false,
+                    "contains": ["phantom container id"],
+                    "description": "Container ID to get email data from",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": true,
+                    "order": 2
+                },
+                "email": {
+                    "contains": ["email"],
+                    "description": "Email of the mailbox owner (used during impersonation)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 1
+                },
+                "vault_id": {
+                    "allow_list": true,
+                    "contains": ["vault id"],
+                    "description": "Vault ID to get email from",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 3
+                },
+                "id": {
+                    "allow_list": true,
+                    "contains": ["exchange email id"],
+                    "description": "Message ID to get",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "height": 5,
+                "width": 12,
+                "view": "ewsonprem_view.display_email",
+                "type": "custom",
+                "title": "Get Email"
+            },
+            "action": "get email",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "contains": ["phantom container id"],
+                    "data_path": "action_result.parameter.container_id",
+                    "data_type": "numeric"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string"
+                }, {
+                    "contains": ["exchange email id"],
+                    "column_order": 3,
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "column_name": "Email ID"
+                }, {
+                    "data_path": "action_result.parameter.ingest_email",
+                    "data_type": "boolean"
+                }, {
+                    "data_path": "action_result.parameter.use_current_container",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["vault id"],
+                    "data_path": "action_result.parameter.vault_id",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Content-Type",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Date",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Delivered-To",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.From",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Importance",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.MIME-Version",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Mail-Filter-Gateway",
+                    "data_type": "string"
+                }, {
+                    "contains": ["internet message id"],
+                    "data_path": "action_result.data.*.Message-ID",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Received",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Return-Path",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Sender",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.Subject",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.To",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Account-Key",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-CTCH-RefID",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.X-Mail-Filter-Gateway-From",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Mail-Filter-Gateway-ID",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Mail-Filter-Gateway-SpamDetectionEngine",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Mail-Filter-Gateway-SpamScore",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.X-Mail-Filter-Gateway-To",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Mailer",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-MimeOLE",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Mozilla-Keys",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Priority",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-SOHU-Antispam-Bayes",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-SOHU-Antispam-Language",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-Spam-Status",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.X-UIDL",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Body.#text",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Body.@BodyType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_DateTimeCreated",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_DateTimeReceived",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_DateTimeSent",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_EmailAddress",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_MailboxType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_Name",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_RoutingType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_HasAttachments",
+                    "data_type": "string"
+                }, {
+                    "contains": ["internet message id"],
+                    "data_path": "action_result.data.*.t_InternetMessageId",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsAssociated",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsDeliveryReceiptRequested",
+                    "data_type": "boolean"
+                }, {
+                    "data_path": "action_result.data.*.t_IsRead",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsReadReceiptRequested",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ItemId.@ChangeKey",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ItemId.@Id",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_LastModifiedTime",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_MimeContent.#text",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_MimeContent.@CharacterSet",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ResponseObjects.t_ForwardItem",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ResponseObjects.t_ReplyAllToItem",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ResponseObjects.t_ReplyToItem",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_EmailAddress",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_MailboxType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_Name",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_RoutingType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sensitivity",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Size",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Subject",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_EmailAddress",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_MailboxType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_Name",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_RoutingType",
+                    "data_type": "string"
+                }, {
+                    "contains": ["phantom container id"],
+                    "data_path": "action_result.summary.container_id",
+                    "data_type": "numeric"
+                }, {
+                    "column_order": 1,
+                    "data_path": "action_result.summary.create_time",
+                    "data_type": "string",
+                    "column_name": "Create Time"
+                }, {
+                    "contains": ["exchange email id"],
+                    "data_path": "action_result.summary.email_id",
+                    "data_type": "numeric"
+                }, {
+                    "column_order": 2,
+                    "data_path": "action_result.summary.sent_time",
+                    "data_type": "string",
+                    "column_name": "Sent Time"
+                }, {
+                    "column_order": 0,
+                    "data_path": "action_result.summary.subject",
+                    "data_type": "string",
+                    "column_name": "Subject"
+                }, {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "get_email",
+            "type": "investigate",
+            "verbose": "Every container that is created by the app has the following values:<ul><li>The container ID that is generated by the Phantom platform.</li><li>The Source ID that the app equates to the email ID on the server if known or the vault ID if asked to parse from the vault.</li><li>The raw_email data in the container's data field is set to the RFC822 format of the email.</li></ul>This action parses email data and if specified creates containers and artifacts. The email data to parse is either extracted from the remote server if an email ID is specified, from a Phantom container, if the <b>container_id</b> is specified or from the vault item if the <b>vault_id</b> is specified.<br>If all three parameters are specified, the action will use the <b>container_id</b>.<br>The data paths differ depending on where the email data is parsed from.<br><br><p>If parsed from the server:<br><ul><li>The data path <b>action_result.data.*.t_MimeContent.#text</b> contains the email in RFC822 format, but base64 encoded.</li><li>The data path <b>action_result.data.*.t_Body.#text</b> contains the email body.</li><li>The widget for this action will render a text version of the email body if possible.</li><li>If impersonation is enabled on the asset, the <b>email</b> parameter is required, else <b>email</b> will be ignored.</li></ul></p><p>If parsed from the container or vault:<br><ul><li>The widget does not render the email body.</li><li>The email headers are listed in a table.</li></ul></p><p>If <b>ingest_email</b> is set to </b>True</b>:<br><ul><li>The ID of the container created or updated will be set in the <b>action_result.summary.container_id</b> data path.</li><li>The widget will display this ID as <b>Ingested Container ID</b>.</li></ul></p>Do note that any containers and artifacts created will use the label configured in the asset.<br>The action will fail if the vault item asked to parse and ingest is not an email item."
+        }, {
+            "read_only": true,
+            "description": "Get the email addresses that make up a Distribution List",
+            "parameters": {
+                "group": {
+                    "contains": ["email", "exchange distribution list"],
+                    "description": "Distribution List to expand",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "recursive": {
+                    "required": false,
+                    "primary": false,
+                    "description": "Expand all sub distribution lists",
+                    "data_type": "boolean",
+                    "order": 1
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "width": 12,
+                "height": 5,
+                "type": "table",
+                "title": "List Addresses"
+            },
+            "action": "list addresses",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "contains": ["email", "exchange distribution list"],
+                    "data_path": "action_result.parameter.group",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.recursive",
+                    "data_type": "boolean"
+                }, {
+                    "contains": ["email"],
+                    "column_order": 0,
+                    "data_path": "action_result.data.*.t_EmailAddress",
+                    "data_type": "string",
+                    "column_name": "Email"
+                }, {
+                    "column_order": 3,
+                    "data_path": "action_result.data.*.t_MailboxType",
+                    "data_type": "string",
+                    "column_name": "Mailbox Type"
+                }, {
+                    "column_order": 1,
+                    "data_path": "action_result.data.*.t_Name",
+                    "data_type": "string",
+                    "column_name": "User Name"
+                }, {
+                    "column_order": 2,
+                    "data_path": "action_result.data.*.t_RoutingType",
+                    "data_type": "string",
+                    "column_name": "Routing Type"
+                }, {
+                    "data_path": "action_result.summary.total_entries",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "expand_dl",
+            "type": "investigate",
+            "verbose": "The <b>group</b> parameter supports, as input, the email (for e.g. dleng@corp.contoso.com) or the name (for e.g. dleng) of the distribution list.<br><br>The <b>recursive</b> parameter will cause the action to recursively search for distribution lists inside of the initial distribution lists and expand those.<br>Each discovered distribution list will be submitted as a separate set of results, causing multiple sets of action results to be created."
+        }, {
+            "read_only": true,
+            "description": "Resolve an Alias name or email address, into mailboxes",
+            "parameters": {
+                "email": {
+                    "required": true,
+                    "description": "Name to resolve",
+                    "data_type": "string",
+                    "contains": ["exchange alias", "email"],
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "height": 5,
+                "width": 12,
+                "view": "ewsonprem_view.display_resolve_names",
+                "type": "custom",
+                "title": "Resolve Name"
+            },
+            "action": "lookup email",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                }, {
+                    "contains": ["exchange alias", "email"],
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_CompanyName",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_ContactSource",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_Department",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_DisplayName",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_EmailAddresses.*.#text",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_EmailAddresses.*.@Key",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_GivenName",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_Initials",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_JobTitle",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_Manager",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_OfficeLocation",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhoneNumbers.t_Entry.*.#text",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhoneNumbers.t_Entry.*.@Key",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhysicalAddresses.t_Entry.@Key",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhysicalAddresses.t_Entry.t_City",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhysicalAddresses.t_Entry.t_CountryOrRegion",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhysicalAddresses.t_Entry.t_PostalCode",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhysicalAddresses.t_Entry.t_State",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_PhysicalAddresses.t_Entry.t_Street",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Contact.t_Surname",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Mailbox.t_EmailAddress",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Mailbox.t_MailboxType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Mailbox.t_Name",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Mailbox.t_RoutingType",
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.summary.total_entries",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "resolve_name",
+            "type": "investigate"
+        }, {
+            "read_only": false,
+            "description": "Update an email on the server",
+            "parameters": {
+                "category": {
+                    "allow_list": true,
+                    "description": "Categories to set",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 3
+                },
+                "subject": {
+                    "required": false,
+                    "description": "Subject to set",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "id": {
+                    "contains": ["exchange email id"],
+                    "description": "Message ID to update",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "email": {
+                    "contains": ["email"],
+                    "description": "Email of the mailbox owner (used during impersonation)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 1
+                }
+            },
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            },
+            "action": "update email",
+            "output": [{
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.category",
+                    "example_values": ["Yellow, Blue, Purple, red"],
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.parameter.email",
+                    "example_values": ["phantom@sample.com"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": ["exchange email id"],
+                    "example_values": ["AAMkAGIyMTUxYTkzLWRjYjctNDFjMi04NTAxLTQzMDFkNDhlZmI5MQBGAAAAAACxQSnX8n2GS4cunBIQ2sV7BwCQhMsoV7EYSJF42ChR9SCxAAAAYCbsAACQhMsoV7EYSJF42ChR9SCxAAAAjh8bAAA="],
+                    "column_order": 1,
+                    "column_name": "Message ID"
+                }, {
+                    "data_path": "action_result.parameter.subject",
+                    "example_values": ["Both value are modified"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_AttachmentId.@Id",
+                    "example_values": ["AAMkAGIyMTUxYTkzLWRjYjctNDFjMi04NTAxLTQzMDFkNDhlZmI5MQBGAAAAAACxQSnX8n2GS4cunBIQ2sV7BwCQhMsoV7EYSJF42ChR9SCxAAAAYCbsAACQhMsoV7EYSJF42ChR9SCxAAAAjh8bAAABEgAQAHAXDtZM8ItNnDTtvcd6IAo="],
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_ContentId",
+                    "example_values": ["7518226202D21C4397EE1CB1E2E540C7@sample.com"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_ContentType",
+                    "example_values": ["application/octet-stream"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_IsContactPhoto",
+                    "example_values": ["false"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_IsInline",
+                    "example_values": ["false"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_LastModifiedTime",
+                    "example_values": ["2017-10-03T21:31:05"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_Name",
+                    "example_values": ["test.msg"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Attachments.t_FileAttachment.t_Size",
+                    "example_values": ["55360"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Body.#text",
+                    "example_values": ["Attached .msg file. Hello"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Body.@BodyType",
+                    "example_values": ["Text"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Categories",
+                    "example_values": ["red"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_DateTimeCreated",
+                    "example_values": ["2017-10-05T20:19:58Z"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_DateTimeReceived",
+                    "example_values": ["2017-10-03T21:31:05Z"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_DateTimeSent",
+                    "example_values": ["2017-10-03T21:31:20Z"],
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_EmailAddress",
+                    "example_values": ["phantom@sample.com"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_MailboxType",
+                    "example_values": ["OneOff"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_Name",
+                    "example_values": ["Phantom"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_From.t_Mailbox.t_RoutingType",
+                    "example_values": ["SMTP"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_HasAttachments",
+                    "example_values": ["true"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_InternetMessageId",
+                    "example_values": ["<81c761fe-caa8-f924-f65d-079382c1ad0b@sample.com>"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsAssociated",
+                    "example_values": ["false"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsDeliveryReceiptRequested",
+                    "example_values": ["false"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsRead",
+                    "example_values": ["true"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_IsReadReceiptRequested",
+                    "example_values": ["false"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ItemId.@ChangeKey",
+                    "example_values": ["CQAAABYAAACQhMsoV7EYSJF42ChR9SCxAAAAj9UU"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ItemId.@Id",
+                    "example_values": ["AAMkAGIyMTUxYTkzLWRjYjctNDFjMi04NTAxLTQzMDFkNDhlZmI5MQBGAAAAAACxQSnX8n2GS4cunBIQ2sV7BwCQhMsoV7EYSJF42ChR9SCxAAAAYCbsAACQhMsoV7EYSJF42ChR9SCxAAAAjh8bAAA="],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_LastModifiedTime",
+                    "example_values": ["2017-10-31T01:09:20Z"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_MimeContent.#text",
+                    "example_values": ["RnJvbTogUGhhbnRvbSBVc2VyIDxwaGFudG9t..."],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_MimeContent.@CharacterSet",
+                    "example_values": ["UTF-8"],
+                    "data_type": "string"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_EmailAddress",
+                    "example_values": ["phantom@sample.com"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_MailboxType",
+                    "example_values": ["OneOff"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_Name",
+                    "example_values": ["Phantom"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sender.t_Mailbox.t_RoutingType",
+                    "example_values": ["SMTP"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Sensitivity",
+                    "example_values": ["Normal"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_Size",
+                    "example_values": ["56353"],
+                    "data_type": "string"
+                }, {
+                    "column_order": 0,
+                    "data_path": "action_result.data.*.t_Subject",
+                    "example_values": ["Both value are modified"],
+                    "data_type": "string",
+                    "column_name": "Subject"
+                }, {
+                    "contains": ["email"],
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_EmailAddress",
+                    "example_values": ["phantom@sample.com"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_MailboxType",
+                    "example_values": ["Mailbox"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_Name",
+                    "example_values": ["Phantom User"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.data.*.t_ToRecipients.t_Mailbox.*.t_RoutingType",
+                    "example_values": ["SMTP"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.summary.create_time",
+                    "example_values": ["2017-10-05T20:19:58Z"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.summary.sent_time",
+                    "example_values": ["2017-10-03T21:31:20Z"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.summary.subject",
+                    "example_values": ["Both value are modified"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "action_result.message",
+                    "example_values": ["Create time: 2017-10-05T20:19:58Z\nSubject: Both value are modified\nSent time: 2017-10-03T21:31:20Z"],
+                    "data_type": "string"
+                }, {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }, {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "identifier": "update_email",
+            "type": "generic",
+            "verbose": "Currently this action only updates the category and subject of an email. To set multiple categories, please pass a comma separated list to the <b>category</b> parameter."
+        }, {
+            "read_only": true,
+            "description": "Ingest emails from the server into Phantom",
+            "parameters": {
+                "container_count": {
+                    "default": 100,
+                    "required": true,
+                    "description": "Maximum number of emails to ingest",
+                    "data_type": "numeric"
+                },
+                "start_time": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric"
+                },
+                "container_id": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric"
+                },
+                "artifact_count": {
+                    "default": 1000,
+                    "required": false,
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric"
+                },
+                "end_time": {
+                    "description": "Parameter Ignored in this app",
+                    "data_type": "numeric"
+                }
+            },
+            "versions": "EQ(*)",
+            "action": "on poll",
+            "output": [],
+            "identifier": "on_poll",
+            "type": "ingest",
+            "verbose": "Please see sections <a href=\"#poll_now\">POLL NOW</a> and <a href=\"#scheduled_polling\">Scheduled Polling</a> for more info on how this action is implemented by the app."
+        }
+    ],
+    "disabled": false,
+    "logo": "logo_microsoft.svg",
+    "logo_dark": "logo_microsoft_dark.svg",
+    "executable": "spawn",
+    "appname": "-",
+    "version": 1,
+    "app_version": "1.0.137",
+    "type": "email",
+    "product_name": "Exchange",
+    "description": "This app performs email ingestion, investigative and containment actions on an on-premise Exchange installation",
+    "utctime_updated": "2019-01-24T02:32:47.000000Z",
+    "configuration": {
+        "username": {
+            "required": true,
+            "order": 2,
+            "data_type": "string",
+            "description": "Username"
+        },
+        "max_containers": {
+            "default": 100,
+            "required": true,
+            "description": "Maximum emails for scheduled polling",
+            "data_type": "numeric",
+            "order": 10
+        },
+        "extract_hashes": {
+            "default": true,
+            "required": false,
+            "description": "Extract Hashes",
+            "data_type": "boolean",
+            "order": 15
+        },
+        "url": {
+            "default": "https://corp.contoso.com/EWS/Exchange.asmx",
+            "required": true,
+            "order": 0,
+            "data_type": "string",
+            "description": "EWS URL"
+        },
+        "poll_folder": {
+            "default": "Inbox",
+            "required": true,
+            "description": "Mailbox folder to be polled",
+            "data_type": "string",
+            "order": 6
+        },
+        "poll_user": {
+            "required": false,
+            "order": 4,
+            "data_type": "string",
+            "description": "User Email Mailbox (Test Connectivity and Poll)"
+        },
+        "extract_attachments": {
+            "default": true,
+            "required": false,
+            "description": "Extract Attachments",
+            "data_type": "boolean",
+            "order": 11
+        },
+        "first_run_max_emails": {
+            "default": "2000",
+            "required": true,
+            "order": 9,
+            "data_type": "numeric",
+            "description": "Maximum emails to poll first time"
+        },
+        "verify_server_cert": {
+            "default": true,
+            "required": false,
+            "description": "Verify server certificate",
+            "data_type": "boolean",
+            "order": 1
+        },
+        "add_body_to_header_artifacts": {
+            "default": false,
+            "required": false,
+            "description": "Add email body to the Email Artifact",
+            "data_type": "boolean",
+            "order": 16
+        },
+        "extract_domains": {
+            "default": true,
+            "required": false,
+            "description": "Extract Domain Names",
+            "data_type": "boolean",
+            "order": 14
+        },
+        "extract_ips": {
+            "default": true,
+            "required": false,
+            "description": "Extract IPs",
+            "data_type": "boolean",
+            "order": 13
+        },
+        "preprocess_script": {
+            "required": false,
+            "description": "Script with functions to preprocess containers and artifacts",
+            "data_type": "file",
+            "order": 17
+        },
+        "is_public_folder": {
+            "default": false,
+            "required": false,
+            "description": "Mailbox folder is a public folder",
+            "data_type": "boolean",
+            "order": 7
+        },
+        "use_impersonation": {
+            "default": false,
+            "required": true,
+            "order": 5,
+            "data_type": "boolean",
+            "description": "Use Impersonation"
+        },
+        "password": {
+            "required": true,
+            "order": 3,
+            "data_type": "password",
+            "description": "Password"
+        },
+        "extract_urls": {
+            "default": true,
+            "required": false,
+            "description": "Extract URLs",
+            "data_type": "boolean",
+            "order": 12
+        },
+        "ingest_manner": {
+            "description": "How to ingest",
+            "data_type": "string",
+            "value_list": ["oldest first", "latest first"],
+            "required": true,
+            "default": "oldest first",
+            "order": 8
+        },
+        "container_severity": {
+            "description": "Container Severity",
+            "data_type": "string",
+            "value_list": ["low", "medium", "high"],
+            "required": false,
+            "default": "medium",
+            "order": 18
+        }
+    },
+    "product_vendor": "Microsoft",
+    "pip_dependencies": {
+        "wheel": [{
+                "module": "requests_ntlm",
+                "input_file": "requests_ntlm/requests_ntlm-1.0.0-py2.py3-none-any.whl"
+            }, {
+                "module": "ntlm_auth",
+                "input_file": "ntlm_auth/ntlm_auth-1.0.5-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "publisher": "Phantom",
+    "name": "EWS for Exchange",
+    "license": "Copyright (c) 2016-2019 Splunk Inc.",
+    "appid": "badc5252-4a82-4a6d-bc53-d1e503857124",
+    "directory": "ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124",
+    "min_phantom_version": "4.0.1068",
+    "main_module": "ewsonprem_connector.pyc"
+}

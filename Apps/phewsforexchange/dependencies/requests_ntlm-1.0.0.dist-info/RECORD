@@ -1,0 +1,11 @@
+requests_ntlm-1.0.0.dist-info/DESCRIPTION.rst,sha256=OCTuuN6LcWulhHS3d5rfjdsQtW22n7HENFRh6jC6ego,10
+requests_ntlm-1.0.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+requests_ntlm-1.0.0.dist-info/METADATA,sha256=FRkcsZ6fm_ZiSioPNhzpViQvi0XNgdQTO-S1J08Sp84,868
+requests_ntlm-1.0.0.dist-info/RECORD,,
+requests_ntlm-1.0.0.dist-info/WHEEL,sha256=5wvfB7GvgZAbKBSE9uX9Zbi6LCL-_KgezgHblXhCRnM,113
+requests_ntlm-1.0.0.dist-info/metadata.json,sha256=7nm_RieLu0ErPM_KcyOiEfNKn50xkmxB4AmwV6Ph0sQ,1003
+requests_ntlm-1.0.0.dist-info/top_level.txt,sha256=W4Rl0Y5Xd899MZzl84o1HBzllzS1o5FCEvzuxVxsTAA,14
+requests_ntlm/__init__.py,sha256=YVPaGT8uI0zUtH2d-a-Z9OiBppV1r7QGVQZWcay-pq4,69
+requests_ntlm/__init__.pyc,,
+requests_ntlm/requests_ntlm.py,sha256=Q5JURICFdorVeiHeLWWr4LBfNYuSLkQK80QwOJNj7bo,8197
+requests_ntlm/requests_ntlm.pyc,,

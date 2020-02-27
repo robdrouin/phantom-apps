@@ -1,0 +1,253 @@
+<!--
+File: readme.html
+
+Copyright (c) 2016-2019 Splunk Inc.
+
+SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+
+-->
+
+<p>
+The app is designed to access an arbitary user's mailbox via EWS XML SOAP calls on an on-premise Exchange server. Two methods used to allow the supplied user to access other users' mailboxes:
+<ul>
+  <li>Impersonation</li>
+  Impersonation needs to be specifically configured on the Exchange server. During impersonation, the App uses the login user (configured in the Asset) to impersonate the target user (specified in the Action) to delete or search in other mailboxes the target user has access to.
+  <li>Specify Privileges</li>
+  Many organizations will configure a special Exchange administrator account that has access to some or all mailboxes.<br>
+To give access to a user's mailbox to another (super) user, use the <b>Add-MailboxPermission</b> PowerShell cmdlet on the Exchange Server.<br>
+You can read more about the cmdlet on <a href="https://technet.microsoft.com/en-us/library/bb124097(v=exchg.160).aspx">Microsoft TechNet</a>.
+<h3>Examples</h3>
+<ul>
+  <li>
+To give <b>Phantom User</b> full access to <b>User Two's</b> Mailbox:<br>
+<pre>[PS] C:\Windows\system32>Add-MailboxPermission "User Two" -User "Phantom User" -AccessRights FullAccess</pre>
+</li>
+<li>
+To grant the administrator access to everybody's mail box:<br>
+<pre>[PS] C:\Windows\system32>Get-Mailbox -ResultSize unlimited -Filter {(RecipientTypeDetails -eq 'UserMailbox') -and (Alias -ne 'Admin')} | Add-MailboxPermission -User admin@contoso.com -AccessRights fullaccess -InheritanceType all</pre>
+</li>
+</ul>
+</ul>
+    <p>
+        It is also common for enterprises to have a specific mailbox configured that users can forward suspicious emails to for further investigation. The ingestion feature in the EWS for Exchange app is primarily designed to pull emails from such a mailbox, and create Containers and Artifacts in Phantom from the contents of those emails. For example, a company might have an email address phishing@company.com that they ask all users to forward suspicious phishing emails to.
+    </p>
+    <p>
+    To create an Exchange asset in Phantom, select Product Vendor <b>Microsoft</b> and Product name "Exchange", and fill in the various required Asset fields like <b>url, username, password and poll_user</b> as shown below. The other values can be left in the default state for now. The user specified in the Username field is the one that has the privileges to access other mailboxes. The User Email Mailbox field is used to specify the mailbox you will ingest from if you turn polling on. It's also the one used during Test Connectivity. There isn't neccessarily any relationship between the login user and the mailbox being Ingested, if you're using an admin user with the rights to access other mailboxes. But if you will be only reading from one mailbox ever (such as with our "phishing" example), then you could use the same phishing user and mailbox for both fields. Keep in mind that the phishing user probably can't access other mailboxes, so attempting to take <b>run query</b> and <b>delete email</b> actions on other mailboxes will fail.
+    <br><br>
+    <a href="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/asset_settings.png">
+        <img src="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/asset_settings.png"/>
+    </a>
+    </p>
+    <p>
+    <br>
+    On the Ingest Settings tab, if you are going to use ingestion, you need to pick what we call a Container Label. This is just a name for all the Containers we make out of the emails we pull in. In our example below, we have selected 'NEW ENTRY' from the list, and typed in <b>Email</b>. After this Asset is saved, you will now find "Emails" under your Main Menu in Phantom, and that menu item will take you to a list of email Containers.
+    <br><br>
+    <a href="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/ingest_settings.png">
+        <img src="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/ingest_settings.png"/>
+    </a>
+    <br><br>
+    <p>
+    Once the asset is saved, run Test Connectivity and make sure it passes. The Test Connectivity action attempts to read some infomation about the configured user's mailbox to validate the credentials you gave it. The Exchange Web Services API is used for all the actions. Impersonation is also used if it is configured.
+    <br><br>
+    <a href="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/test_connectivity.png">
+        <img src="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/test_connectivity.png"/>
+    </a>
+    </p>
+    <p>
+    <br>
+    Now that the Asset has been created and tested, let's delve into the two modes of ingestion you can use, and the differences between them. One thing to note is that for every email that is ingested, a single Container is created containing multiple artifacts.
+    </a>
+<h2 id="poll_now">POLL NOW</h2>
+    <p>
+    POLL NOW will cause Phantom to Ingest emails immediately. It is often used after first setting up an Asset as a further test, and to see what ingested emails look like in Phantom. The POLL NOW dialog allows the user to set the "Maximum containers" that will be ingested during this run. Since a single container is created for each email, this value is equivalent to the maximum number of emails that will be ingested. The app will either get the oldest email first or the newest, depending upon the Asset setting <a href="#howtoingest">How to ingest</a>. POLL NOW ignores the </b>Maxinum artifacts</b> value that is set on the dialog and will ingest as many artifacts as it can find. POLL NOW also supports ingesting a <i>single</i> email. If the message ID of an email is known, place this value as the Source ID in the POLL NOW dialog. This will result in the action ingesting the single specified email.
+    </p>
+<h2 id="scheduled_polling">Scheduled Polling</h2>
+    <p>
+       This mode is used to schedule a polling action on the asset at regular intervals. This is configured via the Ingest Settings tab of the asset. This is the usual "production" ingestion mode that you would use when you're ready to pick up all new emails coming into the mailbox. It makes use of the following asset configuration parameters (among others):
+
+    <ul>
+    <li>Maximum emails to poll first time</li>
+        The app detects the first time it is polling an asset and will ingest these number of emails (at the most).
+    <li>Maximum emails for scheduled polling</li>
+        For all scheduled polls after the first, the app will ingest these number of emails.
+    <li>How to ingest</li>
+        Should the app be ingesting the latest emails or the oldest.
+    </ul>
+    <p>In case of Scheduled Polling, on every poll, the app remembers the last email that it has ingested and will pickup from the next one in the next secheduled poll.</p>
+    <h2 id="howtoingest">How to ingest</h2>
+    <p>The app allows the user to configure how it should ingest emails on every scheduled poll and with POLL NOW. Possible settings are <i>oldest first</i> or <i>latest first</i>. The time/date used to determine oldest or latest is what Exchange Web Service calls <b>LastModifiedTime</b>. This value is different than the mail created time or the mail received time (most email clients display emails sorted by the recieved time). If an email that arrived a week ago is moved from another folder to the folder being ingested, its <b>Last Modified Time</b> will be set to the time that it was moved. Hence it will get ingested by the app.<br>
+Depending upon the scheduled interval and how busy the inbox is, one of the following could potentially happen:</p>
+    <ul>
+    <li>oldest first</li>
+        If the app is configured to poll too slowly and the inbox is so busy that on every poll the maximum ingested emails is less than the number of new emails, the app will never catch up.
+    <li>latest first</li>
+        If the app is configured to poll too slowly and the inbox is so busy that on every poll the maximum ingested emails is less than the number of new emails, the app will drop the older emails since it is ingesting the latest emails that came into the mailbox.
+    </ul>
+    For best results, keep the poll interval and <i>Maximum emails to poll</i> values close to the number of emails you would get within a time interval. This way, every poll will end up ingesting all the new emails.<br>
+    The Exchange server returns email with a time resolution of seconds. In case the asset is configure to poll <b>oldest first</b>, it becomes important that the <i>Maximum emails to poll</i> configured should be greater than maximum emails generated <b>per second</b>. If the app detects it got the maximum configured emails and all occurred in the same second, it will start polling from the next second in the next polling cycle.<br>
+    Exchange and Exchange Online installations set a limit on the maximum number of emails that are returned in a single call. At the time of writing this value is 1000. This <a href="https://msdn.microsoft.com/en-us/library/office/jj945066(v=exchg.150).aspx">MSDN Link</a> lists all the EWS throttling that occurs in Exchange. Please see the documentation of the <b>EWSFindCountLimit</b> parameter for more information.
+    </p>
+<h2>Containers created</h2>
+    <p>
+       As mentioned before, the app will create a single container for each email that it ingests with the following properties:
+      <ul>
+      <li>Name</li>
+      The email subject is used as the name of the container. If a subject is not present the generated name is set to the unique message id that Exchange assigns to every mail in the mailboxes.</br>
+      <li>Source ID</li>
+      The source ID of the container will be the <b> exchange email id</b> as received from the server.
+      </ul>
+<h2>Artifacts created</h2>
+    <p>
+       The app will create the following type of artifacts:
+      <ul>
+      <li>Email Artifact</li>
+      The email addresses that are found in the ingested email will be added as a separate artifact. Any attached emails will also be scanned and the addresses present in the attached emails will be added as separate artifacts. The emails are added as custom strings in the CEF structure in the following manner:
+    <br>
+      <table style="width:100%">
+        <tr>
+          <td><b>Artifact Field</b></td>
+          <td><b>Value Details</b></td>
+        </tr>
+        <tr>
+          <td>fromEmail</td>
+          <td>The email address of the sender</td>
+        </tr>
+        <tr>
+          <td>toEmail</td>
+          <td>The email address of the receiver of the email</td>
+        </tr>
+        <tr>
+          <td>emailHeaders</td>
+          <td>A dictionary containing each email header as a key and it's value as the key-value</td>
+        </tr>
+      </table>
+    <br>
+
+    <a href="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/email_artifact.png">
+        <img src="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/email_artifact.png" border="5"/>
+    </a>
+    <li>IP Artifact
+        <ul>
+            <li>If <b>extract_ips</b> is enabled, any IPv4 or IPv6 found in the email body will be added, with one CEF per IP.</li>
+            <li>Any IP addresses found in the email are added to the CEF structure of an artifact.</li>
+            <li>The CEF for an IP is cef.sourceAddress.</li>
+        </ul>
+    </li>
+    <li>Hash Artifact - cef.fileHash</li>
+        <ul>
+            <li>If <b>extract_hashes</b> is enabled, any hash found in the email body will be added, with one CEF per hash.</li>
+            <li>Any Hashes found in the email are added to the CEF structure of an artifact.</li>
+            <li>The CEF for a hash is cef.fileHash.</li>
+        </ul>
+    </li>
+    <li>URL Artifact - cef.requestURL</li>
+        <ul>
+            <li>If <b>extract_urls</b> is enabled, any url found in the email body will be added, with one CEF per url.</li>
+            <li>Any URLs found are added to the CEF structure of an artifact.</li>
+            <li>The CEF for a URL is cef.requestURL.</li>
+        </ul>
+    </li>
+    <li>Domain Artifact - cef.destinationDnsDomain</li>
+        <ul>
+            <li>If <b>extract_domains</b> is enabled, any domain found in the email body will be added, with one CEF per domain.</li>
+            <li>Domains that are part of a URL or an email address are added to the CEF structure of an artifact.</li>
+            <li>The CEF for a URL is cef.destinationDnsDomain.</li>
+        </ul>
+    </li>
+      <li>Vault Artifact
+        <ul>
+          <li>If the email contains any attachments, these are extracted (if enabled in the config by setting the <b>extract_attachments</b> to True) and added to the vault of the Container.</li>
+          <li>At the same time the vault ID and file name of this item is represented by a Vault Artifact.</li>
+          <li>The same file can be added to the vault multiple times. In this scenario the file name of the item added the second time onwards will be slightly different, but the vault ID will still be the same. However there will be multiple artifacts created.</li>
+          <li>Do note that the system does <i>not</i> duplicate the file bytes, only the metadata in the db.
+          <table style="width:100%">
+            <tr>
+              <td><b>Artifact Field</b></td>
+              <td><b>Value Details</b></td>
+            </tr>
+            <tr>
+              <td>Source ID</td>
+              <td>Email ID set on the server</td>
+            </tr>
+            <tr>
+              <td>cef.vaultId</tdLavel>
+              <td>Vault ID of the attachement</td>
+            </tr>
+            <tr>
+              <td>cef.fileName</td>
+              <td>Attached filename used in the email</td>
+            </tr>
+          </table></li>
+            <li>You will notice additional CEF fields <b>cs6</b> (value is the Vault ID) and <b>cs6Label</b>. These are added for backward compatibility only and will be deprecated in future releases. Please don't use these keys in playbooks.</li>
+        </ul>
+      </li>
+    <br>
+    <a href="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/vault_artifact.png">
+        <img src="/app_resource/ewsforexchange_badc5252-4a82-4a6d-bc53-d1e503857124/img/vault_artifact.png"/>
+      </ul>
+    </a>
+    </p>
+<h3>Asset configuration</h3>
+<ul>
+  <li>The <b>url</b> should be set to https://&lt;my_exchange_server&gt;/EWS/Exchange.asmx</li>
+  <li>The <b>username</b> parameter can be specifed in multiple formats like email address or the AD form like DOMAIN\Administrator.</li>
+</ul>
+
+<h3>Preprocessing Containers</h3>
+<p>
+It is possible to upload your own script which has functions to handle preprocessing of containers.
+The artifacts which are going to be added with the container can be accessed through this container as well.
+This function should accept a container and return the updated container. Also note that the name of this function
+must be <b>preprocess_container</b>.
+<pre class="shell">
+<code>
+import urlparse
+
+
+def get_host_from_url(url):
+    return urlparse.urlparse(url).hostname
+
+
+def preprocess_container(container):
+
+    # Match urls like https://secure.contoso.com/link/https://www.google.com
+    # We want to strip 'https://secure.contoso.com/link/', and instead create
+    #  a URL artifact for 'https://www.google.com'
+    url_prepend = 'https://secure.contoso.com/link/'
+    domain_prepend = 'secure.contoso.com'
+
+    new_artifacts = []
+
+    for artifact in container.get('artifacts', []):
+        cef = artifact.get('cef')
+        url = cef.get('requestURL')
+        if url and url.lower().startswith(url_prepend):
+            url = url.replace(url_prepend, '')
+            artifact['cef']['requestURL'] = url
+            # Create a new domain artifact for this URL
+            new_artifacts.append({
+                'name': 'Domain Artifact',
+                'cef': {
+                    'destinationDnsDomain': get_host_from_url(url)
+                }
+            })
+
+        domain = cef.get('destinationDnsDomain')
+        if domain and domain.lower() == domain_prepend:
+            # These are the wrong domains, ignore them
+            continue
+
+        new_artifacts.append(artifact)
+
+    if new_artifacts:
+        new_artifacts[-1]['run_automation'] = True
+
+    container['artifacts'] = new_artifacts
+    return container
+</code>
+</pre>
+In this example, many of the URLs have 'https://secure.contoso.com/link' appended to the start of them.
+These URL artifacts will be tough to use in a playbook without additional processing. On top of that, all
+of the associated domain artifacts will be incorrect as well, since they will all point to 'secure.contoso.com'.
+</p>
