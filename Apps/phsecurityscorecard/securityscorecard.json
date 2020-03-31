@@ -1,0 +1,818 @@
+{
+    "appid": "4490180b-3fdd-4e7b-b7a0-81a1a6f8a277",
+    "name": "Security Scorecard",
+    "description": "Security Scorecard API",
+    "type": "reputation",
+    "product_vendor": "Security Scorecard",
+    "logo": "securityscorecard.svg",
+    "logo_dark": "securityscorecard_dark.svg",
+    "product_name": "Security Scorecard",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "Robert Drouin",
+    "license": "Copyright (c) Robert Drouin, 2020",
+    "app_version": "1.0.0",
+    "utctime_updated": "2020-03-27T18:42:02.342605Z",
+    "package_name": "phantom_securityscorecard",
+    "main_module": "securityscorecard_connector.pyc",
+    "min_phantom_version": "4.6.19142",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "auth_token": {
+            "description": "Authentication token to use for the API.",
+            "data_type": "password",
+            "required": true,
+            "order": 0
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "company breaches",
+            "identifier": "company_breaches",
+            "description": "Get a company historical breaches events",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "domain": {
+                    "description": "Domain to query",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "order": 0,
+                    "example_values": [
+                        "example.com"
+                    ]
+                },
+                "date_from": {
+                    "description": "Find Entries where 'date' is greater or equal than a date",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 1,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                },
+                "date_to": {
+                    "description": "Find entries where 'date' is lower or equal than a date",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 2,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.domain",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Domain",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.date_from",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.date_to",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.entries.date",
+                    "data_type": "string",
+                    "column_name": "Date",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.entries.event_type",
+                    "data_type": "string",
+                    "column_name": "Event Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.method",
+                    "data_type": "string",
+                    "column_name": "Breach Method",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.description",
+                    "data_type": "string",
+                    "column_name": "Breach Description",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.link",
+                    "data_type": "string",
+                    "column_name": "Breach Link",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "company events",
+            "identifier": "company_events",
+            "description": "Get events in the history of a company",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "scorecard_identifier": {
+                    "description": "Scorecard Identifier",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "order": 0,
+                    "example_values": [
+                        "example.com"
+                    ]
+                },
+                "date_from": {
+                    "description": "Find Entries where 'date' is greater or equal than a date",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 1,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                },
+                "date_to": {
+                    "description": "Find entries where 'date' is lower or equal than a date",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 2,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.scorecard_identifier",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Scorecard Identifier",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.date_from",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.date_to",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.entries.id",
+                    "data_type": "numeric",
+                    "column_name": "Event Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.entries.parent_domain",
+                    "data_type": "string",
+                    "column_name": "Parent Domain",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.entries.date",
+                    "data_type": "string",
+                    "column_name": "Event Type",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.entries.event_type",
+                    "data_type": "string",
+                    "column_name": "Event Type",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.entries.group_status",
+                    "data_type": "string",
+                    "column_name": "Group Status",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.entries.issue_count",
+                    "data_type": "numeric",
+                    "column_name": "Issue Count",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.entries.total_score_impact",
+                    "data_type": "numeric",
+                    "column_name": "Issue Count",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.entries.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.entries.factor",
+                    "data_type": "string",
+                    "column_name": "Factor",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.root_cause",
+                    "data_type": "string",
+                    "column_name": "Root Cause",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.records_lost",
+                    "data_type": "numeric",
+                    "column_name": "Records Lost",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.date_discovered",
+                    "data_type": "string",
+                    "column_name": "Date Discovered",
+                    "column_order": 12
+                },
+                {
+                    "data_path": "action_result.entries.breach_data.type_of_breach",
+                    "data_type": "string",
+                    "column_name": "Type of Breach",
+                    "column_order": 13
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get context",
+            "identifier": "get_context",
+            "description": "Get the score context for an issue type",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "domain": {
+                    "description": "Primary domain identifying a company",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "order": 0,
+                    "example_values": [
+                        "example.com"
+                    ]
+                },
+                "issue_type": {
+                    "description": "Issue type to get context for",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "value_list": ["active_malware_infection", "admin_subdomain", "anonymous_proxy", "attack_detected", "cookie_missing_http_only", "cookie_missing_secure_attribute", "csp_no_policy", "csp_too_broad", "csp_unsafe_policy", "ddos_protection", "domain_missing_https", "historical_malware_infection", "hosted_on_object_storage", "hsts_incorrect", "insecure_https_redirect_pattern", "leaked_credentials", "malware_1_day", "malware_30_day", "malware_365_day", "malware_controller", "object_storage_bucket_with_risky_acl", "open_resolver", "outdated_browser", "outdated_os", "patching_cadence_high", "patching_cadence_low", "patching_cadence_medium", "phishing", "redirect_chain_contains_http", "references_object_storage", "service_cassandra", "service_couchdb", "service_elasticsearch", "service_end_of_life", "service_end_of_service", "service_ftp", "service_imap", "service_microsoft_sql", "service_mongodb", "service_mysql", "service_pop3", "service_postgresql", "service_rdp", "service_redis", "service_rsync", "service_smb", "service_telnet", "service_vnc", "service_vuln_host_high", "service_vuln_host_low", "service_vuln_host_medium", "site_uses_hsts_preloading", "spf_record_malformed", "spf_record_missing", "spf_record_softfail", "spf_record_wildcard", "ssh_weak_cipher", "ssh_weak_mac", "ssh_weak_protocol", "suspicious_traffic", "tls_ocsp_stapling", "tls_weak_cipher", "tlscert_excessive_expiration", "tlscert_expired", "suspicious_traffic", "tlscert_extended_validation", "tlscert_no_revocation", "tlscert_revoked", "tlscert_self_signed", "tlscert_weak_signature", "typosquat", "uce", "unsafe_sri", "waf_detected", "web_vuln_host_high", "web_vuln_host_low", "web_vuln_host_medium", "x_content_type_options_incorrect", "x_frame_options_incorrect", "x_xss_protection_incorrect"],
+                    "default": "active_malware_infection",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.domain",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Domain",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.issue_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.company_incident_percentage",
+                    "data_type": "numeric",
+                    "column_name": "Company Incident Percentage",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.entries.findings_count_average",
+                    "data_type": "numeric",
+                    "column_name": "Findings Count Average",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get findings",
+            "identifier": "get_findings",
+            "description": "Get issue findings by issue type",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "scorecard_identifier": {
+                    "description": "Scorecard Identifier",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "order": 0,
+                    "example_values": [
+                        "example.com"
+                    ]
+                },
+                "issue_type": {
+                    "description": "Issue type to get context for",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "value_list": ["active_malware_infection", "admin_subdomain", "anonymous_proxy", "attack_detected", "cookie_missing_http_only", "cookie_missing_secure_attribute", "csp_no_policy", "csp_too_broad", "csp_unsafe_policy", "ddos_protection", "domain_missing_https", "historical_malware_infection", "hosted_on_object_storage", "hsts_incorrect", "insecure_https_redirect_pattern", "leaked_credentials", "malware_1_day", "malware_30_day", "malware_365_day", "malware_controller", "object_storage_bucket_with_risky_acl", "open_resolver", "outdated_browser", "outdated_os", "patching_cadence_high", "patching_cadence_low", "patching_cadence_medium", "phishing", "redirect_chain_contains_http", "references_object_storage", "service_cassandra", "service_couchdb", "service_elasticsearch", "service_end_of_life", "service_end_of_service", "service_ftp", "service_imap", "service_microsoft_sql", "service_mongodb", "service_mysql", "service_pop3", "service_postgresql", "service_rdp", "service_redis", "service_rsync", "service_smb", "service_telnet", "service_vnc", "service_vuln_host_high", "service_vuln_host_low", "service_vuln_host_medium", "site_uses_hsts_preloading", "spf_record_malformed", "spf_record_missing", "spf_record_softfail", "spf_record_wildcard", "ssh_weak_cipher", "ssh_weak_mac", "ssh_weak_protocol", "suspicious_traffic", "tls_ocsp_stapling", "tls_weak_cipher", "tlscert_excessive_expiration", "tlscert_expired", "suspicious_traffic", "tlscert_extended_validation", "tlscert_no_revocation", "tlscert_revoked", "tlscert_self_signed", "tlscert_weak_signature", "typosquat", "uce", "unsafe_sri", "waf_detected", "web_vuln_host_high", "web_vuln_host_low", "web_vuln_host_medium", "x_content_type_options_incorrect", "x_frame_options_incorrect", "x_xss_protection_incorrect"],
+                    "default": "active_malware_infection",
+                    "order": 1
+                },
+                "issue_id": {
+                    "description": "Find entries where 'issue_id' equals a uuid",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 2,
+                    "example_values": [
+                        "AABBCCDD12345678"
+                    ]
+                },
+                "issue_id_in": {
+                    "description": "Find entries where 'issue_id' is in a set of uuids (comma-separated)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 3,
+                    "example_values": [
+                        "AABBCCDD12345678"
+                    ]
+                },
+                "first_seen_time_from": {
+                    "description": "Find entries where 'first_seen_time' is greater or equal than a date-time",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 4,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                },
+                "first_seen_time_to": {
+                    "description": "Find entries where 'first_seen_time' is lower or equal than a date-time",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 5,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                },
+                "last_seen_time_from": {
+                    "description": "Find entries where 'last_seen_time' is greater or equal than a date-time",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 4,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                },
+                "last_seen_time_to": {
+                    "description": "Find entries where 'last_seen_time' is lower or equal than a date-time",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 5,
+                    "example_values": [
+                        "2018-11-09",
+                        "2018-11-09T00:00:00Z"
+                    ]
+                },
+                "ip_range": {
+                    "description": "IP range to search for",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "order": 7,
+                    "example_values": [
+                        "10.1.1.0/255"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.scorecard_identifier",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Scorecard Identifier",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.issue_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.issue_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.issue_id_in",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.first_seen_time_from",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.first_seen_time_to",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.last_seen_time_from",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.last_seen_time_to",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.ip_range",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.company_incident_percentage",
+                    "data_type": "numeric",
+                    "column_name": "Company Incident Percentage",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.entries.findings_count_average",
+                    "data_type": "numeric",
+                    "column_name": "Findings Count Average",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "score plan",
+            "identifier": "score_plan",
+            "description": "Get the score plan by score target",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "domain": {
+                    "description": "Domain to query",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "order": 0,
+                    "example_values": [
+                        "example.com"
+                    ]
+                },
+                "score": {
+                    "description": "Score target you want to reach",
+                    "data_type": "numeric",
+                    "required": true,
+                    "primary": true,
+                    "order": 1,
+                    "example_values": [
+                        "90"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.domain",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Domain",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.score",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.entries.title",
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.entries.issue_type",
+                    "data_type": "string",
+                    "column_name": "Issue Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.entries.findings",
+                    "data_type": "numeric",
+                    "column_name": "Findings",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.entries.remediations",
+                    "data_type": "numeric",
+                    "column_name": "Remediations",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.entries.factor",
+                    "data_type": "string",
+                    "column_name": "Factor",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.entries.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "company score",
+            "identifier": "company_score",
+            "description": "Get the score plan by score target",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "scorecard_identifier": {
+                    "description": "Scorecard ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "order": 0,
+                    "example_values": [
+                        "example.com"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.scorecard_identifier",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Scorecard Identifier",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.entries.name",
+                    "data_type": "string",
+                    "column_name": "Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.entries.domain",
+                    "data_type": "string",
+                    "column_name": "Domain",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.entries.grade",
+                    "data_type": "string",
+                    "column_name": "Grade",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.entries.grade_url",
+                    "data_type": "string",
+                    "column_name": "Grade URL",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.entries.score",
+                    "data_type": "numeric",
+                    "column_name": "Score",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.entries.industry",
+                    "data_type": "string",
+                    "column_name": "Industry",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.entries.Size",
+                    "data_type": "string",
+                    "column_name": "Compnay Size",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ]
+}
