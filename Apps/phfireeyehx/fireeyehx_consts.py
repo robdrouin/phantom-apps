@@ -1,0 +1,90 @@
+# Define your constants here
+FIREEYE_API_PATH = '/hx/api/v3/'
+# Log in/out endpoint
+FIREEYE_LOGIN_LOGOUT_ENDPOINT = 'token'
+# Version endpoint
+FIREEYE_VERSION_ENDPOINT = 'version'
+# Hosts information endpoint
+FIREEYE_LIST_HOSTS_ENDPOINT = 'hosts'
+FIREEYE_GET_HOSTS_ENDPOINT = 'hosts/{agentId}'
+FIREEYE_GET_HOSTS_ACQUISITIONS_ENDPOINT = 'hosts/{agentId}/host_details_acquisitions'
+FIREEYE_GET_HOSTS_ALERTS_ENDPOINT = 'hosts/{agentId}/host_details_alerts'
+# FIREEYE_GET_HOSTS_AGENT_CONFIG_ENDPOINT = 'hosts/{agentId}/configuration/actual.json'
+FIREEYE_GET_HOST_SYS_INFO_ENDPOINT = 'hosts/{agentId}/sysinfo'
+# Hostsets endpoint
+FIREEYE_LIST_HOST_SET_ENDPOINT = 'host_sets'
+FIREEYE_GET_HOST_SET_ENDPOINT = 'host_sets/{hostSetId}'
+# FIREEYE_HOST_SET_STATIC_ENDPOINT = 'host_sets/static'
+# FIREEYE_HOST_SET_DYNAMIC_ENDPOINT = 'host_sets/dynamic'
+FIREEYE_HOST_SET_LIST_HOST_ENDPOINT = 'host_set/{hostSetId}/hosts'
+# Search endpoint
+# FIREEYE_LIST_SEARCHES_ENDPOINT = 'searches'
+# FIREEYE_LIST_SEARCHES_INFO_ENDPOINT = 'searches/counts'
+# FIREEYE_GET_SEARCH_ENDPOINT = 'searches/{searchId}'
+# FIREEYE_STOP_SEARCH_ENDPOINT = 'searches/{searchId}/actions/action'
+# FIREEYE_LIST_SEARCH_HOSTS_ENDPOINT = 'searches/{searchId}/hosts'
+# FIREEYE_LIST_SEARCH_SKIPS_ENDPOINT = 'searches/{searchId}/skipped_hosts'
+# FIREEYE_LIST_SEARCH_HOST_ENDPOINT = 'searches/{searchId}/hosts/{agentId}'
+# FIREEYE_LIST_SEARCH_RESULTS_ENDPOINT = 'searches/{searchId}/results'
+# FIREEYE_LIST_SEARCH_RESULTS_ROW_ENDPOINT = 'searches/{searchId}/results/{rowId}/hosts'
+# Alerts endpoint
+FIREEYE_LIST_ALERTS_ENDPOINT = 'alerts'
+FIREEYE_GET_ALERT_ENDPOINT = 'alerts/{alertId}'
+FIREEYE_SUPPRESS_ALERT_ENDPOINT = 'alerts/{alertId}'
+FIREEYE_RATE_LIMITS_ENDPOINT = 'services/local_config/tree'
+FIREEYE_LIST_ALERT_GROUPS_ENDPOINT = 'alert_groups'
+FIREEYE_ALERT_GROUP_ENDPOINT = 'alert_groups/{alertGroupId}'
+FIREEYE_LIST_ALERT_GROUP_ALERTS_ENDPOINT = 'alert_groups/{alertGroupId}/alerts'
+FIREEYE_LIST_ALERT_FILTERS_GROUP_ENDPOINT = 'alert_groups/{alertGroupId}/alert_filters'
+FRIEEYE_LIST_ALERT_FILTERS_ENDPOINT = 'alert_filters'
+FIREEYE_GET_ALERT_FILTER_ENDPOINT = 'alert_filters/{alertFilterId}'
+FIREEYE_LIST_FILTER_ALERT_LIST_ENDPOINT = 'alerts_filter'
+FIREEYE_GET_FILTER_ALERT_LIST_ENDPOINT = 'alerts_filter/{filterId}'
+FIREEYE_LIST_FILTER_ALERT_ALERT_GROUP_ENDPOINT = 'alerts_filter/{filterId}/alert_groups'
+FIREEYE_LIST_QUARANTINE_ALERT_FILTER_ENDPOINT = 'alert_filters/{filterId}/quarantines'
+# Source alerts endpoint
+FIREEYE_LIST_SOURCE_ALERTS_ENDPOINT = 'source_alerts'
+FIREEYE_GET_SOURCE_ALERTS_ENDPOINT = 'source_alerts/{alertId}'
+FIREEYE_LIST_SOURCE_ALERTS_ALL_HOSTS_ENDPOINT = 'source_alerts/{alertId}/alerted_hosts'
+FIREEYE_LIST_SOURCE_ALERTS_ALERTS_ENDPOINT = 'source_alerts/{alertId}/alerts'
+# Acuisitions endpoint
+FIREEYE_LIST_ACQUISITIONS_ENDPOINT = 'acqs/files'
+FIREEYE_CREATE_ACQUISITION_ENDPOINT = 'hosts/{agentId}/files'
+FIREEYE_GET_FILE_ACQUISITION_ENDPOINT = 'acqs/files/{acqsId}'
+FIREEYE_GET_FILE_ACQUISITION_PACKAGE_ENDPOINT = 'acqs/files/{acqsId}.zip'
+FIREEYE_LIST_TRIAGE_ACQUISITIONS_ENDPOINT = 'acqs/triages'
+FIREEYE_GET_TRIAGE_ACQUISITION_ENDPOINT = 'acqs/triages/{acqsId}'
+FIREEYE_LIST_TRIAGE_HOST_ENDPOINT = 'hosts/{agentId}/trigaes'
+FIREEYE_BULK_ACQUISITIONS_ENDPOINT = 'acqs/bulk'
+FIREEYE_GET_BULK_ACQUISITION_ENDPOINT = 'acqs/bulk/{acqsId}'
+FIREEYE_CHANGE_ACQUISITION_STATE_ENDPOINT = 'acqs/bulk/{acqsId}/actions/{actionId}'
+FIREEYE_REFRESH_HOST_BULK_ACQUISITION_ENDPOINT = 'acqs/bulk/{acqsId}/hosts/{agentId}/actions/{action}'
+FIREEYE_DELETE_BULK_ACQUISITION_ENDPOINT = 'acqs/bulk/{acqsId}'
+# Quarantine endpoint
+# FIREEYE_QUARANTINES_ENDPOINT = 'quarantines'
+# Scripts endpoint
+# FIREEYE_SCRIPTS_ENDPOINT = 'scripts'
+# Containment endpoint
+FIREEYE_CONTAINMENT_ENDPOINT = 'hosts/{agentId}/containment'
+FIREEYE_CONTAINMENT_STATES_ENDPOINT = 'containment_states'
+FIREEYE_CONATINMENT_ALL_UNLOCK_CODES = 'containment/unlock_codes'
+FIREEYE_CONTAINMENT_UNLOCK_CODES_ENDPOINT = 'hosts/{agentId}/containment/unlock_codes'
+# Policies endpoint
+FIREEYE_POLICIES_ENDPOINT = 'policies'
+# Policy types endpoint
+FIREEYE_POLICY_TYPES_ENDPOINT = 'policy_types'
+# Conditions endpoints
+FIREEYE_GET_CONDITION_ENDPOINT = 'conditions/{conditionId}'
+FIREEYE_LIST_CONDITIONS_ENDPOINT = 'conditions'
+FIREEYE_LIST_CONDITION_INDICATORS_ENDPOINT = 'conditions/{conditionId}/indicators'
+FIREEYE_CREATE_CONDITION_ENDPOINT = 'conditions'
+FIREEYE_ENABLE_CONDITION_ENDPOINT = 'conditions/{conditionId}'
+# Indicators endpoints
+FIREEYE_LIST_INDICATORS_ENDPOINT = 'indicators'
+FIREEYE_LIST_INDICATORS_CATEGORY_ENDPOINT = 'indicators/{category}'
+FIREEYE_GET_INDICATOR_ENDPOINT = 'indicators/{category}/{indicator}'
+FIREEYE_LIST_CONDITIONS_INDICATOR_ENDPOINT = 'indicators/{category}/{indicator}/conditions'
+FIREEYE_LIST_CONDITIONS_INDICATOR_TYPE_ENDPOINT = 'indicators/{category}/{indicator}/conditions/{type}'
+# Indicator categories endpoint
+FIREEYE_LIST_INDICATOR_CATEGORIES_ENDPOINT = 'indicator_categories'
+FIREEYE_GET_INDICATOR_CATEGORY_ENDPOINT = 'indicator_categories/{category}'
