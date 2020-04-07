@@ -1,0 +1,1060 @@
+{
+    "appid": "0e93eabb-90e6-4611-bddc-db02eafe664f",
+    "name": "BitSight",
+    "description": "BitSight",
+    "type": "devops",
+    "product_vendor": "BitSight",
+    "logo": "bitsight.svg",
+    "logo_dark": "bitsight_dark.svg",
+    "product_name": "BitSight",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "Robert Drouin",
+    "license": "Copyright (c) Robert Drouin, 2020",
+    "app_version": "1.0.0",
+    "utctime_updated": "2020-04-06T19:10:26.309611Z",
+    "package_name": "phantom_bitsight",
+    "main_module": "bitsight_connector.pyc",
+    "min_phantom_version": "4.6.19142",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "base_url": {
+            "description": "Base URL for the BitSight API.",
+            "data_type": "string",
+            "required": true,
+            "default": "https://api.bitsighttech.com",
+            "order": 0
+        },
+        "verify_server_cert": {
+            "data_type": "boolean",
+            "description": "Verify server certificate",
+            "required": true,
+            "order": 1,
+            "default": false
+        },
+        "access_token": {
+            "description": "Access Token for the API.",
+            "data_type": "password",
+            "required": true,
+            "order": 2
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list alerts",
+            "identifier": "list_alerts",
+            "description": "Get a list of your existing alerts and their details.",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "alert_date": {
+                    "description": "Filter alerts by the specified alert date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "1960-01-01"
+                    ],
+                    "order": 0
+                },
+                "alert_date_gt": {
+                    "description": "Filter alerts after the requested date. This parameter is incompatible with alert_date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "1960-01-01"
+                    ],
+                    "order": 1
+                },
+                "alert_date_gte": {
+                    "description": "Filter alerts after or on the requested date. This parameter is incompatible with alert_date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "1960-01-01"
+                    ],
+                    "order": 2
+                },
+                "alert_date_lt": {
+                    "description": "Filter alerts prior to the requested date. This parameter is incompatible with alert_date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "1960-01-01"
+                    ],
+                    "order": 3
+                },
+                "alert_date_lte": {
+                    "description": "Filter alerts prior to or on the requested date. This parameter is incompatible with alert_date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "1960-01-01"
+                    ],
+                    "order": 4
+                },
+                "alert_type": {
+                    "description": "Filter alerts prior to or on the requested date. This parameter is incompatible with alert_date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "Informational", "NIST_Category", "Percent_Change", "Rating_Threshold", "Risk_Category", "Vulnerability"
+                    ],
+                    "value_list" : [
+                        "Informational", "NIST_Category", "Percent_Change", "Rating_Threshold", "Risk_Category", "Vulnerability"
+                    ],
+                    "order": 5
+                },
+                "company_guid": {
+                    "description": "Filter alerts by the specified company unique identifier.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "order": 6
+                },
+                "expand": {
+                    "description": "If expand=details is set, the return will include additional alert details.",
+                    "data_type": "boolean",
+                    "required": false,
+                    "primary": false,
+                    "default": false,
+                    "order": 7
+                },
+                "folder_guid": {
+                    "description": "Filter alerts by the specified folder unique identifier.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "bitsight folder id"
+                    ],
+                    "order": 8
+                },
+                "offset": {
+                    "description": "Number of items to skip before returning results",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": 0,
+                    "order": 9
+                },
+                "limit": {
+                    "description": "The number of items to return",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": 100,
+                    "order": 10
+                },
+                "q": {
+                    "description": "Full-text search for matching records.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "Company Name. i.e. Google"
+                    ],
+                    "order": 11
+                },
+                "severity": {
+                    "description": "Filter alerts by the specified severity level.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "Informational", "Increase", "Warn", "Critical"
+                    ],
+                    "value_list": [
+                        "Informational", "Increase", "Warn", "Critical"
+                    ],
+                    "order": 12
+                },
+                "sort": {
+                    "description": "Sort the alerts by the specified parameters, separated by a comma. Alerts are sorted by alert_date, by default.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "guid", "alert_date", "alert_type", "company_name", "folder_name", "trigger", "severity"
+                    ],
+                    "default": "alert_date",
+                    "order": 13
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.alert_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.alert_date_gt",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.alert_date_gte",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.alert_date_lt",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.alert_date_lte",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.alert_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.company_guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.expand",
+                    "data_type": "boolean"
+                },                
+                {
+                    "data_path": "action_result.parameter.folder_guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight folder id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.q",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.sort",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.guid",
+                    "data_type": "numeric",
+                    "contains": [
+                        "bitsight alert id"
+                    ],
+                    "column_name": "Alert ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.alert_type",
+                    "data_type": "string",
+                    "example_values": ["Informational", "NIST_Category", "Percent_Change", "Rating_Threshold", "Risk_Category", "Vulnerability"],
+                    "column_name": "Alert Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.alert_date",
+                    "data_type": "string",
+                    "column_name": "Alert Date",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.start_date",
+                    "data_type": "string",
+                    "column_name": "Start Date",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.company_name",
+                    "data_type": "string",
+                    "column_name": "Company name",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.company_guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "column_name": "Company ID",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.company_url",
+                    "data_type": "string",
+                    "column_name": "BitSight Company URL",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.folder_guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight folder id"
+                    ],
+                    "column_name": "Folder ID",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.folder_name",
+                    "data_type": "string",
+                    "column_name": "Folder Name",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.severity",
+                    "data_type": "string",
+                    "example_values" : [
+                        "Informational", "Increase", "Warn", "Critical"
+                    ],
+                    "column_name": "Severity",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.data.*.results.*.trigger",
+                    "data_type": "string",
+                    "column_name": "Alert Trigger",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get alert",
+            "identifier": "get_alert",
+            "description": "Query for specific alert.",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "alert_guid": {
+                    "description": "GUID of the Alert to get.",
+                    "data_type": "numeric",
+                    "required": true,
+                    "primary": true,
+                    "example_values" : [
+                        "10009"
+                    ],
+                    "contains": [
+                        "bitsight alert id"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.alert_guid",
+                    "data_type": "numeric",
+                    "contains": [
+                        "bitsight alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.guid",
+                    "data_type": "numeric",
+                    "contains": [
+                        "bitsight alert id"
+                    ],
+                    "column_name": "Alert ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.alert_type",
+                    "data_type": "string",
+                    "example_values": ["Informational", "NIST_Category", "Percent_Change", "Rating_Threshold", "Risk_Category", "Vulnerability"],
+                    "column_name": "Alert Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.alert_date",
+                    "data_type": "string",
+                    "column_name": "Alert Date",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.start_date",
+                    "data_type": "string",
+                    "column_name": "Start Date",
+                    "column_order": 3
+                },
+                
+                {
+                    "data_path": "action_result.data.*.start_rating",
+                    "data_type": "numeric",
+                    "example_values" : [
+                        "100"
+                    ],
+                    "column_name": "Start Rating",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.rating_change_pct",
+                    "data_type": "numeric",
+                    "example_values" : [
+                        "5"
+                    ],
+                    "column_name": "Rating Change Percent",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.end_rating",
+                    "data_type": "numeric",
+                    "example_values" : [
+                        "95"
+                    ],
+                    "column_name": "End Rating",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.company_name",
+                    "data_type": "string",
+                    "column_name": "Company name",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.company_guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "column_name": "Company ID",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.company_url",
+                    "data_type": "string",
+                    "column_name": "BitSight Company URL",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.data.*.folder_guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight folder id"
+                    ],
+                    "column_name": "Folder ID",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.data.*.alert_severity",
+                    "data_type": "string",
+                    "example_values" : [
+                        "Informational", "Increase", "Warn", "Critical"
+                    ],
+                    "column_name": "Severity",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list companies",
+            "identifier": "list_companies",
+            "description": "Get a list of companies in your portfolio.",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "exclude_alerts_only": {
+                    "description": "Filter out alerts-only subscriptions.",
+                    "data_type": "boolean",
+                    "required": false,
+                    "primary": false,
+                    "default": false,
+                    "example_values" : [
+                        true, false
+                    ],
+                    "order": 0
+                },
+                "fields": {
+                    "description": "Field names (keys) to include in the response. Comma seperated list allowed.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        ""
+                    ],
+                    "allow_list": true,
+                    "order": 1
+                },
+                "folder": {
+                    "description": "Show only companies in a specified folder.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "example_values" : [
+                        ""
+                    ],
+                    "contains": [
+                        "bitsight folder id"
+                    ],
+                    "order": 2
+                },
+                "quarters_back": {
+                    "description": "Get ratings from the last day of the # quarter(s) from today.",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "2"
+                    ],
+                    "order": 3
+                },
+                "rating_date": {
+                    "description": "The latest rating date.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "example_values" : [
+                        "1960-01-01"
+                    ],
+                    "order": 4
+                },
+                "show_ips": {
+                    "description": "Include only the organizations with visible IP addresses.",
+                    "data_type": "boolean",
+                    "required": false,
+                    "primary": false,
+                    "default": false,
+                    "example_values" : [
+                        true, false
+                    ],
+                    "order": 5
+                },
+                "show_event_evidence": {
+                    "description": "Include only the organizations with enhanced event evidence.",
+                    "data_type": "boolean",
+                    "required": false,
+                    "primary": false,
+                    "default": false,
+                    "example_values" : [
+                        true, false
+                    ],
+                    "order": 6
+                },
+                "tier": {
+                    "description": "Include only companies that are part of the specified tier(s). Untiered companies are included via an “untiered” alias.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "bitsight tier id"
+                    ],
+                    "order": 7
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.exclude_alerts_only",
+                    "data_type": "boolean",
+                    "example_values" : [
+                        true, false
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.fields",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.folder",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight folder id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.quarters_back",
+                    "data_type": "numeric",
+                    "example_values" : [
+                        "2"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.rating_date",
+                    "data_type": "string",
+                    "example_values" : [
+                        "1960-01-01"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.show_ips",
+                    "data_type": "boolean",
+                    "example_values" : [
+                        true, false
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.show_event_evidence",
+                    "data_type": "boolean",
+                    "example_values" : [
+                        true, false
+                    ]
+                },                
+                {
+                    "data_path": "action_result.parameter.tier",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight tier id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.guid",
+                    "data_type": "numeric",
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "column_name": "Company ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.custom_id",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "column_name": "Company Custom Identifier",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.name",
+                    "data_type": "string",
+                    "column_name": "Company Name",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.shortname",
+                    "data_type": "string",
+                    "column_name": "Company Short Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.network_size_v4",
+                    "data_type": "numeric",
+                    "column_name": "Network Size v4",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.rating",
+                    "data_type": "numeric",
+                    "column_name": "Company Rating",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.rating_date",
+                    "data_type": "string",
+                    "column_name": "Rating Date",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.date_added",
+                    "data_type": "string",
+                    "column_name": "Added Date",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.industry",
+                    "data_type": "string",
+                    "column_name": "Company Industry",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.industry_slug",
+                    "data_type": "string",
+                    "column_name": "Company Slug Name",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.sub_industry",
+                    "data_type": "string",
+                    "column_name": "Company Sub Industry",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.sub_industry_slug",
+                    "data_type": "string",
+                    "column_name": "Company Sub Industry Slug",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.type",
+                    "data_type": "string",
+                    "example_values": ["Curated", "Self Published", "Private"],
+                    "column_name": "BitSight Security Rating Report",
+                    "column_order": 12
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.logo",
+                    "data_type": "string",
+                    "column_name": "Company Logo",
+                    "column_order": 13
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.sub_industry_slug",
+                    "data_type": "string",
+                    "column_name": "Company Sub Industry Slug",
+                    "column_order": 14
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.sparkline",
+                    "data_type": "string",
+                    "column_name": "Company sparkline",
+                    "column_order": 15
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.external_id",
+                    "data_type": "numeric",
+                    "column_name": "External ID",
+                    "column_order": 16
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.subscription_type",
+                    "data_type": "string",
+                    "column_name": "Subscription Type",
+                    "column_order": 17
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.subscription_type_key",
+                    "data_type": "string",
+                    "column_name": "Subscription Type Key",
+                    "column_order": 18
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.primary_domain",
+                    "data_type": "string",
+                    "column_name": "Company Domain",
+                    "column_order": 19
+                },
+                {
+                    "data_path": "action_result.data.*.security_grade",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.grade_date",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.companies.*.display_url",
+                    "data_type": "string",
+                    "column_name": "Company Overview URL",
+                    "column_order": 20
+                },
+                {
+                    "data_path": "action_result.data.*.rating_date",
+                    "data_type": "string",
+                    "column_name": "Ratings Last Updated",
+                    "column_order": 21
+                },
+                {
+                    "data_path": "action_result.data.*.created",
+                    "data_type": "string",
+                    "column_name": "Portfolio Create Date",
+                    "column_order": 22
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get company",
+            "identifier": "get_company",
+            "description": "Query for specific alert.",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {
+                "company_id": {
+                    "description": "GUID of the Alert to get.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.company_id",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.guid",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "column_name": "ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.custom_id",
+                    "data_type": "string",
+                    "contains": [
+                        "bitsight company id"
+                    ],
+                    "column_name": "Custom Identifier",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Name",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.ipv4_count",
+                    "data_type": "numeric",
+                    "column_name": "Number of IP Addresses",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.people_count",
+                    "data_type": "numeric",
+                    "column_name": "Number of employees",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.shortname",
+                    "data_type": "string",
+                    "column_name": "Short Name",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.rating",
+                    "data_type": "numeric",
+                    "column_name": "Rating",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.industry",
+                    "data_type": "string",
+                    "column_name": "Industry",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.industry_slug",
+                    "data_type": "string",
+                    "column_name": "Slug Name",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.data.*.sub_industry",
+                    "data_type": "string",
+                    "column_name": "Sub Industry",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.data.*.sub_industry_slug",
+                    "data_type": "string",
+                    "column_name": "Sub Industry Slug",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.data.*.homepage",
+                    "data_type": "string",
+                    "column_name": "Homepage",
+                    "column_order": 12
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "example_values": ["Curated", "Self Published", "Private"],
+                    "column_name": "BitSight Security Rating Report",
+                    "column_order": 13
+                },
+                {
+                    "data_path": "action_result.data.*sub_industry_slug",
+                    "data_type": "string",
+                    "column_name": "Sub Industry Slug",
+                    "column_order": 14
+                },
+                {
+                    "data_path": "action_result.data.*.subscription_type",
+                    "data_type": "string",
+                    "column_name": "Subscription Type",
+                    "column_order": 15
+                },
+                {
+                    "data_path": "action_result.data.*.subscription_type_key",
+                    "data_type": "string",
+                    "column_name": "Subscription Type Key",
+                    "column_order": 16
+                },
+                {
+                    "data_path": "action_result.data.*.primary_domain",
+                    "data_type": "string",
+                    "column_name": "Domain",
+                    "column_order": 17
+                },
+                {
+                    "data_path": "action_result.data.*.display_url",
+                    "data_type": "string",
+                    "column_name": "Overview URL",
+                    "column_order": 18
+                },
+                {
+                    "data_path": "action_result.data.*.ratings.0.rating_date",
+                    "data_type": "string",
+                    "column_name": "Ratings Last Updated",
+                    "column_order": 19
+                },
+                {
+                    "data_path": "action_result.data.*.ratings.0.rating",
+                    "data_type": "string",
+                    "column_name": "Rating",
+                    "column_order": 20
+                },
+                {
+                    "data_path": "action_result.data.*.ratings.0.range",
+                    "data_type": "string",
+                    "column_name": "Rating Range",
+                    "column_order": 21
+                },
+                {
+                    "data_path": "action_result.data.*.ratings.0.rating_color",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ]
+}
