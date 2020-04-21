@@ -224,251 +224,234 @@
                     ],
                     "example_values": [
                         "3805951439869103977B58"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*._id",
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx agentid"
+                    ],
+                    "example_values": [
+                        "3805951439869103977B58"
                     ],
                     "column_order": 0,
                     "column_name": "Agent ID"
                 },
                 {
-                    "data_path": "action_result.data.*.@created",
-                    "example_values": ["2012-01-12T22:36:22Z"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.@uid",
-                    "example_values": ["A390C269-EE66-409E-B262-13F7D577588D"],
-                    "data_type": "string"
-                },
-                {
-                    "column_order": 3,
-                    "data_path": "action_result.data.*.MAC",
-                    "example_values": ["a2-ac-75-70-ec-ae"],
-                    "data_type": "string",
-                    "column_name": "MAC"
-                },
-                {
-                    "column_order": 4,
-                    "data_path": "action_result.data.*.OS",
-                    "example_values": ["Windows 7 Enterprise 7601 Service Pack 1"],
-                    "data_type": "string",
-                    "column_name": "OS"
-                },
-                {
-                    "data_path": "action_result.data.*.OSbitness",
-                    "example_values": ["32-bit"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.appCreated",
-                    "example_values": ["2011-08-08T12:34:56Z"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.appVersion",
-                    "example_values": ["1.0.1"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.availphysical",
-                    "example_values": ["1434546176"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.biosInfo.biosDate",
-                    "example_values": ["09/13/2011"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.biosInfo.biosVersion",
-                    "example_values": ["Xen 4.1.1"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.buildNumber",
-                    "example_values": ["7601"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.date",
-                    "example_values": ["2014-08-09T06:55:07Z"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.directory",
-                    "example_values": ["C:"],
-                    "data_type": "string"
-                },
-                {
-                    "contains": ["domain"],
-                    "data_path": "action_result.data.*.domain",
-                    "example_values": ["marketing.abc.com"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.gmtoffset",
-                    "example_values": ["-PT8H"],
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.hostname",
                     "data_type": "string",
-                    "contains": ["host name"],
+                    "contains": ["host name", "fireeyehx hostname"],
                     "example_values": ["random_565_4"],
                     "column_order": 1,
                     "column_name": "Hostname"
                 },
                 {
-                    "data_path": "action_result.data.*.installDate",
-                    "example_values": ["2011-11-16T17:02:17Z"],
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.domain",
+                    "contains": ["domain"],
+                    "example_values": ["marketing.abc.com"],
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "Domain"
                 },
                 {
-                    "data_path": "action_result.data.*.machine",
-                    "example_values": ["CORAL-WIN7SP164"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.MAC",
-                    "example_values": ["a2-ac-75-70-ec-ae"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.adapter",
-                    "example_values": ["{C8CD9531-F96E-4B48-995E-9C34552FFDD0}"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.description",
-                    "example_values": ["Citrix PV Ethernet Adapter"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.dhcpLeaseExpires",
-                    "example_values": ["2012-01-20T09:02:03Z"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.dhcpLeaseObtained",
-                    "example_values": ["2012-01-12T09:02:03Z"],
-                    "data_type": "string"
-                },
-                {
-                    "contains": ["ip"],
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.dhcpServerArray.dhcpServer",
-                    "example_values": ["10.6.6.7"],
-                    "data_type": "string"
-                },
-                {
-                    "contains": ["ip"],
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.ipArray.ipInfo.ipAddress",
-                    "example_values": ["10.6.6.6"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.ipArray.ipInfo.ipv6Address",
-                    "example_values": ["::1"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.ipArray.ipInfo.ipv6SubnetMask",
-                    "example_values": ["FFFF:FFFF:FFFF:FC00:0:0:0:0"],
-                    "data_type": "string"
-                },
-                {
-                    "contains": ["ip"],
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.ipArray.ipInfo.subnetMask",
-                    "example_values": ["255.255.255.0"],
-                    "data_type": "string"
-                },
-                {
-                    "contains": ["ip"],
-                    "data_path": "action_result.data.*.networkArray.networkInfo.*.ipGatewayArray.ipGateway",
-                    "example_values": ["10.1.1.1"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.patchLevel",
-                    "example_values": ["Service Pack 2"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.primaryIpAddress",
+                    "data_path": "action_result.data.*.primary_ip_address",
                     "data_type": "string",
                     "contains": ["ip"],
                     "example_values": ["10.1.1.1"],
-                    "column_order": 2,
+                    "column_order": 3,
                     "column_name": "Primary IP"
                 },
                 {
-                    "data_path": "action_result.data.*.procType",
-                    "example_values": ["Multiprocessor Free"],
+                    "data_path": "action_result.data.*.primary_mac",
+                    "example_values": ["a2-ac-75-70-ec-ae"],
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "MAC"
+                },
+                {
+                    "data_path": "action_result.data.*.containment_state",
+                    "example_values": ["normal"],
+                    "data_type": "string",
+                    "column_order": 5,
+                    "column_name": "Containment State"
+                },
+                {
+                    "data_path": "action_result.data.*.agent_version",
+                    "example_values": ["XX.XX.X"],
+                    "data_type": "string",
+                    "column_order": 6,
+                    "column_name": "Agent Version"
+                },
+                {
+                    "data_path": "action_result.data.*.os.kernal_version",
+                    "data_type": "string",
+                    "column_name": "OS Kernal Version"
+                },
+                {
+                    "data_path": "action_result.data.*.os.platform",
+                    "example_values": ["win"],
+                    "data_type": "string",
+                    "column_name": "OS Platform"
+                },
+                {
+                    "data_path": "action_result.data.*.os.patch_level",
+                    "example_values": ["Service Pack 1"],
+                    "data_type": "string",
+                    "column_name": "OS Patch Level"
+                },
+                {
+                    "data_path": "action_result.data.*.os.bitness",
+                    "example_values": ["32-bit", "64-bit"],
+                    "data_type": "string",
+                    "column_name": "OS Bitness"
+                },
+                {
+                    "data_path": "action_result.data.*.os.product_name",
+                    "example_values": ["Windows 7 Professional"],
+                    "data_type": "string",
+                    "column_order": 7,
+                    "column_name": "OS Type"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.alert_conditions",
+                    "data_type": "numeric",
+                    "column_name": "Number of Alert Conditions"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.exploit_alerts",
+                    "data_type": "numeric",
+                    "column_name": "Number of Exploited Alerts"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.acqs",
+                    "data_type": "numeric",
+                    "column_name": "Number of Acquisitions"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.malware_false_positive_alerts",
+                    "data_type": "numeric",
+                    "column_name": "Number of Malware False Positives"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.alerts",
+                    "data_type": "numeric",
+                    "column_name": "Number of Alerts"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.exploit_blocks",
+                    "data_type": "numeric",
+                    "column_name": "Number of Exploits Blocked"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.false_positive_alerts",
+                    "data_type": "numeric",
+                    "column_name": "Number of False Positives"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.malware_cleaned_count",
+                    "data_type": "numeric",
+                    "column_name": "Number of Malware Cleaned"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.malware_alerts",
+                    "data_type": "numeric",
+                    "column_name": "Number of Malware Alerts"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.false_positive_alerts_by_source",
+                    "data_type": "numeric",
+                    "column_name": "Number of False Positives by Source"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.malware_quarantined_count",
+                    "data_type": "numeric",
+                    "column_name": "Number of Malware Quarantined"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.generic_alerts",
+                    "data_type": "numeric",
+                    "column_name": "Number of Generic Alerts"
+                },
+                {
+                    "data_path": "action_result.data.*.initial_agent_checkin",
+                    "example_values": ["2012-01-12T22:36:22Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.processor",
-                    "example_values": ["Intel(R) Xeon(R) CPU X5670 @ 2.93GHz"],
+                    "data_path": "action_result.data.*.last_audit_timestamp",
+                    "example_values": ["2012-01-12T22:36:22Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.productID",
-                    "example_values": ["55041-050-0818515-86383"],
+                    "data_path": "action_result.data.*.last_alert_timestamp",
+                    "example_values": ["2012-01-12T22:36:22Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.productName",
-                    "example_values": ["Windows XP SP3"],
+                    "data_path": "action_result.data.*.last_poll_timestamp",
+                    "example_values": ["2012-01-12T22:36:22Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.regOrg",
-                    "example_values": ["FireEye"],
+                    "data_path": "action_result.data.*.last_exploit_block",
+                    "example_values": ["2012-01-12T22:36:22Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.regOwner",
-                    "example_values": ["dgoodman"],
+                    "data_path": "action_result.data.*.last_exploit_timestamp",
+                    "example_values": ["2012-01-12T22:36:22Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.timezone",
-                    "example_values": ["Pacific Standard Time"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.timezoneDST",
-                    "example_values": ["Pacific Daylight Time"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.timezoneStandard",
-                    "example_values": ["Pacific Standard Time"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.totalphysical",
-                    "example_values": ["2142883840"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.uptime",
-                    "example_values": ["PT2468377S"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.user",
-                    "example_values": ["SYSTEM"],
-                    "data_type": "string"
-                },
-                {
-                    "contains": ["host name"],
-                    "data_path": "action_result.summary.Hostname",
-                    "example_values": ["random_565_4"],
-                    "data_type": "string"
-                },
-                {
+                    "data_path": "action_result.data.*.last_poll_ip",
+                    "data_type": "string",
                     "contains": ["ip"],
-                    "data_path": "action_result.summary.Primary IP",
                     "example_values": ["10.1.1.1"],
-                    "data_type": "string"
+                    "column_name": "Last Poll IP"
+                },
+                {
+                    "data_path": "action_result.data.*.containment_queued",
+                    "example_values": [true, false],
+                    "data_type": "boolean",
+                    "column_name": "Containment Queued"
+                },
+                {
+                    "data_path": "action_result.data.*.containment_missing_software",
+                    "example_values": [true, false],
+                    "data_type": "boolean",
+                    "column_name": "Containment Missing Software"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert._id",
+                    "example_values": ["1"],
+                    "contains": ["fireeyehx alert id"],
+                    "data_type": "string",
+                    "column_name": "Last Alert ID"
+                },
+                {
+                    "data_path": "action_result.data.*.reported_clone",
+                    "example_values": [true, false],
+                    "data_type": "boolean",
+                    "column_name": "Reported Clone"
+                },
+                {
+                    "data_path": "action_result.data.*.excluded_from_containment",
+                    "example_values": [true, false],
+                    "data_type": "boolean",
+                    "column_name": "Excluded From Containment"
+                },
+                {
+                    "data_path": "action_result.data.*.excluded_from_containment",
+                    "example_values": ["E. South America Standard Time"],
+                    "data_type": "string",
+                    "column_name": "Time Zone"
+                },
+                {
+                    "data_path": "action_result.data.*.gmt_offset_seconds",
+                    "example_values": ["-1000"],
+                    "data_type": "numeric",
+                    "column_name": "GMT Offset (Seconds)"
                 },
                 {
                     "data_path": "action_result.data",
@@ -2961,7 +2944,7 @@
                     "description": "HX Agent ID for the host",
                     "data_type": "string",
                     "contains": ["fireeyehx agentid"],
-                    "primary": false,
+                    "primary": true,
                     "order": 0
                 },
                 "req_path": {
@@ -2969,7 +2952,7 @@
                     "description": "Path of the file that you want to acquire.",
                     "data_type": "string",
                     "contains": ["file path"],
-                    "primary": false,
+                    "primary": true,
                     "order": 1
                 },
                 "external_id": {
@@ -3293,20 +3276,18 @@
                     "data_path": "action_result.parameter.alert_id",
                     "data_type": "string",
                     "contains": ["fireeyehx alert id"],
-                    "example_values": ["3B5F121536786496889B17"],
+                    "example_values": ["3B5F121536786496889B17"]
+                },
+                {
+                    "data_path": "action_result.data.*._id",
+                    "data_type": "numeric",
+                    "contains": ["fireeyehx alert id"],
+                    "example_values": ["22"],
                     "column_order": 0,
                     "column_name": "Alert ID"
                 },
                 {
-                    "data_path": "action_result.entries.*._id",
-                    "data_type": "numeric",
-                    "contains": ["fireeyehx alert id"],
-                    "example_values": ["22"],
-                    "column_order": 1,
-                    "column_name": "Alert ID"
-                },
-                {
-                    "data_path": "action_result.entries.*.agent._id",
+                    "data_path": "action_result.data.*.agent._id",
                     "example_values": ["3B5F121536786496889B17"],
                     "data_type": "string",
                     "contains": [
@@ -3314,22 +3295,22 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.entries.*.agent.url",
+                    "data_path": "action_result.data.*.agent.url",
                     "example_values": ["/hx/api/v3/hosts/3B5F121536786496889B17"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.agent.containment_state",
+                    "data_path": "action_result.data.*.agent.containment_state",
                     "example_values": ["normal"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.appliance._id",
+                    "data_path": "action_result.data.*.appliance._id",
                     "example_values": ["865393E9C9ED"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.condition._id",
+                    "data_path": "action_result.data.*.condition._id",
                     "example_values": ["CCCCCCCCCCCCCCCCCCCCCCCC"],
                     "data_type": "string",
                     "contains": [
@@ -3337,12 +3318,12 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.entries.*.condition.url",
+                    "data_path": "action_result.data.*.condition.url",
                     "example_values": ["/hx/api/v3/conditions/CCCCCCCCCCCCCCCCCCCCCCCC"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator._id",
+                    "data_path": "action_result.data.*.indicator._id",
                     "example_values": ["fc0f73fe-ba96-443c-90ec-5f6516d71cd1"],
                     "data_type": "string",
                     "contains": [
@@ -3350,52 +3331,52 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.url",
+                    "data_path": "action_result.data.*.indicator.url",
                     "example_values": ["/hx/api/v3/indicators/threat_cat_test/threat_test"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.name",
+                    "data_path": "action_result.data.*.indicator.name",
                     "example_values": ["threat_test"],
                     "data_type": "string",
-                    "column_order": 2,
+                    "column_order": 1,
                     "column_name": "Alert Name"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.uri_name",
+                    "data_path": "action_result.data.*.indicator.uri_name",
                     "example_values": ["threat_test"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.display_name",
+                    "data_path": "action_result.data.*.indicator.display_name",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.signature",
+                    "data_path": "action_result.data.*.indicator.signature",
                     "example_values": ["threat_sig"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.category",
+                    "data_path": "action_result.data.*.indicator.category",
                     "example_values": ["threat_cat_test"],
                     "data_type": "string",
-                    "column_order": 3,
+                    "column_order": 2,
                     "column_name": "Alert Category"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.url",
+                    "data_path": "action_result.data.*.indicator.url",
                     "example_values": ["threat_cat_test"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_at",
+                    "data_path": "action_result.data.*.event_at",
                     "example_values": ["2011-08-08T12:34:56Z"],
                     "data_type": "string",
-                    "column_order": 4,
+                    "column_order": 3,
                     "column_name": "Alert Start"
                 },
                 {
-                    "data_path": "action_result.entries.*.matched_at",
+                    "data_path": "action_result.data.*.matched_at",
                     "example_values": ["2011-08-08T12:34:56Z"],
                     "data_type": "string"
                 },
@@ -3405,63 +3386,63 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.source",
+                    "data_path": "action_result.data.*.source",
                     "example_values": ["IOC"],
                     "data_type": "string",
-                    "column_order": 5,
+                    "column_order": 4,
                     "column_name": "Alert Source"
                 },
                 {
-                    "data_path": "action_result.entries.*.subtype",
+                    "data_path": "action_result.data.*.subtype",
                     "data_type": "string",
-                    "column_order": 6,
+                    "column_order": 5,
                     "column_name": "Alert Subtype"
                 },
                 {
-                    "data_path": "action_result.entries.*.matched_source_alerts",
+                    "data_path": "action_result.data.*.matched_source_alerts",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.resolution",
+                    "data_path": "action_result.data.*.resolution",
                     "example_values": ["Alert"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.is_false_positive",
+                    "data_path": "action_result.data.*.is_false_positive",
                     "example_values": [true, false],
                     "data_type": "boolean",
-                    "column_order": 7,
+                    "column_order": 6,
                     "column_name": "Is False Positive"                    
                 },
                 {
-                    "data_path": "action_result.entries.*.decorators",
+                    "data_path": "action_result.data.*.decorators",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.rl",
+                    "data_path": "action_result.data.*.rl",
                     "example_values": ["/hx/api/v3/alerts/22"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator",
+                    "data_path": "action_result.data.*.indicator",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_id",
+                    "data_path": "action_result.data.*.event_id",
                     "example_values": ["9f387276e4f8f5b501408625bd"],
                     "data_type": "string",
-                    "column_order": 8,
+                    "column_order": 7,
                     "column_name": "Event ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_type",
+                    "data_path": "action_result.data.*.event_type",
                     "example_values": ["event_type"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_values.*",
+                    "data_path": "action_result.data.*.event_values.*",
                     "data_type": "string",
-                    "column_order": 9,
+                    "column_order": 8,
                     "column_name": "Event Values"
                 },
                 {
@@ -3534,7 +3515,8 @@
                 {
                     "data_path": "action_result.data.*.agent._id",
                     "example_values": ["3B5F121536786496889B17"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"]
                 },
                 {
                     "data_path": "action_result.data.*.agent.url",
@@ -3554,7 +3536,8 @@
                 {
                     "data_path": "action_result.data.*.condition._id",
                     "example_values": ["CCCCCCCCCCCCCCCCCCCCCCCC"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx condition id"]
                 },
                 {
                     "data_path": "action_result.data.*.condition.url",
@@ -3564,7 +3547,8 @@
                 {
                     "data_path": "action_result.data.*.indicator._id",
                     "example_values": ["fc0f73fe-ba96-443c-90ec-5f6516d71cd1"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx indicator id"]
                 },
                 {
                     "data_path": "action_result.data.*.indicator.url",
@@ -3696,8 +3680,15 @@
             "description": "List all the alerts for all Hosts.",
             "type": "investigate",
             "parameters": {
-                "limit": {
+                "filter_query": {
                     "order": 0,
+                    "required": false,
+                    "description": "Allows filtering on various criteria. See App documentaion for useage and explaination.",
+                    "data_type": "string",
+                    "primary": false
+                },
+                "limit": {
+                    "order": 1,
                     "required": false,
                     "description": "Limit the number of hosts returned. (HX Defaults to 50)",
                     "data_type": "numeric",
@@ -3705,7 +3696,7 @@
                     "default": 50
                 },
                 "offset": {
-                    "order": 1,
+                    "order": 2,
                     "required": false,
                     "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
                     "data_type": "numeric",
@@ -3720,6 +3711,10 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.parameter.filter_query",
+                    "data_type": "numeric"
+                },
+                {
                     "data_path": "action_result.parameter.limit",
                     "data_type": "numeric",
                     "example_values": ["100"]
@@ -3730,168 +3725,181 @@
                     "example_values": ["200"]
                 },
                 {
-                    "data_path": "action_result.entries.*._id",
+                    "data_path": "action_result.data.*.entries.*._id",
                     "data_type": "numeric",
                     "contains": ["fireeyehx alert id"],
                     "example_values": ["22"],
-                    "column_order": 1,
+                    "column_order": 0,
                     "column_name": "Alert ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.agent._id",
+                    "data_path": "action_result.data.*.entries.*.agent._id",
                     "example_values": ["3B5F121536786496889B17"],
                     "data_type": "string",
                     "contains": [
                         "fireeyehx agentid"
-                    ]
+                    ],
+                    "column_order": 1,
+                    "column_name": "Agent ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.agent.url",
+                    "data_path": "action_result.data.*.entries.*.agent.url",
                     "example_values": ["/hx/api/v3/hosts/3B5F121536786496889B17"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.agent.containment_state",
+                    "data_path": "action_result.data.*.entries.*.agent.containment_state",
                     "example_values": ["normal"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.appliance._id",
+                    "data_path": "action_result.data.*.entries.*.appliance._id",
                     "example_values": ["865393E9C9ED"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.condition._id",
+                    "data_path": "action_result.data.*.entries.*.condition._id",
                     "example_values": ["CCCCCCCCCCCCCCCCCCCCCCCC"],
                     "data_type": "string",
                     "contains": [
                         "fireeyehx condition id"
-                    ]
+                    ],
+                    "column_order": 11,
+                    "column_name": "Condition ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.condition.url",
+                    "data_path": "action_result.data.*.entries.*.condition.url",
                     "example_values": ["/hx/api/v3/conditions/CCCCCCCCCCCCCCCCCCCCCCCC"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator._id",
+                    "data_path": "action_result.data.*.entries.*.event_type",
+                    "example_values": [""],
+                    "data_type": "string",
+                    "column_order": 10,
+                    "column_name": "Event Type"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator._id",
                     "example_values": ["fc0f73fe-ba96-443c-90ec-5f6516d71cd1"],
                     "data_type": "string",
                     "contains": [
                         "fireeyehx indicator id"
-                    ]
+                    ],
+                    "column_order": 12,
+                    "column_name": "Indicator ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.url",
+                    "data_path": "action_result.data.*.entries.*.indicator.url",
                     "example_values": ["/hx/api/v3/indicators/threat_cat_test/threat_test"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.name",
+                    "data_path": "action_result.data.*.entries.*.indicator.name",
                     "example_values": ["threat_test"],
                     "data_type": "string",
                     "column_order": 2,
                     "column_name": "Alert Name"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.uri_name",
+                    "data_path": "action_result.data.*.entries.*.indicator.uri_name",
                     "example_values": ["threat_test"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.display_name",
+                    "data_path": "action_result.data.*.entries.*.indicator.display_name",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.signature",
+                    "data_path": "action_result.data.*.entries.*.indicator.signature",
                     "example_values": ["threat_sig"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.category",
+                    "data_path": "action_result.data.*.entries.*.indicator.category",
                     "example_values": ["threat_cat_test"],
                     "data_type": "string",
                     "column_order": 3,
                     "column_name": "Alert Category"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator.url",
+                    "data_path": "action_result.data.*.entries.*.indicator.url",
                     "example_values": ["threat_cat_test"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_at",
+                    "data_path": "action_result.data.*.entries.*.event_at",
                     "example_values": ["2011-08-08T12:34:56Z"],
                     "data_type": "string",
                     "column_order": 4,
                     "column_name": "Alert Start"
                 },
                 {
-                    "data_path": "action_result.entries.*.matched_at",
+                    "data_path": "action_result.data.*.entries.*.matched_at",
                     "example_values": ["2011-08-08T12:34:56Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.reported_at",
+                    "data_path": "action_result.data.*.entries.*.reported_at",
                     "example_values": ["2011-08-08T12:34:56Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.source",
+                    "data_path": "action_result.data.*.entries.*.source",
                     "example_values": ["IOC"],
                     "data_type": "string",
                     "column_order": 5,
                     "column_name": "Alert Source"
                 },
                 {
-                    "data_path": "action_result.entries.*.subtype",
+                    "data_path": "action_result.data.*.entries.*.subtype",
                     "data_type": "string",
                     "column_order": 6,
                     "column_name": "Alert Subtype"
                 },
                 {
-                    "data_path": "action_result.entries.*.matched_source_alerts",
+                    "data_path": "action_result.data.*.entries.*.matched_source_alerts",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.resolution",
+                    "data_path": "action_result.data.*.entries.*.resolution",
                     "example_values": ["Alert"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.is_false_positive",
+                    "data_path": "action_result.data.*.entries.*.is_false_positive",
                     "example_values": [true, false],
                     "data_type": "boolean",
                     "column_order": 7,
                     "column_name": "Is False Positive"                    
                 },
                 {
-                    "data_path": "action_result.entries.*.decorators",
+                    "data_path": "action_result.data.*.entries.*.decorators",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.rl",
+                    "data_path": "action_result.data.*.entries.*.rl",
                     "example_values": ["/hx/api/v3/alerts/22"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.indicator",
+                    "data_path": "action_result.data.*.entries.*.indicator",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_id",
+                    "data_path": "action_result.data.*.entries.*.event_id",
                     "example_values": ["9f387276e4f8f5b501408625bd"],
                     "data_type": "string",
                     "column_order": 8,
                     "column_name": "Event ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_type",
+                    "data_path": "action_result.data.*.entries.*.event_type",
                     "example_values": ["event_type"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.event_values.*",
+                    "data_path": "action_result.data.*.entries.*.event_values.*",
                     "data_type": "string",
                     "column_order": 9,
                     "column_name": "Event Values"
@@ -3932,8 +3940,15 @@
             "description": "List all the alert groups.",
             "type": "investigate",
             "parameters": {
-                "limit": {
+                "filter_query": {
                     "order": 0,
+                    "required": false,
+                    "description": "Allows filtering on various criteria. See App documentaion for useage and explaination.",
+                    "data_type": "string",
+                    "primary": false
+                },
+                "limit": {
+                    "order": 1,
                     "required": false,
                     "description": "Limit the number of hosts returned. (HX Defaults to 50)",
                     "data_type": "numeric",
@@ -3941,7 +3956,7 @@
                     "default": 50
                 },
                 "offset": {
-                    "order": 1,
+                    "order": 2,
                     "required": false,
                     "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
                     "data_type": "numeric",
@@ -3953,6 +3968,10 @@
                 {
                     "data_path": "action_result.status",
                     "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.filter_query",
                     "data_type": "string"
                 },
                 {
@@ -3998,12 +4017,12 @@
             "action": "get alert group",
             "identifier": "get_alert_group",
             "read_only": true,
-            "description": "Get the alert group by ID",
+            "description": "Get the alert group by ID.",
             "type": "investigate",
             "parameters": {
                 "alert_group_id": {
                     "required": true,
-                    "description": "ID of the alert group to get",
+                    "description": "ID of the alert group to get.",
                     "data_type": "string",
                     "contains": ["fireeyehx alertgroup id"],
                     "primary": true,
@@ -4057,7 +4076,7 @@
             "action": "list alertgroups alerts",
             "identifier": "list_alert_group_alerts",
             "read_only": true,
-            "description": "List all the alerts for an alert group.",
+            "description": "List all the alerts for by alert group",
             "type": "investigate",
             "parameters": {
                 "group_id": {
@@ -4094,7 +4113,8 @@
                 {
                     "data_path": "action_result.data.*.agent._id",
                     "example_values": ["3B5F121536786496889B17"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"]
                 },
                 {
                     "data_path": "action_result.data.*.agent.url",
@@ -4114,7 +4134,8 @@
                 {
                     "data_path": "action_result.data.*.condition._id",
                     "example_values": ["CCCCCCCCCCCCCCCCCCCCCCCC"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx condition id"]
                 },
                 {
                     "data_path": "action_result.data.*.condition.url",
@@ -4124,7 +4145,8 @@
                 {
                     "data_path": "action_result.data.*.indicator._id",
                     "example_values": ["fc0f73fe-ba96-443c-90ec-5f6516d71cd1"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx indicator id"]
                 },
                 {
                     "data_path": "action_result.data.*.indicator.url",
@@ -4340,6 +4362,7 @@
                     "data_path": "action_result.entries.*.filter.md5sum",
                     "example_values": ["316b8d57e79e730acb3bfb7ae7e0ec98"],
                     "data_type": "string",
+                    "contains": ["md5", "hash"],
                     "column_order": 3,
                     "column_name": "Filters Md5sum"
                 },
@@ -4347,6 +4370,7 @@
                     "data_path": "action_result.entries.*.filter.file-path",
                     "example_values": ["C:\\Windows\\ccmcache\\br\\EnCasewindows\\windows\\installer\\setup.exe"],
                     "data_type": "string",
+                    "contains": ["file path"],
                     "column_order": 4,
                     "column_name": "Filters File Path"
                 },
@@ -4391,7 +4415,7 @@
             "action": "get alert filter",
             "identifier": "get_alert_filter",
             "read_only": true,
-            "description": "Get the alet filter by ID",
+            "description": "Get the alert filter by ID.",
             "type": "investigate",
             "parameters": {
                 "alert_filter_id": {
@@ -4517,89 +4541,6 @@
             }
         },
         {
-            "action": "list alertgroup filters",
-            "identifier": "list_alert_group_filters",
-            "read_only": true,
-            "description": "List all the alert groups by filter ID.",
-            "type": "investigate",
-            "parameters": {
-                "filter_id": {
-                    "order": 0,
-                    "required": true,
-                    "description": "The alert filter ID to use to get all the alert groups.",
-                    "data_type": "numeric",
-                    "contains": ["fireeyehx alert filter id"],
-                    "primary": false
-                },
-                "limit": {
-                    "order": 1,
-                    "required": false,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "offset": {
-                    "order": 2,
-                    "required": false,
-                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "example_values": ["success"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.filter_id",
-                    "data_type": "string",
-                    "contains": ["fireeyehx alert filter id"],
-                    "example_values": ["3B5F121536786496889B17"],
-                    "column_order": 0,
-                    "column_name": "Filter ID"
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.offset",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "example_values": ["Important data: value"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                }
-            ],
-            "versions": "EQ(*)",
-            "render": {
-                "type": "table"
-            }
-        },
-        {
             "action": "list indicators",
             "identifier": "list_indicators",
             "read_only": true,
@@ -4667,84 +4608,6 @@
             }
         },
         {
-            "action": "list indicators category",
-            "identifier": "list_indicators_category",
-            "read_only": true,
-            "description": "Get a list of indicators within a category.",
-            "type": "investigate",
-            "parameters": {
-                "category": {
-                    "order": 0,
-                    "required": true,
-                    "description": "Category to search by.",
-                    "data_type": "string",
-                    "primary": false
-                },
-                "limit": {
-                    "order": 1,
-                    "required": false,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "offset": {
-                    "order": 2,
-                    "required": false,
-                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "example_values": ["success"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.category",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.offset",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "example_values": ["Important data: value"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                }
-            ],
-            "versions": "EQ(*)",
-            "render": {
-                "type": "table"
-            }
-        },
-        {
             "action": "get indicator",
             "identifier": "get_indicator",
             "read_only": true,
@@ -4756,14 +4619,16 @@
                     "required": true,
                     "description": "Category to search by.",
                     "data_type": "string",
-                    "primary": false
+                    "primary": true,
+                    "contains": ["fireeyehx indicator category"]
                 },
                 "indicator": {
                     "order": 1,
                     "required": true,
                     "description": "Indicator to search by.",
                     "data_type": "string",
-                    "primary": false
+                    "primary": true,
+                    "contains": ["fireeyehx indicator id"]
                 }
             },
             "output": [
@@ -4774,346 +4639,13 @@
                 },
                 {
                     "data_path": "action_result.parameter.category",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx indicator category"]
                 },
                 {
                     "data_path": "action_result.parameter.indicator",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "example_values": ["Important data: value"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                }
-            ],
-            "versions": "EQ(*)",
-            "render": {
-                "type": "table"
-            }
-        },
-        {
-            "action": "list conditions indicator",
-            "identifier": "list_conditions_indicator",
-            "read_only": true,
-            "description": "Get an indicator by catergory and indicator.",
-            "type": "investigate",
-            "parameters": {
-                "category": {
-                    "order": 0,
-                    "required": true,
-                    "description": "Category to search by.",
                     "data_type": "string",
-                    "primary": false
-                },
-                "indicator": {
-                    "order": 1,
-                    "required": true,
-                    "description": "Indicator to search by.",
-                    "data_type": "string",
-                    "primary": false
-                },
-                "limit": {
-                    "order": 2,
-                    "required": false,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "offset": {
-                    "order": 3,
-                    "required": false,
-                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "example_values": ["success"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.category",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.indicator",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.offset",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "example_values": ["Important data: value"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                }
-            ],
-            "versions": "EQ(*)",
-            "render": {
-                "type": "table"
-            }
-        },
-        {
-            "action": "list conditions indicator type",
-            "identifier": "list_conditions_indicator_type",
-            "read_only": true,
-            "description": "List conditions for a particular indicator by type.",
-            "type": "investigate",
-            "parameters": {
-                "category": {
-                    "order": 0,
-                    "required": true,
-                    "description": "Category to search by.",
-                    "data_type": "string",
-                    "primary": false
-                },
-                "indicator": {
-                    "order": 1,
-                    "required": true,
-                    "description": "Indicator to search by.",
-                    "data_type": "string",
-                    "primary": false
-                },
-                "type": {
-                    "order": 1,
-                    "required": true,
-                    "description": "Type to search by.",
-                    "data_type": "string",
-                    "primary": false
-                },
-                "limit": {
-                    "order": 2,
-                    "required": false,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "offset": {
-                    "order": 3,
-                    "required": false,
-                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "example_values": ["success"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.category",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.indicator",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.type",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.offset",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "example_values": ["Important data: value"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                }
-            ],
-            "versions": "EQ(*)",
-            "render": {
-                "type": "table"
-            }
-        },
-        {
-            "action": "list indicator categories",
-            "identifier": "list_indicator_categories",
-            "read_only": true,
-            "description": "Get a list of indicator categories.",
-            "type": "investigate",
-            "parameters": {
-                "limit": {
-                    "order": 0,
-                    "required": false,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "offset": {
-                    "order": 1,
-                    "required": false,
-                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "example_values": ["success"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.offset",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "example_values": ["Important data: value"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "example_values": [1],
-                    "data_type": "numeric"
-                }
-            ],
-            "versions": "EQ(*)",
-            "render": {
-                "type": "table"
-            }
-        },
-        {
-            "action": "get indicator category",
-            "identifier": "get_indicator_category",
-            "read_only": true,
-            "description": "Get a list of indicator categories.",
-            "type": "investigate",
-            "parameters": {
-                "category": {
-                    "order": 0,
-                    "required": true,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "limit": {
-                    "order": 1,
-                    "required": false,
-                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 50
-                },
-                "offset": {
-                    "order": 2,
-                    "required": false,
-                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
-                    "data_type": "numeric",
-                    "primary": false,
-                    "default": 0
-                }
-            },
-            "output": [
-                {
-                    "data_path": "action_result.status",
-                    "example_values": ["success"],
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.category",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.parameter.offset",
-                    "data_type": "numeric"
+                    "contains": ["fireeyehx indicator id"]
                 },
                 {
                     "data_path": "action_result.data",

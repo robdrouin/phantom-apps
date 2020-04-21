@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 # Usage of the consts file is recommended
 from fireeyehx_consts import *
+import pudb
 
 
 class RetVal(tuple):
@@ -49,6 +50,24 @@ class FireeyeHxConnector(BaseConnector):
             pass
 
         return response
+
+    def flatten_json(self, y):
+        out = {}
+
+        def flatten(x, name=''):
+            if type(x) is dict:
+                for a in x:
+                    flatten(x[a], name + a + '_')
+            elif type(x) is list:
+                i = 0
+                for a in x:
+                    flatten(a, name + str(i) + '_')
+                    i += 1
+            else:
+                out[name[:-1]] = x
+
+        flatten(y)
+        return out
 
     def _process_empty_reponse(self, response, action_result):
 
@@ -220,16 +239,17 @@ class FireeyeHxConnector(BaseConnector):
             # Query the endpoint
             try:
                 r = request_func(url, verify=config.get('verify_server_cert', False), headers=self._header, **kwargs)
+
             except requests.exceptions.RequestException as e:
+
                 return RetVal(action_result.set_status(phantom.APP_ERROR, ('Error Connecting to server. Details: {0}').format(str(e))), resp_json)
+
             else:
                 # Logout of the API.
                 # The Endpoint Security API has a default limit of 100 concurrent open sessions.
                 # FireEye highly recommends that you close any session you open after you have
                 # finished.
                 try:
-                    login_url = self._base_url + FIREEYE_API_PATH + FIREEYE_LOGIN_LOGOUT_ENDPOINT
-
                     self.save_progress('HX Logout: Execute REST Call')
 
                     req = requests.delete(login_url, verify=False, headers=self._header)
@@ -311,7 +331,9 @@ class FireeyeHxConnector(BaseConnector):
         params['limit'] = param.get('limit')
         params['offset'] = param.get('offset')
 
-        ret_val, response = self._make_rest_call(FIREEYE_LIST_HOSTS_ENDPOINT, action_result, params=params)
+        endpoint = FIREEYE_LIST_HOSTS_ENDPOINT
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -844,6 +866,9 @@ class FireeyeHxConnector(BaseConnector):
         params['limit'] = param.get('limit')
         params['offset'] = param.get('offset')
 
+        if param.get('filter_query'):
+            params['filterQuery'] = param.get('filter_query')
+
         endpoint = FIREEYE_LIST_ALERTS_ENDPOINT
 
         ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
@@ -874,6 +899,9 @@ class FireeyeHxConnector(BaseConnector):
 
         params['limit'] = param.get('limit')
         params['offset'] = param.get('offset')
+
+        if param.get('filter_query'):
+            params['filterQuery'] = param.get('filter_query')
 
         endpoint = FIREEYE_LIST_ALERT_GROUPS_ENDPOINT
 
@@ -1270,19 +1298,26 @@ class FireeyeHxConnector(BaseConnector):
 
         # If it is a manual poll or first run, ingest data from the last 1 hour
         if self.is_poll_now() or self._state.get('first_run', True):
-            start_time = datetime.today() - timedelta(hours=1)
+            start_time = datetime.now(pytz.timezone(tz)) - timedelta(hours=1)
 
         # If it is a scheduled poll, ingest from last_ingestion_time
         else:
-            start_time = self._state.get('last_ingestion_time', datetime.today() - timedelta(hours=1))
+            start_time = self._state.get('last_ingestion_time', datetime.now(pytz.timezone(tz)) - timedelta(hours=1))
 
         # End time is current time stamp
-        end_time = self._convert_timestamp_to_string(datetime.now(), tz)
+        end_time = datetime.now(pytz.timezone(tz))
 
-        # Start time is the beginning time stamp
-        start_time = self._convert_timestamp_to_string(start_time, tz)
+        # Print the times in an acceptable format for Fireeye
+        start_time = start_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
-        params['filterQuery'] = {"operator": "between", "arg": [start_time, end_time], "field": "created_at"}
+        # Create the filter were will use to query Fireeye
+        query = [{"operator": "between", "arg": [start_time, end_time], "field": "first_event_at"}]
+
+        # Dump the query.
+        filterQuery = json.dumps(query)
+        # Note we need to replace all the spaces since python.requests adds + to spaces and screws up the query.
+        params['filterQuery'] = "{}".format(filterQuery.replace(" ", ""))
 
         endpoint = FIREEYE_LIST_ALERT_GROUPS_ENDPOINT
 
@@ -1299,9 +1334,11 @@ class FireeyeHxConnector(BaseConnector):
         action_result.add_data(response)
 
         if alerts_list:
-            self.save_progress('Ingesting {} alerts'.format(len(alerts_list)))
 
-            for alert in alerts_list:
+            self.save_progress('Ingesting {} alerts'.format(len(alerts_list['entries'])))
+
+            for alert in alerts_list['entries']:
+
                 # Reset parameters dict
                 param = dict()
 
@@ -1340,7 +1377,7 @@ class FireeyeHxConnector(BaseConnector):
 
         date_time = datetime.fromtimestamp(timestamp, pytz.timezone(tz))
 
-        return date_time.strftime('%Y-%m-%dT%H:%M:%S:%fZ')
+        return date_time.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
     def _create_container(self, alert):
         """ This function is used to create the container in Phantom using alert data.
@@ -1349,16 +1386,16 @@ class FireeyeHxConnector(BaseConnector):
         """
         container_dict = dict()
 
-        container_dict['name'] = '{alert_name}'.format(alert_name=alert['data']['entires']['assessment'])
+        container_dict['name'] = '{alert_name}'.format(alert_name=alert['assessment'])
         container_dict['source_data_identifier'] = container_dict['name']
-        container_dict['description'] = alert['data']['entires']['assessment']
+        container_dict['description'] = alert['assessment']
 
         container_creation_status, container_creation_msg, container_id = self.save_container(container=container_dict)
 
         if phantom.is_fail(container_creation_status):
             self.debug_print(container_creation_msg)
             self.save_progress('Error while creating container for alert {alert_name}. '
-                               '{error_message}'.format(alert_name=alert['data']['entires']['assessment'], error_message=container_creation_msg))
+                               '{error_message}'.format(alert_name=alert['assessment'], error_message=container_creation_msg))
             return self.set_status(phantom.APP_ERROR)
 
         return self.set_status(phantom.APP_SUCCESS), container_id
@@ -1369,18 +1406,28 @@ class FireeyeHxConnector(BaseConnector):
         :param container_id: ID of container in which we have to create the artifacts
         :return: status(success/failure), message
         """
+
+        pudb.set_trace()
+
         artifacts_list = []
         temp_dict = {}
         cef = {}
-
+        """
         # List to transform the data to CEF acceptable fields.
         transforms = {'hostname': 'sourceHostName', 'primary_ip_address': 'sourceAddress', 'file-path': 'filePath', 'file_full_path': 'filePath',
         'path': 'filePath', 'md5sum': 'fileHashMd5', 'sha1sum': 'fileHashSha1', 'sha256sum': 'fileHashSha256', 'original-file-name': 'fileName',
         'creation-time': 'fileCreateTime', 'modification-time': 'fileModificationTime', 'size-in-bytes': 'fileSize'}
 
+
+        detections_dict = self._process_artifact_detections(alert.get("last_alert").get("event_values").get("detections"), container_id)
+        del alert["last_alert"]["event_values"]["detections"]
+        artifacts_list.append(detections_dict)
+
+        # create_artifact_status, create_artifact_msg, _ = self.save_artifact(artifacts_list)
+
         # Process the details section.
-        details = json.loads(alert['data']['entires'])
-        for detail in details['data']['entries'].items():
+        details = alert
+        for detail in details.items():
             if detail[0] in transforms:
                 cef[transforms[detail[0]]] = detail[1]
             else:
@@ -1392,22 +1439,52 @@ class FireeyeHxConnector(BaseConnector):
                 cef[transforms[artifact_name]] = artifact_value
             else:
                 cef[artifact_name] = artifact_value
+        """
+
+        cef = self.flatten_json(alert)
 
         # Add into artifacts dictionary if it is available
         if cef:
             temp_dict['cef'] = cef
-            temp_dict['name'] = alert['data']['entires']['assessment']
+            temp_dict['name'] = alert['assessment']
             temp_dict['container_id'] = container_id
+            temp_dict['type'] = "Host"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
         artifacts_list.append(temp_dict)
 
-        create_artifact_status, create_artifact_msg, _ = self.save_artifact(temp_dict)
+        print("ARTIFACTS LIST!!!!!!!!\n\n\n\n\n")
+        print(artifacts_list)
+
+        create_artifact_status, create_artifact_msg, _ = self.save_artifacts(artifacts_list)
 
         if phantom.is_fail(create_artifact_status):
             return self.set_status(phantom.APP_ERROR), create_artifact_msg
 
         return self.set_status(phantom.APP_SUCCESS), 'Artifacts created successfully'
+
+    def _process_artifact_detections(self, alert, container_id):
+        """ This function is used to create the artifact detections using the data from the alert.
+        :param alert: Data of single alert
+        :return: dictionary of detections to be added as artifact(s)
+        """
+
+        temp_dict = {}
+        cef = {}
+
+        # Process the detections
+        for detections in alert['detection']:
+            cef = detections
+
+        # Add into artifacts dictionary if it is available
+        if cef:
+            temp_dict['cef'] = cef
+            temp_dict['name'] = "HX Detection"
+            temp_dict['container_id'] = container_id
+            temp_dict['type'] = "endpoint"
+            temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
+
+        return temp_dict
 
     def _create_dict_hash(self, input_dict):
         """ This function is used to generate the hash from dictionary.
