@@ -156,7 +156,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         self.save_progress("Connecting to endpoint")
 
         # make rest call
-        ret_val, response = self._make_rest_call(AKAMAI_NETWORK_LIST_ENDPOINT, action_result)
+        ret_val, response = self._make_rest_call(AKAMAI_NETWORK_LIST_ENDPOINT, action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -190,10 +190,10 @@ class AkamaiNetworkListsConnector(BaseConnector):
         if param.get("search"):
             params['search'] = param.get("search")
 
-        endpoint = AKAMAI_NETWORK_LIST_ENDPOINT
+        endpoint = self._process_parameters(AKAMAI_NETWORK_LIST_ENDPOINT, params)
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -228,10 +228,10 @@ class AkamaiNetworkListsConnector(BaseConnector):
         # Loop through each Network ID to retrive the data.
         for networklist in param_networklistid:
             # Format the URI
-            endpoint = "{}/{}".format(AKAMAI_NETWORK_LIST_ENDPOINT, networklist)
+            endpoint = self._process_parameters(AKAMAI_NETWORK_LIST_ENDPOINT + "/{}".format(networklist), params)
 
             # make rest call
-            ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+            ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None)
 
             if (phantom.is_fail(ret_val)):
                 # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -262,12 +262,12 @@ class AkamaiNetworkListsConnector(BaseConnector):
         if len(param_elements) <= 1:
             # Create the param data to build the URI correctly. Only doing this to reuse code.
             # Can assign manually but it wont be as flexiable if the API changes.
-            params['element'] = param.get('elements')
+            params = {'element': param.get('elements')}
 
-            endpoint = "{}/{}/elements".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'))
+            endpoint = self._process_parameters("{}/{}/elements".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid')), params)
 
             # make rest call
-            ret_val, response = self._make_rest_call(endpoint, action_result, params=params, method="put")
+            ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="put")
         else:
             data = {"list": []}
             # Rebuild the elements as JSON
@@ -278,7 +278,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
             endpoint = "{}/{}/append".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'))
 
             # make rest call
-            ret_val, response = self._make_rest_call(endpoint, action_result, method="post", json=data)
+            ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="post", json=data)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -308,10 +308,10 @@ class AkamaiNetworkListsConnector(BaseConnector):
             # Can assign manually but it wont be as flexiable if the API changes.
             params = {'element': param.get('elements')}
 
-            endpoint = "{}/{}/elements".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'))
+            endpoint = self._process_parameters("{}/{}/elements".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid')), params)
 
             # make rest call
-            ret_val, response = self._make_rest_call(endpoint, action_result, params=params, method="delete")
+            ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="delete")
         else:
             # This is a hack to remove multiple elements at a time. I use the "Update a network list" API to be able to remove multiple IP's / CIDR's.
 
@@ -320,7 +320,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
             endpoint = "{}/{}".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'))
 
             # make rest call
-            ret_val, response = self._make_rest_call(endpoint, action_result)
+            ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None)
 
             networkList = response['list']
 
@@ -345,7 +345,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
             }
 
             # make rest call
-            ret_val, response = self._make_rest_call(endpoint, action_result, method="put", json=data)
+            ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="put", json=data)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -386,7 +386,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         endpoint = "{}".format(AKAMAI_NETWORK_LIST_ENDPOINT)
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, method="post", json=data)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="post", json=data)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -418,7 +418,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         }
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, method="put", json=data)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="put", json=data)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -446,7 +446,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         endpoint = "{}/{}".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'))
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, method="delete")
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="delete")
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -475,11 +475,11 @@ class AkamaiNetworkListsConnector(BaseConnector):
             "comments": param.get('comments', '')
         }
 
-        # Notification parameter is used
+        # Notification parameter is used 
         if param.get("notification"):
             notificationEmails = []
 
-            for notificationEmail in param.get("notification").split(','):
+            for notificationEmail in param.get("notification").split(',')
                 notificationEmails.append(notificationEmail)
 
             data['notification'] = notificationEmails
@@ -487,7 +487,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         endpoint = "{}/{}/environments/{}/activate".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'), param.get('environment'))
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, method="post", json=data)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None, method="post", json=data)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -513,7 +513,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         endpoint = "{}/{}/environments/{}/status".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'), param.get('environment'))
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -536,12 +536,13 @@ class AkamaiNetworkListsConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        params['extended'] = param.get('extended')
+        params = {'extended': param.get('extended')}
 
-        endpoint = "{}/{}/sync-points/{}/history".format(AKAMAI_NETWORK_LIST_ENDPOINT, param.get('networklistid'), param.get('syncpoint'))
+        endpoint = self._process_parameters("{}/{}/sync-points/{}/history".format(AKAMAI_NETWORK_LIST_ENDPOINT,
+                                                                            param.get('networklistid'), param.get('syncpoint')), params)
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -567,7 +568,7 @@ class AkamaiNetworkListsConnector(BaseConnector):
         endpoint = "{}/{}".format(AKAMAI_ACTIVATIONS_ENDPOINT, param.get('activationid'))
 
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -612,6 +613,29 @@ class AkamaiNetworkListsConnector(BaseConnector):
             action_execution_status = action_function(param)
         return action_execution_status
 
+    def _process_parameters(self, endpoint, params):
+        """ This function is used process the parameters and creates a valid endpoint URL.
+        :param endpoint: The endpoint we want to send data to
+        :param param: Dictionary of input parameters
+        :return: endpoint
+        """
+        # Default values
+        first_param = True
+
+        if len(params) > 0:
+            endpoint += "?"
+
+            for param, value in params.items():
+                if first_param:
+                    endpoint += "{}={}".format(param, value)
+                    first_param = False
+                else:
+                    endpoint += "&{}={}".format(param, value)
+        else:
+            endpoint = endpoint
+
+        return endpoint
+
     def initialize(self):
 
         # Load the state in initialize, use it to store data
@@ -620,6 +644,16 @@ class AkamaiNetworkListsConnector(BaseConnector):
 
         # get the asset config
         config = self.get_config()
+
+        """
+        # Access values in asset config by the name
+
+        # Required values can be accessed directly
+        required_config_name = config['required_config_name']
+
+        # Optional values should use the .get() function
+        optional_config_name = config.get('optional_config_name')
+        """
 
         self._base_url = config.get('base_url')
         self._client_token = config.get('client_token')
