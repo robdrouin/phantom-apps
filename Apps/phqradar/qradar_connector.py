@@ -28,6 +28,7 @@ from datetime import timedelta
 from pytz import timezone
 from bs4 import BeautifulSoup
 from bs4 import UnicodeDammit
+import os
 
 
 class RetVal(tuple):
@@ -117,6 +118,7 @@ class QradarConnector(BaseConnector):
         return message
 
     def _call_api(self, endpoint, method, result, params=None, headers=None, send_progress=False):
+        
 
         url = self._base_url + endpoint
 
@@ -141,6 +143,9 @@ class QradarConnector(BaseConnector):
 
         config = self.get_config()
 
+        if config.get("client_cert"):
+            cert = "{}/{}".format(os.path.dirname(os.path.realpath(__file__)), config.get("client_cert"))
+
         if self.get_action_identifier() == 'test_asset_connectivity':
             try:
                 sec_token_header = headers.pop('SEC')
@@ -152,10 +157,13 @@ class QradarConnector(BaseConnector):
             # 1. Testing the basic auth workflow as here
             if 'Authorization' in headers:
                 try:
-                    r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params)
-                    if r.status_code != 200:
-                        result.set_status(phantom.APP_ERROR, "Please provide correct username and password in the asset configuration parameters")
-                        return r
+                    if config.get("client_cert"):
+                        r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params, cert=cert)
+                    else:
+                        r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params)
+                        if r.status_code != 200:
+                            result.set_status(phantom.APP_ERROR, 'Please provide correct username and password in the asset configuration parameters')
+                            return r
                 except Exception as e:
                     result.set_status(phantom.APP_ERROR, "{0}. {1}".format(QRADAR_ERR_REST_API_CALL_FAILED,
                                         "Please provide correct username and password in the asset configuration parameters."), e)
@@ -173,17 +181,26 @@ class QradarConnector(BaseConnector):
 
                 # Testing the auth token workflow
                 try:
-                    r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params)
-                    if r.status_code != 200:
-                        result.set_status(phantom.APP_ERROR, "Please provide correct authorization token in the asset configuration parameters")
-                        return r
+                    if config.get("client_cert"):
+                        r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params, cert=cert)
+                    else:
+                        r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params)
+                        if r.status_code != 200:
+                            result.set_status(phantom.APP_ERROR, 'Please provide correct username and password in the asset configuration parameters')
+                            return r
                 except Exception as e:
                     result.set_status(phantom.APP_ERROR, "{0}. {1}".format(QRADAR_ERR_REST_API_CALL_FAILED,
                                         "Please provide correct authorization token in the asset configuration parameters."), e)
                     return r
         else:
             try:
-                r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params)
+                if config.get("client_cert"):
+                    r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params, cert=cert)
+                else:
+                    r = request_func(url, headers=headers, verify=config[phantom.APP_JSON_VERIFY], params=params)
+                    if r.status_code != 200:
+                        result.set_status(phantom.APP_ERROR, 'Please provide correct username and password in the asset configuration parameters')
+                        return r
             except Exception as e:
                 if e.message:
                     if isinstance(e.message, basestring):

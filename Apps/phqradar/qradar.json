@@ -156,6 +156,11 @@
             "required": false,
             "order": 19,
             "description": "Events ingestion initial time relative to offense start time (default is 60 min)"
+        },
+        "client_cert": {
+            "order": 21,
+            "data_type": "string",
+            "description": "Path to the client cert. Include the full path"
         }
     },
     "app_config": {
