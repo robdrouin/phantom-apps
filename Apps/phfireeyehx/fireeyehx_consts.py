@@ -70,7 +70,9 @@ FIREEYE_CONTAINMENT_STATES_ENDPOINT = 'containment_states'
 FIREEYE_CONATINMENT_ALL_UNLOCK_CODES = 'containment/unlock_codes'
 FIREEYE_CONTAINMENT_UNLOCK_CODES_ENDPOINT = 'hosts/{agentId}/containment/unlock_codes'
 # Policies endpoint
-FIREEYE_POLICIES_ENDPOINT = 'policies'
+FIREEYE_LIST_POLICIES_ENDPOINT = 'policies'
+FIREEYE_GET_POLICY_ENDPOINT = 'policies/{policyId}'
+FIREEYE_UPDATE_POLICY_ENDPOINT = 'policies/{policyId}'
 # Policy types endpoint
 FIREEYE_POLICY_TYPES_ENDPOINT = 'policy_types'
 # Conditions endpoints

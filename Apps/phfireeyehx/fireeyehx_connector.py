@@ -1275,6 +1275,117 @@ class FireeyeHxConnector(BaseConnector):
         # BaseConnector will create a textual message based off of the summary dictionary
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_policies(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        params = {}
+
+        params['limit'] = param.get('limit')
+        params['offset'] = param.get('offset')
+
+        if param.get('combined'):
+            params['combined'] = param.get('combined')
+
+        endpoint = FIREEYE_LIST_POLICIES_ENDPOINT
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_policy(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        endpoint = FIREEYE_GET_POLICY_ENDPOINT.format(policyId=param.get('policy_id'))
+
+        ret_val, response = self._make_rest_call(endpoint, action_result)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_update_policy(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        params = {}
+
+        # Defaults for appending new data
+        malwareProtection = []
+        exploitGuardProtection = []
+        realTimeIndicatorDetection = []
+
+        # Need to get the policy details first
+        endpoint = FIREEYE_GET_POLICY_ENDPOINT.format(policyId=param.get('policy_id'))
+
+        ret_val, policy = self._make_rest_call(endpoint, action_result)
+
+        if param.get("malware_protection"):
+            malware_protection = policy.get("data").get("data").get("malware_protection").get("excludedFiles")
+
+        if param.get("exploit_guard_protection"):
+
+
+        if param.get("real_time_indicator_detection"):
+
+
+
+
+
+
+        endpoint = FIREEYE_UPDATE_POLICY_ENDPOINT.format(policyId=param.get('policy_id'))
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params, method="put")
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_on_poll(self, param):
         # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
@@ -1333,14 +1444,11 @@ class FireeyeHxConnector(BaseConnector):
         response = self._flatten_response_data(alerts_list)
         action_result.add_data(response)
 
-        if alerts_list:
+        if response:
 
-            self.save_progress('Ingesting {} alerts'.format(len(alerts_list['entries'])))
+            self.save_progress('Ingesting {} alerts'.format(len(response['entries'])))
 
-            for alert in alerts_list['entries']:
-
-                # Reset parameters dict
-                param = dict()
+            for alert in response['entries']:
 
                 # Create a container for each alert
                 container_creation_status, container_id = self._create_container(alert)
@@ -1412,6 +1520,23 @@ class FireeyeHxConnector(BaseConnector):
         artifacts_list = []
         temp_dict = {}
         cef = {}
+
+        # print("Alert type {} ".format(type(alert)))
+        # alert = json.dumps(alert)
+
+        # alert = alert['last_alert']
+
+        # for data in alert:
+        #    print("KEY {}   Data {}   Type {}".format(data, alert[data], type(alert[data])))
+        #    if type(alert[data]) is str:
+        #        cef[str(data.encode('ascii', 'ignore'))] = str(alert[data].encode('ascii', 'ignore'))
+        #    elif type(alert[data]) is int:
+        #        cef[str(data.encode('ascii', 'ignore'))] = alert[data]
+
+        # del alert["last_alert"]["event_values"]
+        # cef = alert
+        # print(cef)
+
         """
         # List to transform the data to CEF acceptable fields.
         transforms = {'hostname': 'sourceHostName', 'primary_ip_address': 'sourceAddress', 'file-path': 'filePath', 'file_full_path': 'filePath',
@@ -1440,7 +1565,7 @@ class FireeyeHxConnector(BaseConnector):
             else:
                 cef[artifact_name] = artifact_value
         """
-
+        # Old method to just flatten all the data into a single element array
         cef = self.flatten_json(alert)
 
         # Add into artifacts dictionary if it is available
@@ -1452,9 +1577,6 @@ class FireeyeHxConnector(BaseConnector):
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
         artifacts_list.append(temp_dict)
-
-        print("ARTIFACTS LIST!!!!!!!!\n\n\n\n\n")
-        print(artifacts_list)
 
         create_artifact_status, create_artifact_msg, _ = self.save_artifacts(artifacts_list)
 
@@ -1482,6 +1604,39 @@ class FireeyeHxConnector(BaseConnector):
             temp_dict['name'] = "HX Detection"
             temp_dict['container_id'] = container_id
             temp_dict['type'] = "endpoint"
+            temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
+
+        return temp_dict
+
+    def _process_artifact_host(self, alert, container_id):
+        """ This function is used to create the artifact host using the data from the alert.
+            This will seperate the host and os details from the rest of the alert
+        :param alert: Data of single alert
+        :return: dictionary of detections to be added as artifact(s)
+        """
+
+        temp_dict = {}
+        cef = {}
+        cef_types = {}
+
+        cef_types["_id"] = ["fireeyehx agentid"]
+        cef_types["hostname"] = ["sourceHostName"]
+
+        # Get the host details from the alert
+        cef['agent'] = alert.get("last_alert").get("agent")
+        cef['os-details'] = alert.get("last_alert").get("os-details").get("$")
+
+        # Remove the data we just parsed from the alert
+        del alert['last_alert']['agent']
+        del alert['last_alert']['os-details']
+
+        # Add into artifacts dictionary if it is available
+        if cef:
+            temp_dict['cef'] = cef
+            temp_dict['cef_types'] = cef_types
+            temp_dict['name'] = "HX Host Details"
+            temp_dict['container_id'] = container_id
+            temp_dict['type'] = "host"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
         return temp_dict
@@ -1545,6 +1700,9 @@ class FireeyeHxConnector(BaseConnector):
             'list_conditions_indicator_type': self._handle_list_conditions_indicator_type,
             'list_indicator_categories': self._handle_list_indicator_categories,
             'get_indicator_category': self._handle_get_indicator_category,
+            'list_policies': self._handle_list_policies,
+            'get_policy': self._handle_get_policy,
+            'update_policy': self._handle_update_policy,
             'on_poll': self._handle_on_poll
         }
 

@@ -4579,6 +4579,116 @@
                     "data_type": "numeric"
                 },
                 {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_order": 0,
+                    "column_name": "Name"
+                },
+                {
+                    "data_path": "action_result.data.*.active_since",
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "Active Since"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*._revision",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.create_text",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.created_by",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.meta",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.signature",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.display_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*._id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.uri_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "Description"
+                },
+                {
+                    "data_path": "action_result.data.*.category._id",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.category.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category.uri_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category.share_mode",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.source_alerts",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.agent_alerts",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.active_conditions",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.create_actor.username",
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "Created By"
+                },
+                {
+                    "data_path": "action_result.data.*.create_actor._id",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.update_actor.username",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.update_actor._id",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.platforms",
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "Platforms"
+                },
+                {
                     "data_path": "action_result.data",
                     "data_type": "string"
                 },
@@ -4646,6 +4756,412 @@
                     "data_path": "action_result.parameter.indicator",
                     "data_type": "string",
                     "contains": ["fireeyehx indicator id"]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": ["Important data: value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
+        {
+            "action": "list policies",
+            "identifier": "list_policies",
+            "read_only": true,
+            "description": "Get the all the policies on the appliance.",
+            "type": "investigate",
+            "parameters": {
+                "combined": {
+                    "order": 0,
+                    "required": false,
+                    "description": "When true, returns category settings and attribution information from the policies selected and the Default Policy.",
+                    "data_type": "boolean",
+                    "primary": false
+                },
+                "limit": {
+                    "order": 1,
+                    "required": false,
+                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 50
+                },
+                "offset": {
+                    "order": 2,
+                    "required": false,
+                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.combined",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*._id",
+                    "data_type": "string",
+                    "column_order": 0,
+                    "column_name": "ID",
+                    "contains": ["fireeyehx policy id"]
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.name",
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "Name"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.description",
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "Description"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.created_by",
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "Created By"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.created_at",
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "Created At"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.updated_at",
+                    "data_type": "string",
+                    "column_order": 5,
+                    "column_name": "Updated At"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.display_created_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.display_updated_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.migrated",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.default",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.enabled",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.policy_type_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.priority",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": ["Important data: value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
+        {
+            "action": "get policy",
+            "identifier": "get_policy",
+            "read_only": true,
+            "description": "Get a specific policy.",
+            "type": "investigate",
+            "parameters": {
+                "policy_id": {
+                    "order": 0,
+                    "required": true,
+                    "description": "The ID of the policy to retrive.",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": ["fireeyehx policy id"]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.policy_id",
+                    "data_type": "string",
+                    "contains": ["fireeyehx policy id"]
+                },
+                {
+                    "data_path": "action_result.data.*.data.*._id",
+                    "data_type": "string",
+                    "column_order": 0,
+                    "column_name": "ID",
+                    "contains": ["fireeyehx policy id"]
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.name",
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "Name"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.description",
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "Description"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.created_by",
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "Created By"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.created_at",
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "Created At"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.updated_at",
+                    "data_type": "string",
+                    "column_order": 5,
+                    "column_name": "Updated At"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.display_created_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.display_updated_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.migrated",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.default",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.enabled",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.policy_type_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.data.*.priority",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": ["Important data: value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
+        {
+            "action": "update policy",
+            "identifier": "update_policy",
+            "read_only": true,
+            "description": "Update a specific policy with exclusions.",
+            "type": "investigate",
+            "parameters": {
+                "policy_id": {
+                    "order": 0,
+                    "required": true,
+                    "description": "The ID of the policy to update.",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": ["fireeyehx policy id"]
+                },
+                "malware_protection": {
+                    "order": 1,
+                    "required": false,
+                    "description": "Update the Malware Protection exclusions list.",
+                    "data_type": "boolean",
+                    "primary": false,
+                    "default": false
+                },
+                "exploit_guard_protection": {
+                    "order": 2,
+                    "required": false,
+                    "description": "Update the Malware Guard Protection exclusions list.",
+                    "data_type": "boolean",
+                    "primary": false,
+                    "default": false
+                },
+                "real_time_indicator_detection": {
+                    "order": 3,
+                    "required": false,
+                    "description": "Update the Real Timne Indicator Detection exclusions list.",
+                    "data_type": "boolean",
+                    "primary": false,
+                    "default": false
+                },
+                "excluded_md5s": {
+                    "order": 4,
+                    "required": false,
+                    "description": "List of MD5s to exclude. Commas seperated list allowed.",
+                    "data_type": "string",
+                    "primary": false,
+                    "contains": ["fileHash", "fileHashMd5", "oldFileHash"]
+                },
+                "excluded_files": {
+                    "order": 5,
+                    "required": false,
+                    "description": "List of Files to exclude. Commas seperated list allowed.",
+                    "data_type": "string",
+                    "primary": false,
+                    "contains": ["fileName", "oldFileName"]
+                },
+                "excluded_paths": {
+                    "order": 6,
+                    "required": false,
+                    "description": "List of File Paths to exclude. Commas seperated list allowed.",
+                    "data_type": "string",
+                    "primary": false,
+                    "contains": ["filePath", "oldfFilePath"]
+                },
+                "excluded_processes": {
+                    "order": 7,
+                    "required": false,
+                    "description": "List of Processes to exclude. Commas seperated list allowed.",
+                    "data_type": "string",
+                    "primary": false
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.policy_id",
+                    "data_type": "string",
+                    "contains": ["fireeyehx policy id"]
+                },
+                {
+                    "data_path": "action_result.parameter.malware_protection",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.parameter.exploit_guard_protection",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.parameter.real_time_indicator_detection",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.parameter.excluded_md5s",
+                    "data_type": "string",
+                    "contains": ["fileHash", "fileHashMd5", "oldFileHash"]
+                },
+                {
+                    "data_path": "action_result.parameter.excluded_files",
+                    "data_type": "string",
+                    "contains": ["fileName", "oldFileName"]
+                },
+                {
+                    "data_path": "action_result.parameter.excluded_paths",
+                    "data_type": "string",
+                    "contains": ["filePath", "oldfFilePath"]
+                },
+                {
+                    "data_path": "action_result.parameter.excluded_processes",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data",
