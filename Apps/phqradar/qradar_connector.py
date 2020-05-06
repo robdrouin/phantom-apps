@@ -118,7 +118,6 @@ class QradarConnector(BaseConnector):
         return message
 
     def _call_api(self, endpoint, method, result, params=None, headers=None, send_progress=False):
-        
 
         url = self._base_url + endpoint
 

@@ -5,7 +5,7 @@
     "type": "siem",
     "publisher": "Splunk",
     "main_module": "qradar_connector.pyc",
-    "app_version": "1.2.69",
+    "app_version": "1.2.70",
     "latest_tested_versions": [
         "On-premise v7.3.1"
     ],
@@ -160,7 +160,7 @@
         "client_cert": {
             "order": 21,
             "data_type": "string",
-            "description": "Path to the client cert. Include the full path"
+            "description": "File name for the client cert"
         }
     },
     "app_config": {
