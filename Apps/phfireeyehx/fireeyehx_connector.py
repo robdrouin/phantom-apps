@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 # Usage of the consts file is recommended
 from fireeyehx_consts import *
-import pudb
+# import pudb
 
 
 class RetVal(tuple):
@@ -114,21 +114,30 @@ class FireeyeHxConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_octet_response(self, r, action_result):
+        # pudb.set_trace()
+
         guid = uuid.uuid4()
+
         if hasattr(Vault, 'get_vault_tmp_dir'):
-            local_dir = Vault.get_vault_tmp_dir() + guid
+            local_dir = ('{}/{}').format(Vault.get_vault_tmp_dir(), guid)
         else:
             local_dir = ('/opt/phantom/vault/tmp/{}').format(guid)
+
         self.save_progress(('Using temp directory: {0}').format(guid))
+
         try:
             os.makedirs(local_dir)
         except Exception as e:
             return action_result.set_status(phantom.APP_ERROR, 'Unable to create temporary vault folder.', e)
 
         action_params = self.get_current_param()
+
         acq_id = action_params.get('acquisition_id', 'no_id')
+
         zip_file_path = ('{0}/{1}.zip').format(local_dir, acq_id)
+
         if r.status_code == 200:
+
             try:
                 with open(zip_file_path, 'wb') as (f):
                     f.write(r.content)
@@ -156,6 +165,7 @@ class FireeyeHxConnector(BaseConnector):
                     return RetVal(action_result.set_status(phantom.APP_ERROR, ('Unable to store file in Phantom Vault. Error: {0}').format(str(e))), None)
 
         message = ('Error from server. Status Code: {0} Data from server: {1}').format(r.status_code, r.text.replace('{', '{{').replace('}', '}}'))
+
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_response(self, r, action_result):
@@ -193,7 +203,8 @@ class FireeyeHxConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
-    def _make_rest_call(self, endpoint, action_result, method='get', **kwargs):
+    def _make_rest_call(self, endpoint, action_result, method='get', get_file=False, **kwargs):
+
         config = self.get_config()
 
         username = config.get('hx_username')
@@ -238,6 +249,11 @@ class FireeyeHxConnector(BaseConnector):
 
             # Query the endpoint
             try:
+
+                # If we are downloading a file from HX, we need to update the header.
+                if get_file:
+                    self._header.update({'Accept': 'application/octet-stream'})
+
                 r = request_func(url, verify=config.get('verify_server_cert', False), headers=self._header, **kwargs)
 
             except requests.exceptions.RequestException as e:
@@ -462,7 +478,7 @@ class FireeyeHxConnector(BaseConnector):
         # BaseConnector will create a textual message based off of the summary dictionary
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_list_acquisitions(self, param):
+    def _handle_list_file_acquisitions(self, param):
         # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -470,20 +486,143 @@ class FireeyeHxConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
+        params = {}
+
         agent_id = param.get('agent_id', None)
 
-        req_filename = param.get('req_filename', None)
+        search = param.get('search', None)
 
-        search_data = {}
+        params['limit'] = param.get('limit')
+        params['offset'] = param.get('offset')
 
         if agent_id is not None:
-            search_data['host._id'] = agent_id
-        if req_filename is not None:
-            search_data['search'] = req_filename
+            params['host._id'] = agent_id
+        if search is not None:
+            params['search'] = search
 
-        endpoint = FIREEYE_LIST_ACQUISITIONS_ENDPOINT
+        endpoint = FIREEYE_LIST_FILE_ACQUISITIONS_ENDPOINT
 
-        ret_val, response = self._make_rest_call(endpoint, action_result, params=search_data)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_quarantine_acquisitions(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        params = {}
+
+        agent_id = param.get('agent_id', None)
+
+        search = param.get('search', None)
+
+        params['limit'] = param.get('limit')
+        params['offset'] = param.get('offset')
+
+        if agent_id is not None:
+            params['host._id'] = agent_id
+        if search is not None:
+            params['search'] = search
+
+        endpoint = FIREEYE_LIST_QUARANTINE_FILES_ENDPOINT
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_data_acquisitions(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        params = {}
+
+        agent_id = param.get('agent_id', None)
+
+        search = param.get('search', None)
+
+        params['limit'] = param.get('limit')
+        params['offset'] = param.get('offset')
+
+        if agent_id is not None:
+            params['host._id'] = agent_id
+        if search is not None:
+            params['search'] = search
+
+        endpoint = FIREEYE_LIST_DATA_ACQUISITIONS_ENDPOINT
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_triage_acquisitions(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        params = {}
+
+        agent_id = param.get('agent_id', None)
+
+        search = param.get('search', None)
+
+        params['limit'] = param.get('limit')
+        params['offset'] = param.get('offset')
+
+        if agent_id is not None:
+            params['host._id'] = agent_id
+        if search is not None:
+            params['search'] = search
+
+        endpoint = FIREEYE_LIST_TRIAGE_ACQUISITIONS_ENDPOINT
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -507,7 +646,12 @@ class FireeyeHxConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        endpoint = FIREEYE_GET_FILE_ACQUISITION_ENDPOINT.format(acqsId=param.get('acquisition_id'))
+        if param.get('acquisition_type') == "File":
+            endpoint = FIREEYE_GET_FILE_ACQUISITION_ENDPOINT.format(acqsId=param.get('acquisition_id'))
+        elif param.get('acquisition_type') == "Quarantine":
+            endpoint = FIREEYE_GET_QUARANTINE_ACQUISITION_ENDPOINT.format(quarantineId=param.get('acquisition_id'))
+        elif param.get('acquisition_type') == "Triage":
+            endpoint = FIREEYE_GET_TRIAGE_ACQUISITION_ENDPOINT.format(acqsId=param.get('acquisition_id'))
 
         ret_val, response = self._make_rest_call(endpoint, action_result)
 
@@ -533,12 +677,14 @@ class FireeyeHxConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        # NEED TO FIGURE THIS PART OUT IN THE _MAKE_REST_CALL
-        self._header.update({'Accept': 'application/octet-stream'})
+        if param.get('acquisition_type') == "File":
+            endpoint = FIREEYE_GET_FILE_ACQUISITION_PACKAGE_ENDPOINT.format(acqsId=param.get('acquisition_id'))
+        elif param.get('acquisition_type') == "Quarantine":
+            endpoint = FIREEYE_GET_QUARANTINE_ACQUISITION_PACKAGE_ENDPOINT.format(quarantineId=param.get('acquisition_id'))
+        elif param.get('acquisition_type') == "Triage":
+            endpoint = FIREEYE_GET_TRIAGE_ACQUISITION_PACKAGE_ENDPOINT.format(acqsId=param.get('acquisition_id'))
 
-        endpoint = FIREEYE_GET_FILE_ACQUISITION_PACKAGE_ENDPOINT.format(acqsId=param.get('acquisition_id'))
-
-        ret_val, response = self._make_rest_call(endpoint, action_result)
+        ret_val, response = self._make_rest_call(endpoint, action_result, get_file=True)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -1346,31 +1492,62 @@ class FireeyeHxConnector(BaseConnector):
         params = {}
 
         # Defaults for appending new data
-        malwareProtection = []
-        exploitGuardProtection = []
-        realTimeIndicatorDetection = []
+        excluded_md5s = param.get("excluded_md5s", None)
+        excluded_files = param.get("excluded_files", None)
+        excluded_paths = param.get("excluded_paths", None)
+        excluded_processes = param.get("excluded_processes_names", None)
 
-        # Need to get the policy details first
-        endpoint = FIREEYE_GET_POLICY_ENDPOINT.format(policyId=param.get('policy_id'))
+        policyId = param.get('policy_id')
 
-        ret_val, policy = self._make_rest_call(endpoint, action_result)
+        # Hold which category we are going to add the exclusions too
+        categories = []
 
         if param.get("malware_protection"):
-            malware_protection = policy.get("data").get("data").get("malware_protection").get("excludedFiles")
-
+            categories.append("malware_protection")
         if param.get("exploit_guard_protection"):
-
-
+            categories.append("exploit_guard_protection")
         if param.get("real_time_indicator_detection"):
+            categories.append("real_time_indicator_detection")
 
+        md5s = []
+        files = []
+        paths = []
+        processes = []
 
+        # Need to get the policy details first
+        endpoint = FIREEYE_GET_POLICY_ENDPOINT.format(policyId=policyId)
 
+        ret_val, response = self._make_rest_call(endpoint, action_result)
 
+        policy = self._flatten_response_data(response)
 
+        for category in categories:
 
-        endpoint = FIREEYE_UPDATE_POLICY_ENDPOINT.format(policyId=param.get('policy_id'))
+            if policy.get("data").get("data").get(category).get("excludedMD5s"):
+                md5s = policy.get("data").get("data").get(category).get("excludedMD5s")
 
-        ret_val, response = self._make_rest_call(endpoint, action_result, params=params, method="put")
+                policy["data"][category]["excludedMD5s"] = md5s + excluded_md5s.split(',')
+
+            if policy.get("data").get("data").get(category).get("excludedFiles"):
+                files = policy.get("data").get("data").get(category).get("excludedFiles")
+
+                policy["data"][category]["excludedFiles"] = files + excluded_files.split(',')
+
+            if policy.get("data").get("data").get(category).get("excludedPaths"):
+                paths = policy.get("data").get("data").get(category).get("excludedPaths")
+
+                policy["data"][category]["excludedPaths"] = paths + excluded_paths.split(',')
+
+            if policy.get("data").get("data").get(category).get("excludedProcesses"):
+                processes = policy.get("data").get("data").get(category).get("excludedProcesses")
+
+                policy["data"][category]["excludedProcesses"] = processes + excluded_processes.split(',')
+
+        data = json.dumps(policy)
+
+        endpoint = FIREEYE_UPDATE_POLICY_ENDPOINT.format(policyId=policyId)
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params, method="put", data=data)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -1517,63 +1694,93 @@ class FireeyeHxConnector(BaseConnector):
 
         pudb.set_trace()
 
+        # Get the config
+        config = self.get_config()
+
         artifacts_list = []
         temp_dict = {}
         cef = {}
 
-        # print("Alert type {} ".format(type(alert)))
-        # alert = json.dumps(alert)
+        # Check to see which options the user has selected
+        if config.get('seperate_artifacts'):
 
-        # alert = alert['last_alert']
+            if alert.get('last_alert').get('source') == "IOC":
+                host_dict, alert = self._process_artifact_host(alert, container_id)
+                artifacts_list.append(host_dict)
 
-        # for data in alert:
-        #    print("KEY {}   Data {}   Type {}".format(data, alert[data], type(alert[data])))
-        #    if type(alert[data]) is str:
-        #        cef[str(data.encode('ascii', 'ignore'))] = str(alert[data].encode('ascii', 'ignore'))
-        #    elif type(alert[data]) is int:
-        #        cef[str(data.encode('ascii', 'ignore'))] = alert[data]
+                for alert_data in alert['last_alert']:
+                    cef[alert_data] = alert['last_alert'][alert_data]
 
-        # del alert["last_alert"]["event_values"]
-        # cef = alert
-        # print(cef)
+            elif alert.get('last_alert').get('source') == "EXD":
+                host_dict, alert = self._process_artifact_host(alert, container_id)
+                artifacts_list.append(host_dict)
 
-        """
-        # List to transform the data to CEF acceptable fields.
-        transforms = {'hostname': 'sourceHostName', 'primary_ip_address': 'sourceAddress', 'file-path': 'filePath', 'file_full_path': 'filePath',
-        'path': 'filePath', 'md5sum': 'fileHashMd5', 'sha1sum': 'fileHashSha1', 'sha256sum': 'fileHashSha256', 'original-file-name': 'fileName',
-        'creation-time': 'fileCreateTime', 'modification-time': 'fileModificationTime', 'size-in-bytes': 'fileSize'}
+                for alert_data in alert['last_alert']:
+                    cef[alert_data] = alert['last_alert'][alert_data]
+
+            elif alert.get('last_alert').get('source') == "MAL":
+                # Malware alerts have a lot more details so we seperate the artifacts further.
+
+                host_dict, alert = self._process_artifact_host(alert, container_id)
+                artifacts_list.append(host_dict)
+
+                detections_dict = self._process_artifact_detections(alert, container_id)
+                artifacts_list.append(detections_dict)
+
+                # print("Alert type {} ".format(type(alert)))
+                # alert = json.dumps(alert)
+
+                # alert = alert['last_alert']
+
+                # for data in alert:
+                #    print("KEY {}   Data {}   Type {}".format(data, alert[data], type(alert[data])))
+                #    if type(alert[data]) is str:
+                #        cef[str(data.encode('ascii', 'ignore'))] = str(alert[data].encode('ascii', 'ignore'))
+                #    elif type(alert[data]) is int:
+                #        cef[str(data.encode('ascii', 'ignore'))] = alert[data]
+
+                # del alert["last_alert"]["event_values"]
+                # cef = alert
+                # print(cef)
+
+                """
+                # List to transform the data to CEF acceptable fields.
+                transforms = {'hostname': 'sourceHostName', 'primary_ip_address': 'sourceAddress', 'file-path': 'filePath', 'file_full_path': 'filePath',
+                'path': 'filePath', 'md5sum': 'fileHashMd5', 'sha1sum': 'fileHashSha1', 'sha256sum': 'fileHashSha256', 'original-file-name': 'fileName',
+                'creation-time': 'fileCreateTime', 'modification-time': 'fileModificationTime', 'size-in-bytes': 'fileSize'}
 
 
-        detections_dict = self._process_artifact_detections(alert.get("last_alert").get("event_values").get("detections"), container_id)
-        del alert["last_alert"]["event_values"]["detections"]
-        artifacts_list.append(detections_dict)
+                detections_dict = self._process_artifact_detections(alert.get("last_alert").get("event_values").get("detections"), container_id)
+                del alert["last_alert"]["event_values"]["detections"]
+                artifacts_list.append(detections_dict)
 
-        # create_artifact_status, create_artifact_msg, _ = self.save_artifact(artifacts_list)
+                # create_artifact_status, create_artifact_msg, _ = self.save_artifact(artifacts_list)
 
-        # Process the details section.
-        details = alert
-        for detail in details.items():
-            if detail[0] in transforms:
-                cef[transforms[detail[0]]] = detail[1]
-            else:
-                cef[detail[0]] = detail[1]
+                # Process the details section.
+                details = alert
+                for detail in details.items():
+                    if detail[0] in transforms:
+                        cef[transforms[detail[0]]] = detail[1]
+                    else:
+                        cef[detail[0]] = detail[1]
 
-        # Process the rest of the alert
-        for artifact_name, artifact_value in alert.items():
-            if artifact_name in transforms:
-                cef[transforms[artifact_name]] = artifact_value
-            else:
-                cef[artifact_name] = artifact_value
-        """
-        # Old method to just flatten all the data into a single element array
-        cef = self.flatten_json(alert)
+                # Process the rest of the alert
+                for artifact_name, artifact_value in alert.items():
+                    if artifact_name in transforms:
+                        cef[transforms[artifact_name]] = artifact_value
+                    else:
+                        cef[artifact_name] = artifact_value
+                """
+        else:
+            # Flatten data into a single array.
+            cef = self.flatten_json(alert)
 
         # Add into artifacts dictionary if it is available
         if cef:
             temp_dict['cef'] = cef
             temp_dict['name'] = alert['assessment']
             temp_dict['container_id'] = container_id
-            temp_dict['type'] = "Host"
+            temp_dict['type'] = "Alert"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
         artifacts_list.append(temp_dict)
@@ -1595,8 +1802,10 @@ class FireeyeHxConnector(BaseConnector):
         cef = {}
 
         # Process the detections
-        for detections in alert['detection']:
-            cef = detections
+        for detections in alert["last_alert"]["detection"]:
+            cef = alert["last_alert"]["detection"]['detections']
+
+        del alert["last_alert"]["event_values"]["detections"]
 
         # Add into artifacts dictionary if it is available
         if cef:
@@ -1606,13 +1815,13 @@ class FireeyeHxConnector(BaseConnector):
             temp_dict['type'] = "endpoint"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
-        return temp_dict
+        return temp_dict, alert
 
     def _process_artifact_host(self, alert, container_id):
         """ This function is used to create the artifact host using the data from the alert.
             This will seperate the host and os details from the rest of the alert
         :param alert: Data of single alert
-        :return: dictionary of detections to be added as artifact(s)
+        :return: dictionary of detections to be added as artifact(s) and the updated alert data
         """
 
         temp_dict = {}
@@ -1621,14 +1830,20 @@ class FireeyeHxConnector(BaseConnector):
 
         cef_types["_id"] = ["fireeyehx agentid"]
         cef_types["hostname"] = ["sourceHostName"]
+        cef_types["primary_ip_address"] = ["ip"]
 
         # Get the host details from the alert
-        cef['agent'] = alert.get("last_alert").get("agent")
-        cef['os-details'] = alert.get("last_alert").get("os-details").get("$")
+        if alert.get("last_alert").get("agent"):
+            cef["agent"] = alert.get("last_alert").get("agent")
+            del alert["last_alert"]["agent"]
+        else:
+            cef["agent"] = alert.get("grouped_by").get("agent")
+            del alert["grouped_by"]["agent"]
 
-        # Remove the data we just parsed from the alert
-        del alert['last_alert']['agent']
-        del alert['last_alert']['os-details']
+        # Get the OS details of the host.
+        if alert.get("last_alert").get("os-details"):
+            cef["os-details"] = alert.get("last_alert").get("os-details").get("$")
+            del alert["last_alert"]["os-details"]
 
         # Add into artifacts dictionary if it is available
         if cef:
@@ -1639,7 +1854,7 @@ class FireeyeHxConnector(BaseConnector):
             temp_dict['type'] = "host"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
-        return temp_dict
+        return temp_dict, alert
 
     def _create_dict_hash(self, input_dict):
         """ This function is used to generate the hash from dictionary.
@@ -1673,7 +1888,10 @@ class FireeyeHxConnector(BaseConnector):
             'unquarantine_device': self._handle_unquarantine_device,
             'start_acquisition': self._handle_start_acquisition,
             'get_acquisition_status': self._handle_get_acquisition_status,
-            'list_acquisitions': self._handle_list_acquisitions,
+            'list_file_acquisitions': self._handle_list_file_acquisitions,
+            'list_quarantine_acquisitions': self._handle_list_quarantine_acquisitions,
+            'list_data_acquisitions': self._handle_list_data_acquisitions,
+            'list_triage_acquisitions': self._handle_list_triage_acquisitions,
             'list_endpoints': self._handle_list_endpoints,
             'get_system_info': self._handle_get_system_info,
             'get_file': self._handle_get_file,

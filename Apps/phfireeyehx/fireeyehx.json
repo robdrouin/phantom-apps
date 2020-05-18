@@ -55,6 +55,13 @@
             "order": 5,
             "data_type": "timezone",
             "description": "Fireeye server timezone"
+        },
+        "seperate_artifacts": {
+            "required": false,
+            "order": 6,
+            "data_type": "boolean",
+            "default": true,
+            "description": "Seperate data into seperate artifacts. Review the App documentation for a full explination"
         }
     },
     "actions": [
@@ -1610,39 +1617,51 @@
         {
             "action": "get acquisition status",
             "read_only": false,
-            "description": "Get status of file acquisition",
+            "description": "Get status of an acquisition",
             "identifier": "get_acquisition_status",
             "type": "investigate",
             "parameters": {
+                "acquisition_type": {
+                    "required": true,
+                    "description": "The type of acquisition",
+                    "data_type": "string",
+                    "primary": false,
+                    "value_list": ["Data", "File", "Quarantine", "Triage"],
+                    "default": "File",
+                    "order": 0
+                },
                 "acquisition_id": {
                     "required": true,
                     "description": "Acquisition ID from (get file) action to query status",
                     "data_type": "numeric",
                     "contains": ["fireeyehx acquisition id"],
                     "primary": true,
-                    "order": 0
+                    "order": 1
                 }
             },
             "output": [
                 {
-                    "column_order": 1,
                     "data_path": "action_result.status",
                     "example_values": ["success"],
-                    "data_type": "string",
-                    "column_name": "status"
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.acquisition_type",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.parameter.acquisition_id",
                     "data_type": "numeric",
                     "contains": ["fireeyehx acquisition id"],
-                    "example_values": ["2494"],
-                    "column_order": 0,
-                    "column_name": "acquisition_id"
+                    "example_values": [2494]
                 },
                 {
                     "data_path": "action_result.data.*._id",
+                    "data_type": "numeric",
+                    "contains": ["fireeyehx acquisition id"],
                     "example_values": [2494],
-                    "data_type": "numeric"
+                    "column_order": 0,
+                    "column_name": "Acquisition Id"
                 },
                 {
                     "data_path": "action_result.data.*._revision",
@@ -1674,12 +1693,17 @@
                 {
                     "data_path": "action_result.data.*.finish_time",
                     "example_values": ["2018-05-23T19:10:59.963Z"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_order": 7,
+                    "column_name": "Finish Time"
                 },
                 {
                     "data_path": "action_result.data.*.host._id",
                     "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "column_order": 4,
+                    "column_name": "Host Id"
                 },
                 {
                     "data_path": "action_result.data.*.host.url",
@@ -1692,7 +1716,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.md5",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": ["fileHashMd5", "fileHash"],
+                    "column_order": 5,
+                    "column_name": "MD5"
                 },
                 {
                     "data_path": "action_result.data.*.message",
@@ -1703,13 +1730,17 @@
                     "contains": ["file name"],
                     "data_path": "action_result.data.*.req_filename",
                     "example_values": ["NV4HPControllerSetup.exe"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "File Name"
                 },
                 {
                     "contains": ["file path"],
                     "data_path": "action_result.data.*.req_path",
                     "example_values": ["C:\\Users\\aeh11\\AppData\\Local\\Temp\\1\\NVFiles_7e7bc015-0db1-4605-a9cf-9d81754054e9\\"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "Full File Path"
                 },
                 {
                     "data_path": "action_result.data.*.req_use_api",
@@ -1730,7 +1761,9 @@
                 {
                     "data_path": "action_result.data.*.request_time",
                     "example_values": ["2018-05-23T19:10:00.000Z"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_order": 6,
+                    "column_name": "Requested Time"
                 },
                 {
                     "data_path": "action_result.data.*.route",
@@ -1739,8 +1772,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.state",
-                    "example_values": ["COMPLETE"],
-                    "data_type": "string"
+                    "example_values": ["COMPLETE", "NEW", "RUNNING"],
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "State"
                 },
                 {
                     "data_path": "action_result.data.*.url",
@@ -2510,7 +2545,7 @@
                     "contains": ["host name", "ip", "fireeyehx agentid"]
                 },
                 {
-                    "data_path": "action_result.entries.*._id",
+                    "data_path": "action_result.data.*.entries.*._id",
                     "data_type": "string",
                     "contains": ["fireeyehx agentid"],
                     "example_values": ["3805951439869103977B58"],
@@ -2518,27 +2553,27 @@
                     "column_name": "Agent ID"
                 },
                 {
-                    "data_path": "action_result.entries.*.agent_version",
+                    "data_path": "action_result.data.*.entries.*.agent_version",
                     "example_values": ["1.0.1"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.containment_missing_software",
+                    "data_path": "action_result.data.*.entries.*.containment_missing_software",
                     "example_values": [true, false],
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.entries.*.containment_queued",
+                    "data_path": "action_result.data.*.entries.*.containment_queued",
                     "example_values": [true, false],
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.entries.*.containment_state",
+                    "data_path": "action_result.data.*.entries.*.containment_state",
                     "example_values": ["normal"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.domain",
+                    "data_path": "action_result.data.*.entries.*.domain",
                     "data_type": "string",
                     "contains": ["domain"],
                     "example_values": ["hr.fireeye.com"],
@@ -2546,17 +2581,17 @@
                     "column_name": "Domain"
                 },
                 {
-                    "data_path": "action_result.entries.*.excluded_from_containment",
+                    "data_path": "action_result.data.*.entries.*.excluded_from_containment",
                     "example_values": [true, false],
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.entries.*.gmt_offset_seconds",
+                    "data_path": "action_result.data.*.entries.*.gmt_offset_seconds",
                     "example_values": [-28800],
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.entries.*.hostname",
+                    "data_path": "action_result.data.*.entries.*.hostname",
                     "data_type": "string",
                     "contains": ["host name"],
                     "example_values": ["random_164_1"],
@@ -2564,51 +2599,51 @@
                     "column_name": "Hostname"
                 },
                 {
-                    "data_path": "action_result.entries.*.last _exploit_block",
+                    "data_path": "action_result.data.*.entries.*.last _exploit_block",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.last_alert",
+                    "data_path": "action_result.data.*.entries.*.last_alert",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.last_alert_timestamp",
+                    "data_path": "action_result.data.*.entries.*.last_alert_timestamp",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.last_audit_timestamp",
+                    "data_path": "action_result.data.*.entries.*.last_audit_timestamp",
                     "example_values": ["2015-07-30T04:12:23.000Z"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.last_exploit_block_timestamp",
+                    "data_path": "action_result.data.*.entries.*.last_exploit_block_timestamp",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.last_poll_ip",
+                    "data_path": "action_result.data.*.entries.*.last_poll_ip",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.last_poll_timestamp",
+                    "data_path": "action_result.data.*.entries.*.last_poll_timestamp",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.os.bitness",
+                    "data_path": "action_result.data.*.entries.*.os.bitness",
                     "example_values": ["32-bit"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.os.patch_level",
+                    "data_path": "action_result.data.*.entries.*.os.patch_level",
                     "example_values": ["Service Pack 3"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.os.product_name",
+                    "data_path": "action_result.data.*.entries.*.os.product_name",
                     "example_values": ["Windows XP SP1"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.primary_ip_address",
+                    "data_path": "action_result.data.*.entries.*.primary_ip_address",
                     "data_type": "string",
                     "contains": ["ip"],
                     "example_values": ["10.1.1.1"],
@@ -2616,57 +2651,57 @@
                     "column_name": "Primary IP"
                 },
                 {
-                    "data_path": "action_result.entries.*.primary_mac",
+                    "data_path": "action_result.data.*.entries.*.primary_mac",
                     "example_values": ["a2-ac-75-70-ec-ae"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.reported_clone",
+                    "data_path": "action_result.data.*.entries.*.reported_clone",
                     "example_values": [true, false],
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.entries.*.stats.acqs",
+                    "data_path": "action_result.data.*.entries.*.stats.acqs",
                     "example_values": [0],
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.entries.*.stats.alerting_conditions",
+                    "data_path": "action_result.data.*.entries.*.stats.alerting_conditions",
                     "example_values": [0],
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.entries.*.stats.alerts",
+                    "data_path": "action_result.data.*.entries.*.stats.alerts",
                     "example_values": [0],
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.entries.*.stats.exploit_alerts",
+                    "data_path": "action_result.data.*.entries.*.stats.exploit_alerts",
                     "example_values": [0],
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.entries.*.stats.exploit_blocks",
+                    "data_path": "action_result.data.*.entries.*.stats.exploit_blocks",
                     "example_values": [0],
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.entries.*.sysinfo.url",
+                    "data_path": "action_result.data.*.entries.*.sysinfo.url",
                     "example_values": ["/hx/api/v3/hosts/3805951439869103977B58/sysinfo"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.timezone",
+                    "data_path": "action_result.data.*.entries.*.timezone",
                     "example_values": ["Pacific Standard Time"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.entries.*.url",
+                    "data_path": "action_result.data.*.entries.*.url",
                     "example_values": ["/hx/api/v3/hosts/3805951439869103977B58"],
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.limit",
+                    "data_path": "action_result.data.*.data.*.limit",
                     "example_values": [50],
                     "data_type": "numeric"
                 },
@@ -2720,20 +2755,12 @@
             }
         },
         {
-            "action": "list acquisitions",
+            "action": "list file acquisitions",
             "read_only": true,
-            "description": "Retireve a list of all acquisitions with optional filters",
-            "identifier": "list_acquisitions",
+            "description": "Retireve a list of all file acquisitions with optional filters",
+            "identifier": "list_file_acquisitions",
             "type": "generic",
             "parameters": {
-                "req_filename": {
-                    "required": false,
-                    "description": "Name of the file acquired",
-                    "data_type": "string",
-                    "contains": ["file name"],
-                    "primary": false,
-                    "order": 1
-                },
                 "agent_id": {
                     "required": false,
                     "description": "HX Agent ID for the host",
@@ -2741,6 +2768,30 @@
                     "contains": ["fireeyehx agentid"],
                     "primary": false,
                     "order": 0
+                },
+                "search": {
+                    "required": false,
+                    "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
+                    "data_type": "string",
+                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "primary": false,
+                    "order": 1
+                },
+                "limit": {
+                    "required": false,
+                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 50,
+                    "order": 2
+                },
+                "offset": {
+                    "required": false,
+                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 0,
+                    "order": 3
                 }
             },
             "output": [
@@ -2753,22 +2804,447 @@
                     "data_path": "action_result.parameter.agent_id",
                     "data_type": "string",
                     "contains": ["fireeyehx agentid"],
-                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"],
-                    "column_order": 0,
-                    "column_name": "agent_id"
+                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"]
                 },
                 {
-                    "data_path": "action_result.parameter.req_filename",
+                    "data_path": "action_result.parameter.search",
+                    "data_type": "string",
+                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "example_values": ["NV4HPControllerSetup.exe"]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*._id",
+                    "example_values": [2494],
+                    "data_type": "numeric",
+                    "column_order": 0,
+                    "column_name": "Acquisition Id"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*._revision",
+                    "example_values": ["20180523191000077103881827"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.alert",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.condition",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.error_message",
+                    "data_type": "string",
+                    "column_order": 8,
+                    "column_name": "Error Message"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.external_id",
+                    "example_values": ["null"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.finish_time",
+                    "data_type": "string",
+                    "column_order": 5,
+                    "column_name": "Finished Time"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.host._id",
+                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.host.url",
+                    "example_values": ["/hx/api/v3/hosts/E8kw2d9uRcjgkfDjWKQqnv"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.md5",
+                    "data_type": "string",
+                    "contains": ["fileHash", "fileHashMd5"],
+                    "column_order": 6,
+                    "column_name": "MD5"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.message",
+                    "example_values": ["Created"],
+                    "data_type": "string"
+                },
+                {
+                    "contains": ["file name"],
+                    "data_path": "action_result.data.*.entries.*.req_filename",
+                    "example_values": ["NV4HPControllerSetup.exe"],
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "File Name"
+                },
+                {
+                    "contains": ["file path"],
+                    "data_path": "action_result.data.*.entries.*.req_path",
+                    "example_values": ["C:\\Users\\aeh11\\AppData\\Local\\Temp\\1\\NVFiles_7e7bc015-0db1-4605-a9cf-9d81754054e9\\"],
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "File Path"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.req_use_api",
+                    "example_values": [true, false],
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.request_actor._id",
+                    "example_values": [1012],
+                    "data_type": "numeric"
+                },
+                {
+                    "contains": ["user name"],
+                    "data_path": "action_result.data.*.entries.*.request_actor.username",
+                    "example_values": ["bckapi"],
+                    "data_type": "string", 
+                    "column_order": 7,
+                    "column_name": "Requested By"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.request_time",
+                    "example_values": ["2018-05-23T19:10:00.000Z"],
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "Requested Time"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.route",
+                    "example_values": ["/hx/api/v3/hosts/agent_id/files"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.state",
+                    "example_values": ["NEW", "COMPLETE"],
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "State"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.url",
+                    "example_values": ["/hx/api/v3/acqs/files/2494"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.zip_passphrase",
+                    "example_values": ["unzip-me"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.important_data",
+                    "example_values": ["value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": ["Important data: value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
+        {
+            "action": "list quarantine acquisitions",
+            "read_only": true,
+            "description": "Retireve a list of all file acquisitions with optional filters",
+            "identifier": "list_quarantine_acquisitions",
+            "type": "generic",
+            "parameters": {
+                "agent_id": {
+                    "required": false,
+                    "description": "HX Agent ID for the host",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "primary": false,
+                    "order": 1
+                },
+                "search": {
+                    "required": false,
+                    "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
                     "data_type": "string",
                     "contains": ["file name"],
-                    "example_values": ["NV4HPControllerSetup.exe"],
+                    "primary": false,
+                    "order": 2
+                },
+                "limit": {
+                    "required": false,
+                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 50,
+                    "order": 3
+                },
+                "offset": {
+                    "required": false,
+                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 0,
+                    "order": 4
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.agent_id",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"]
+                },
+                {
+                    "data_path": "action_result.parameter.search",
+                    "data_type": "string",
+                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "example_values": ["NV4HPControllerSetup.exe"]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*._id",
+                    "example_values": [2494],
+                    "data_type": "numeric",
+                    "column_order": 0,
+                    "column_name": "Acquisition Id"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.agent_quarantine_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.alert._id",
+                    "data_type": "numeric",
+                    "column_order": 7,
+                    "column_name": "Alert Id"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.alert.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.alert_file_creation_time",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.alert_infection_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.file_md5",
+                    "data_type": "string",
+                    "contains": ["fileHash", "fileHashMd5"],
+                    "column_order": 4,
+                    "column_name": "MD5"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.file_path",
+                    "data_type": "string",
+                    "contains": ["filePath"],
+                    "column_order": 3,
+                    "column_name": "File Path"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.file_sha1",
+                    "data_type": "string",
+                    "contains": ["fileHashSha1"],
+                    "column_order": 5,
+                    "column_name": "SHA1"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.hit_correlation_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.host._id",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "column_order": 6,
+                    "column_name": "Host Id"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.host.url",
+                    "data_type": "string",
+                    "example_values": ["/hx/api/v3/hosts/E8kw2d9uRcjgkfDjWKQqnv"]
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.quarantined_at",
+                    "data_type": "string",
+                    "example_values": ["2018-05-23T19:10:00.000Z"],
                     "column_order": 2,
-                    "column_name": "req_filename"
+                    "column_name": "Quarantined Time"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.reported_at",
+                    "data_type": "string",
+                    "example_values": ["2018-05-23T19:10:00.000Z"],
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.state",
+                    "data_type": "string",
+                    "example_values": ["NEW", "COMPLETE", "RUNNING"],
+                    "column_order": 1,
+                    "column_name": "State"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.update_time",
+                    "data_type": "string",
+                    "example_values": ["2018-05-23T19:10:00.000Z"]
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": ["Important data: value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
+        {
+            "action": "list data acquisitions",
+            "read_only": true,
+            "description": "Retireve a list of all file acquisitions with optional filters",
+            "identifier": "list_data_acquisitions",
+            "type": "generic",
+            "parameters": {
+                "agent_id": {
+                    "required": false,
+                    "description": "HX Agent ID for the host",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "primary": false,
+                    "order": 1
+                },
+                "search": {
+                    "required": false,
+                    "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
+                    "data_type": "string",
+                    "contains": ["file name"],
+                    "primary": false,
+                    "order": 2
+                },
+                "limit": {
+                    "required": false,
+                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 50,
+                    "order": 3
+                },
+                "offset": {
+                    "required": false,
+                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 0,
+                    "order": 4
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.agent_id",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"]
+                },
+                {
+                    "data_path": "action_result.parameter.search",
+                    "data_type": "string",
+                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "example_values": ["NV4HPControllerSetup.exe"]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
                 },
                 {
                     "data_path": "action_result.data.*._id",
                     "example_values": [2494],
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "column_order": 0,
+                    "column_name": "Acquisition Id"
                 },
                 {
                     "data_path": "action_result.data.*._revision",
@@ -2909,7 +3385,220 @@
             "render": {
                 "type": "table"
             }
-        }, 
+        },
+        {
+            "action": "list triage acquisitions",
+            "read_only": true,
+            "description": "Retireve a list of all file acquisitions with optional filters",
+            "identifier": "list_triage_acquisitions",
+            "type": "generic",
+            "parameters": {
+                "agent_id": {
+                    "required": false,
+                    "description": "HX Agent ID for the host",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "primary": false,
+                    "order": 1
+                },
+                "search": {
+                    "required": false,
+                    "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
+                    "data_type": "string",
+                    "contains": ["file name"],
+                    "primary": false,
+                    "order": 2
+                },
+                "limit": {
+                    "required": false,
+                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 50,
+                    "order": 3
+                },
+                "offset": {
+                    "required": false,
+                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 0,
+                    "order": 4
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": ["success"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.agent_id",
+                    "data_type": "string",
+                    "contains": ["fireeyehx agentid"],
+                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"]
+                },
+                {
+                    "data_path": "action_result.parameter.search",
+                    "data_type": "string",
+                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "example_values": ["NV4HPControllerSetup.exe"]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*._id",
+                    "example_values": [2494],
+                    "data_type": "numeric",
+                    "column_order": 0,
+                    "column_name": "Acquisition Id"
+                },
+                {
+                    "data_path": "action_result.data.*._revision",
+                    "example_values": ["20180523191000077103881827"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.alert",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.condition",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.error_message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.external_id",
+                    "example_values": ["null"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.finish_time",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.host._id",
+                    "example_values": ["E8kw2d9uRcjgkfDjWKQqnv"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.host.url",
+                    "example_values": ["/hx/api/v3/hosts/E8kw2d9uRcjgkfDjWKQqnv"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.md5",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.message",
+                    "example_values": ["Created"],
+                    "data_type": "string"
+                },
+                {
+                    "contains": ["file name"],
+                    "data_path": "action_result.data.*.req_filename",
+                    "example_values": ["NV4HPControllerSetup.exe"],
+                    "data_type": "string"
+                },
+                {
+                    "contains": ["file path"],
+                    "data_path": "action_result.data.*.req_path",
+                    "example_values": ["C:\\Users\\aeh11\\AppData\\Local\\Temp\\1\\NVFiles_7e7bc015-0db1-4605-a9cf-9d81754054e9\\"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.req_use_api",
+                    "example_values": [true, false],
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.request_actor._id",
+                    "example_values": [1012],
+                    "data_type": "numeric"
+                },
+                {
+                    "contains": ["user name"],
+                    "data_path": "action_result.data.*.request_actor.username",
+                    "example_values": ["bckapi"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.request_time",
+                    "example_values": ["2018-05-23T19:10:00.000Z"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.route",
+                    "example_values": ["/hx/api/v3/hosts/agent_id/files"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "example_values": ["NEW", "COMPLETE"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "example_values": ["/hx/api/v3/acqs/files/2494"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.zip_passphrase",
+                    "example_values": ["unzip-me"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.important_data",
+                    "example_values": ["value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": ["Important data: value"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [1],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
         {
             "action": "start acquisition",
             "read_only": true,
@@ -3161,13 +3850,22 @@
             "identifier": "get_file",
             "type": "investigate",
             "parameters": {
+                "acquisition_type": {
+                    "required": true,
+                    "description": "The type of acquisition",
+                    "data_type": "string",
+                    "primary": false,
+                    "value_list": ["Data", "File", "Quarantine", "Triage"],
+                    "default": "File",
+                    "order": 0
+                },
                 "acquisition_id": {
                     "required": true,
                     "description": "HX Acquisition ID for the acquired file",
                     "data_type": "numeric",
                     "contains": ["fireeyehx acquisition id"],
                     "primary": true,
-                    "order": 0
+                    "order": 1
                 }
             },
             "output": [
@@ -3177,17 +3875,21 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.parameter.acquisition_type",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.parameter.acquisition_id",
                     "data_type": "numeric",
                     "contains": ["fireeyehx acquisition id"],
-                    "example_values": ["2496"],
-                    "column_order": 0,
-                    "column_name": "acquisition_id"
+                    "example_values": ["2496"]
                 },
                 {
                     "data_path": "action_result.data.*.container",
                     "example_values": [544],
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "column_order": 4,
+                    "column_name": "Container"
                 },
                 {
                     "contains": ["hash"],
@@ -3198,17 +3900,24 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "example_values": [2],
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "contains": ["fireeyehx acquisition id"],
+                    "column_order": 0,
+                    "column_name": "Acquisition Id"
                 },
                 {
                     "data_path": "action_result.data.*.message",
                     "example_values": ["success"],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "Message"
                 },
                 {
                     "data_path": "action_result.data.*.size",
                     "example_values": [345088],
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "column_order": 3,
+                    "column_name": "Size (KB)"
                 },
                 {
                     "data_path": "action_result.data.*.succeeded",
@@ -3219,7 +3928,9 @@
                     "contains": ["vault id"],
                     "data_path": "action_result.data.*.vault_id",
                     "example_values": ["0f3c4ff28f354aede202d54e9d1c5529a3bf87d8"],
-                    "data_type": "string"
+                    "data_type": "string", 
+                    "column_order": 2,
+                    "column_name": "Vault Id"
                 },
                 {
                     "data_path": "action_result.data",
@@ -3983,6 +4694,187 @@
                     "data_path": "action_result.parameter.offset",
                     "data_type": "numeric",
                     "example_values": ["200"]
+                },
+
+                {
+                    "data_path": "action_result.data.*.entries.*._id",
+                    "data_type": "numeric",
+                    "contains": ["fireeyehx alert id"],
+                    "example_values": ["22"],
+                    "column_order": 0,
+                    "column_name": "Alert ID"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.agent._id",
+                    "example_values": ["3B5F121536786496889B17"],
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx agentid"
+                    ],
+                    "column_order": 1,
+                    "column_name": "Agent ID"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.agent.url",
+                    "example_values": ["/hx/api/v3/hosts/3B5F121536786496889B17"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.agent.containment_state",
+                    "example_values": ["normal"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.appliance._id",
+                    "example_values": ["865393E9C9ED"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.condition._id",
+                    "example_values": ["CCCCCCCCCCCCCCCCCCCCCCCC"],
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx condition id"
+                    ],
+                    "column_order": 11,
+                    "column_name": "Condition ID"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.condition.url",
+                    "example_values": ["/hx/api/v3/conditions/CCCCCCCCCCCCCCCCCCCCCCCC"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.event_type",
+                    "example_values": [""],
+                    "data_type": "string",
+                    "column_order": 10,
+                    "column_name": "Event Type"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator._id",
+                    "example_values": ["fc0f73fe-ba96-443c-90ec-5f6516d71cd1"],
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx indicator id"
+                    ],
+                    "column_order": 12,
+                    "column_name": "Indicator ID"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.url",
+                    "example_values": ["/hx/api/v3/indicators/threat_cat_test/threat_test"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.name",
+                    "example_values": ["threat_test"],
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "Alert Name"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.uri_name",
+                    "example_values": ["threat_test"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.display_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.signature",
+                    "example_values": ["threat_sig"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.category",
+                    "example_values": ["threat_cat_test"],
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "Alert Category"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator.url",
+                    "example_values": ["threat_cat_test"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.event_at",
+                    "example_values": ["2011-08-08T12:34:56Z"],
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "Alert Start"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.matched_at",
+                    "example_values": ["2011-08-08T12:34:56Z"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.reported_at",
+                    "example_values": ["2011-08-08T12:34:56Z"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.source",
+                    "example_values": ["IOC"],
+                    "data_type": "string",
+                    "column_order": 5,
+                    "column_name": "Alert Source"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.subtype",
+                    "data_type": "string",
+                    "column_order": 6,
+                    "column_name": "Alert Subtype"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.matched_source_alerts",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.resolution",
+                    "example_values": ["Alert"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.is_false_positive",
+                    "example_values": [true, false],
+                    "data_type": "boolean",
+                    "column_order": 7,
+                    "column_name": "Is False Positive"                    
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.decorators",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.rl",
+                    "example_values": ["/hx/api/v3/alerts/22"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.indicator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.event_id",
+                    "example_values": ["9f387276e4f8f5b501408625bd"],
+                    "data_type": "string",
+                    "column_order": 8,
+                    "column_name": "Event ID"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.event_type",
+                    "example_values": ["event_type"],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*.event_values.*",
+                    "data_type": "string",
+                    "column_order": 9,
+                    "column_name": "Event Values"
                 },
                 {
                     "data_path": "action_result.data",
@@ -5113,7 +6005,7 @@
                     "primary": false,
                     "contains": ["filePath", "oldfFilePath"]
                 },
-                "excluded_processes": {
+                "excluded_process_names": {
                     "order": 7,
                     "required": false,
                     "description": "List of Processes to exclude. Commas seperated list allowed.",
