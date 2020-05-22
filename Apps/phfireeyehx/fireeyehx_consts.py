@@ -9,7 +9,7 @@ FIREEYE_LIST_HOSTS_ENDPOINT = 'hosts'
 FIREEYE_GET_HOSTS_ENDPOINT = 'hosts/{agentId}'
 FIREEYE_GET_HOSTS_ACQUISITIONS_ENDPOINT = 'hosts/{agentId}/host_details_acquisitions'
 FIREEYE_GET_HOSTS_ALERTS_ENDPOINT = 'hosts/{agentId}/host_details_alerts'
-# FIREEYE_GET_HOSTS_AGENT_CONFIG_ENDPOINT = 'hosts/{agentId}/configuration/actual.json'
+FIREEYE_GET_HOSTS_AGENT_CONFIG_ENDPOINT = 'hosts/{agentId}/configuration/actual.json'
 FIREEYE_GET_HOST_SYS_INFO_ENDPOINT = 'hosts/{agentId}/sysinfo'
 # Hostsets endpoint
 FIREEYE_LIST_HOST_SET_ENDPOINT = 'host_sets'

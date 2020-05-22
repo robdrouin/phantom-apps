@@ -51,24 +51,6 @@ class FireeyeHxConnector(BaseConnector):
 
         return response
 
-    def flatten_json(self, y):
-        out = {}
-
-        def flatten(x, name=''):
-            if type(x) is dict:
-                for a in x:
-                    flatten(x[a], name + a + '_')
-            elif type(x) is list:
-                i = 0
-                for a in x:
-                    flatten(a, name + str(i) + '_')
-                    i += 1
-            else:
-                out[name[:-1]] = x
-
-        flatten(y)
-        return out
-
     def _process_empty_reponse(self, response, action_result):
 
         if response.status_code == 200:
@@ -1568,6 +1550,7 @@ class FireeyeHxConnector(BaseConnector):
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
+        pudb.set_trace()
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -1604,6 +1587,7 @@ class FireeyeHxConnector(BaseConnector):
 
         # Dump the query.
         filterQuery = json.dumps(query)
+
         # Note we need to replace all the spaces since python.requests adds + to spaces and screws up the query.
         params['filterQuery'] = "{}".format(filterQuery.replace(" ", ""))
 
@@ -1631,7 +1615,7 @@ class FireeyeHxConnector(BaseConnector):
                 container_creation_status, container_id = self._create_container(alert)
 
                 if phantom.is_fail(container_creation_status) or not container_id:
-                    self.debug_print('Error while creating artifacts for container with ID {container_id}. {error_msg}'.
+                    self.debug_print('Error while creating container with ID {container_id}. {error_msg}'.
                                 format(container_id=container_id, error_msg=container_creation_status))
                     continue
                 else:
@@ -1691,99 +1675,13 @@ class FireeyeHxConnector(BaseConnector):
         :param container_id: ID of container in which we have to create the artifacts
         :return: status(success/failure), message
         """
-
-        pudb.set_trace()
-
-        # Get the config
-        config = self.get_config()
-
         artifacts_list = []
-        temp_dict = {}
-        cef = {}
 
-        # Check to see which options the user has selected
-        if config.get('seperate_artifacts'):
+        detections_dict, alert = self._process_artifact_detections(alert, container_id)
+        artifacts_list.append(detections_dict)
 
-            if alert.get('last_alert').get('source') == "IOC":
-                host_dict, alert = self._process_artifact_host(alert, container_id)
-                artifacts_list.append(host_dict)
-
-                for alert_data in alert['last_alert']:
-                    cef[alert_data] = alert['last_alert'][alert_data]
-
-            elif alert.get('last_alert').get('source') == "EXD":
-                host_dict, alert = self._process_artifact_host(alert, container_id)
-                artifacts_list.append(host_dict)
-
-                for alert_data in alert['last_alert']:
-                    cef[alert_data] = alert['last_alert'][alert_data]
-
-            elif alert.get('last_alert').get('source') == "MAL":
-                # Malware alerts have a lot more details so we seperate the artifacts further.
-
-                host_dict, alert = self._process_artifact_host(alert, container_id)
-                artifacts_list.append(host_dict)
-
-                detections_dict = self._process_artifact_detections(alert, container_id)
-                artifacts_list.append(detections_dict)
-
-                # print("Alert type {} ".format(type(alert)))
-                # alert = json.dumps(alert)
-
-                # alert = alert['last_alert']
-
-                # for data in alert:
-                #    print("KEY {}   Data {}   Type {}".format(data, alert[data], type(alert[data])))
-                #    if type(alert[data]) is str:
-                #        cef[str(data.encode('ascii', 'ignore'))] = str(alert[data].encode('ascii', 'ignore'))
-                #    elif type(alert[data]) is int:
-                #        cef[str(data.encode('ascii', 'ignore'))] = alert[data]
-
-                # del alert["last_alert"]["event_values"]
-                # cef = alert
-                # print(cef)
-
-                """
-                # List to transform the data to CEF acceptable fields.
-                transforms = {'hostname': 'sourceHostName', 'primary_ip_address': 'sourceAddress', 'file-path': 'filePath', 'file_full_path': 'filePath',
-                'path': 'filePath', 'md5sum': 'fileHashMd5', 'sha1sum': 'fileHashSha1', 'sha256sum': 'fileHashSha256', 'original-file-name': 'fileName',
-                'creation-time': 'fileCreateTime', 'modification-time': 'fileModificationTime', 'size-in-bytes': 'fileSize'}
-
-
-                detections_dict = self._process_artifact_detections(alert.get("last_alert").get("event_values").get("detections"), container_id)
-                del alert["last_alert"]["event_values"]["detections"]
-                artifacts_list.append(detections_dict)
-
-                # create_artifact_status, create_artifact_msg, _ = self.save_artifact(artifacts_list)
-
-                # Process the details section.
-                details = alert
-                for detail in details.items():
-                    if detail[0] in transforms:
-                        cef[transforms[detail[0]]] = detail[1]
-                    else:
-                        cef[detail[0]] = detail[1]
-
-                # Process the rest of the alert
-                for artifact_name, artifact_value in alert.items():
-                    if artifact_name in transforms:
-                        cef[transforms[artifact_name]] = artifact_value
-                    else:
-                        cef[artifact_name] = artifact_value
-                """
-        else:
-            # Flatten data into a single array.
-            cef = self.flatten_json(alert)
-
-        # Add into artifacts dictionary if it is available
-        if cef:
-            temp_dict['cef'] = cef
-            temp_dict['name'] = alert['assessment']
-            temp_dict['container_id'] = container_id
-            temp_dict['type'] = "Alert"
-            temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
-
-        artifacts_list.append(temp_dict)
+        alert_dict, alert = self._process_artifact_alert(alert, container_id)
+        artifacts_list.append(alert_dict)
 
         create_artifact_status, create_artifact_msg, _ = self.save_artifacts(artifacts_list)
 
@@ -1797,22 +1695,128 @@ class FireeyeHxConnector(BaseConnector):
         :param alert: Data of single alert
         :return: dictionary of detections to be added as artifact(s)
         """
-
-        temp_dict = {}
         cef = {}
+        actor_process = {}
+        cef_types = {}
+        temp_dict = {}
 
-        # Process the detections
-        for detections in alert["last_alert"]["detection"]:
-            cef = alert["last_alert"]["detection"]['detections']
+        for last_alert in alert['last_alert']:
+            # Process the event values
+            if last_alert == "event_values":
+                for event_values in alert['last_alert'][last_alert]:
+                    # Grab the detection data.
+                    if event_values == "detections":
+                        # Process the detection's data.
+                        i = 0
+                        for detections in alert['last_alert'][last_alert][event_values]:
+                            for detection in alert['last_alert'][last_alert][event_values][detections][i]:
+                                if detection == "action":
+                                    if alert['last_alert'][last_alert][event_values][detections][i][detection]['actioned-object']['object-type'] == "file":
+                                        name = alert['last_alert'][last_alert][event_values][detections][i][detection]['actioned-object']['object-type']
+                                        detection_file_name = "{}_{}".format(name, i)
+                                        cef[detection_file_name] = alert['last_alert'][last_alert][event_values][detections][i][detection]['actioned-object']['file-object']
+                                # Skip the infected object since it is repeated with the data from the actioned-object json
+                                elif detection == "infected-object":
+                                    continue
+                                else:
+                                    cef[detection] = detection
+                            i += 1
+                    # Process the scanned object data.
+                    elif event_values == "scanned-object":
+                        scanned_object_type = alert['last_alert'][last_alert][event_values]["scanned-object-type"]
+                        for so in alert['last_alert'][last_alert][event_values][scanned_object_type]:
+                            if so == "actor-process":
+                                for actor in alert['last_alert'][last_alert][event_values][scanned_object_type][so]:
+                                    if alert['last_alert'][last_alert][event_values][scanned_object_type][so][actor] == "user":
+                                        for userdata in alert['last_alert'][last_alert][event_values][scanned_object_type][so][actor]:
+                                            actor_process[userdata] = alert['last_alert'][last_alert][event_values][scanned_object_type][so][actor]
+                                    else:
+                                        actor_process[actor] = alert['last_alert'][last_alert][event_values][scanned_object_type][so][actor]
+                            else:
+                                actor_process[so] = alert['last_alert'][last_alert][event_values][scanned_object_type][so]
+                        cef["actor-process"] = actor_process
+                    else:
+                        cef[last_alert] = alert['last_alert'][last_alert]
+            else:
+                cef[last_alert] = alert['last_alert'][last_alert]
 
-        del alert["last_alert"]["event_values"]["detections"]
+        # Transform the hosts id into its own field name so we can add a type to it
+        cef['agent']['host_id'] = cef['agent']['_id']
+        del cef['agent']['_id']
+
+        # Sort keys to make it easier to read
+        # cef = json.dumps(cef, sort_keys=True)
+
+        # Remove the data we just parse. No need to be there anymore when processing the other artifacts.
+        del alert['last_alert']
+
+        cef_types["_id"] = ["fireeyehx alert id"]
+        cef_types["md5sum"] = ["fileHash", "fileHashMd5"]
+        cef_types["sha256sum"] = ["fileHashSha256"]
+        cef_types["sha1sum"] = ["fileHashSha1"]
+        cef_types["file-path"] = ["filePath"]
+        cef_types["path"] = ["filePath"]
+        cef_types["file_full_path"] = ["filePath"]
+        cef_types["pid"] = ["pid"]
+        cef_types["hostname"] = ["sourceHostName"]
+        cef_types["host_id"] = ["fireeyehx agentid"]
+        cef_types["fileWriteEvent/username"] = ["sourceUserId"]
+        cef_types["fileWriteEvent/processPath"] = ["filePath"]
+        cef_types["fileWriteEvent/process"] = ["deviceProcessName"]
+        cef_types["fileWriteEvent/fullPath"] = ["filePath"]
+        cef_types["fileWriteEvent/fileName"] = ["fileName"]
+        cef_types["fileWriteEvent/filePath"] = ["filePath"]
+        cef_types["fileWriteEvent/md5"] = ["fileHash", "fileHashMd5"]
+        cef_types["fileWriteEvent/parentProcessPath"] = ["deviceProcessName"]
 
         # Add into artifacts dictionary if it is available
         if cef:
             temp_dict['cef'] = cef
+            temp_dict['cef_types'] = cef_types
             temp_dict['name'] = "HX Detection"
             temp_dict['container_id'] = container_id
-            temp_dict['type'] = "endpoint"
+            temp_dict['type'] = "event"
+            temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
+
+        return temp_dict, alert
+
+    def _process_artifact_alert(self, alert, container_id):
+        """ This function is used to create the artifact detections using the data from the alert.
+        :param alert: Data of single alert
+        :return: dictionary of detections to be added as artifact(s)
+        """
+        cef = {}
+        cef_types = {}
+        temp_dict = {}
+
+        for data in alert:
+            if data == "grouped_by":
+                for grouped in alert[data]:
+                    cef[grouped] = alert[data][grouped]
+            else:
+                cef[data] = alert[data]
+
+        # Transform the hosts id into its own field name so we can add a type to it
+        cef['host']['host_id'] = cef['host']['_id']
+        del cef['host']['_id']
+
+        # cef = json.dumps(cef, sort_keys=True)
+
+        cef_types["_id"] = ["fireeyehx alertgroup id"]
+        cef_types["md5sum"] = ["fileHash", "fileHashMd5"]
+        cef_types["file-path"] = ["filePath"]
+        cef_types["file_full_path"] = ["filePath"]
+        cef_types["hostname"] = ["sourceHostName"]
+        cef_types["primary_ip_address"] = ["ip"]
+        cef_types["host_id"] = ["fireeyehx agentid"]
+
+        # Add into artifacts dictionary if it is available
+        if cef:
+            temp_dict['cef'] = cef
+            temp_dict['cef_types'] = cef_types
+            temp_dict['name'] = "HX Alert Details"
+            temp_dict['container_id'] = container_id
+            temp_dict['type'] = "event"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
         return temp_dict, alert
@@ -1823,27 +1827,26 @@ class FireeyeHxConnector(BaseConnector):
         :param alert: Data of single alert
         :return: dictionary of detections to be added as artifact(s) and the updated alert data
         """
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict({})))
+
+        # Get all the information about the host
+        endpoint = FIREEYE_GET_HOSTS_ENDPOINT.format(agentId=alert.get("last_alert").get("agent").get("_id"))
+
+        ret_val, host_data = self._make_rest_call(endpoint, action_result)
 
         temp_dict = {}
         cef = {}
         cef_types = {}
+        cef_types["last_alert"] = {}
 
+        cef_types["last_alert"]["_id"] = ["fireeyehx alert id"]
         cef_types["_id"] = ["fireeyehx agentid"]
         cef_types["hostname"] = ["sourceHostName"]
         cef_types["primary_ip_address"] = ["ip"]
+        cef_types["last_poll_ip"] = ["ip"]
 
-        # Get the host details from the alert
-        if alert.get("last_alert").get("agent"):
-            cef["agent"] = alert.get("last_alert").get("agent")
-            del alert["last_alert"]["agent"]
-        else:
-            cef["agent"] = alert.get("grouped_by").get("agent")
-            del alert["grouped_by"]["agent"]
-
-        # Get the OS details of the host.
-        if alert.get("last_alert").get("os-details"):
-            cef["os-details"] = alert.get("last_alert").get("os-details").get("$")
-            del alert["last_alert"]["os-details"]
+        cef = host_data['data']
 
         # Add into artifacts dictionary if it is available
         if cef:
@@ -1854,7 +1857,7 @@ class FireeyeHxConnector(BaseConnector):
             temp_dict['type'] = "host"
             temp_dict['source_data_identifier'] = self._create_dict_hash(temp_dict)
 
-        return temp_dict, alert
+        return temp_dict
 
     def _create_dict_hash(self, input_dict):
         """ This function is used to generate the hash from dictionary.

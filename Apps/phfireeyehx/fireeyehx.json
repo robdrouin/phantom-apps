@@ -3126,7 +3126,7 @@
                 {
                     "data_path": "action_result.data.*.entries.*.reported_at",
                     "data_type": "string",
-                    "example_values": ["2018-05-23T19:10:00.000Z"],
+                    "example_values": ["2018-05-23T19:10:00.000Z"]
                 },
                 {
                     "data_path": "action_result.data.*.entries.*.state",
@@ -4968,7 +4968,7 @@
             "action": "list alertgroups alerts",
             "identifier": "list_alert_group_alerts",
             "read_only": true,
-            "description": "List all the alerts for by alert group",
+            "description": "List all the alerts by alert group",
             "type": "investigate",
             "parameters": {
                 "group_id": {
