@@ -96,8 +96,6 @@ class FireeyeHxConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_octet_response(self, r, action_result):
-        # pudb.set_trace()
-
         guid = uuid.uuid4()
 
         if hasattr(Vault, 'get_vault_tmp_dir'):
@@ -1550,7 +1548,6 @@ class FireeyeHxConnector(BaseConnector):
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
-        pudb.set_trace()
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
