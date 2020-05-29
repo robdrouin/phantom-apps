@@ -1710,7 +1710,7 @@
                 {
                     "data_path": "action_result.data.*.md5",
                     "data_type": "string",
-                    "contains": ["fileHashMd5", "fileHash"],
+                    "contains": ["md5"],
                     "column_order": 5,
                     "column_name": "MD5"
                 },
@@ -2766,7 +2766,7 @@
                     "required": false,
                     "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
                     "data_type": "string",
-                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "primary": false,
                     "order": 1
                 },
@@ -2802,7 +2802,7 @@
                 {
                     "data_path": "action_result.parameter.search",
                     "data_type": "string",
-                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "example_values": ["NV4HPControllerSetup.exe"]
                 },
                 {
@@ -2871,7 +2871,7 @@
                 {
                     "data_path": "action_result.data.*.entries.*.md5",
                     "data_type": "string",
-                    "contains": ["fileHash", "fileHashMd5"],
+                    "contains": ["hash", "md5"],
                     "column_order": 6,
                     "column_name": "MD5"
                 },
@@ -2996,7 +2996,7 @@
                     "required": false,
                     "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
                     "data_type": "string",
-                    "contains": ["file name"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "primary": false,
                     "order": 2
                 },
@@ -3032,7 +3032,7 @@
                 {
                     "data_path": "action_result.parameter.search",
                     "data_type": "string",
-                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "example_values": ["NV4HPControllerSetup.exe"]
                 },
                 {
@@ -3075,21 +3075,21 @@
                 {
                     "data_path": "action_result.data.*.entries.*.file_md5",
                     "data_type": "string",
-                    "contains": ["fileHash", "fileHashMd5"],
+                    "contains": ["hash", "md5"],
                     "column_order": 4,
                     "column_name": "MD5"
                 },
                 {
                     "data_path": "action_result.data.*.entries.*.file_path",
                     "data_type": "string",
-                    "contains": ["filePath"],
+                    "contains": ["file path"],
                     "column_order": 3,
                     "column_name": "File Path"
                 },
                 {
                     "data_path": "action_result.data.*.entries.*.file_sha1",
                     "data_type": "string",
-                    "contains": ["fileHashSha1"],
+                    "contains": ["sha1"],
                     "column_order": 5,
                     "column_name": "SHA1"
                 },
@@ -3185,7 +3185,7 @@
                     "required": false,
                     "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
                     "data_type": "string",
-                    "contains": ["file name"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "primary": false,
                     "order": 2
                 },
@@ -3221,7 +3221,7 @@
                 {
                     "data_path": "action_result.parameter.search",
                     "data_type": "string",
-                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "example_values": ["NV4HPControllerSetup.exe"]
                 },
                 {
@@ -3398,7 +3398,7 @@
                     "required": false,
                     "description": "Search by a specific peice of data. Supports Hostname, IP Address, Acqusistion Id, File Name, External Id.",
                     "data_type": "string",
-                    "contains": ["file name"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "primary": false,
                     "order": 2
                 },
@@ -3434,7 +3434,7 @@
                 {
                     "data_path": "action_result.parameter.search",
                     "data_type": "string",
-                    "contains": ["file name", "fireeyehx agentid", "file path", "fileHash", "fileHashMd5", "fileName", "fireeyehx acquisition id", "ip"],
+                    "contains": ["file name", "fireeyehx agentid", "file path", "hash", "md5", "file name", "fireeyehx acquisition id", "ip"],
                     "example_values": ["NV4HPControllerSetup.exe"]
                 },
                 {
@@ -5980,7 +5980,7 @@
                     "description": "List of MD5s to exclude. Commas seperated list allowed.",
                     "data_type": "string",
                     "primary": false,
-                    "contains": ["fileHash", "fileHashMd5", "oldFileHash"]
+                    "contains": ["hash", "md5"]
                 },
                 "excluded_files": {
                     "order": 5,
@@ -5988,7 +5988,7 @@
                     "description": "List of Files to exclude. Commas seperated list allowed.",
                     "data_type": "string",
                     "primary": false,
-                    "contains": ["fileName", "oldFileName"]
+                    "contains": ["file name"]
                 },
                 "excluded_paths": {
                     "order": 6,
@@ -5996,7 +5996,7 @@
                     "description": "List of File Paths to exclude. Commas seperated list allowed.",
                     "data_type": "string",
                     "primary": false,
-                    "contains": ["filePath", "oldfFilePath"]
+                    "contains": ["file path"]
                 },
                 "excluded_process_names": {
                     "order": 7,
@@ -6032,20 +6032,20 @@
                 {
                     "data_path": "action_result.parameter.excluded_md5s",
                     "data_type": "string",
-                    "contains": ["fileHash", "fileHashMd5", "oldFileHash"]
+                    "contains": ["hash", "md5"]
                 },
                 {
                     "data_path": "action_result.parameter.excluded_files",
                     "data_type": "string",
-                    "contains": ["fileName", "oldFileName"]
+                    "contains": ["file name"]
                 },
                 {
                     "data_path": "action_result.parameter.excluded_paths",
                     "data_type": "string",
-                    "contains": ["filePath", "oldfFilePath"]
+                    "contains": ["file path"]
                 },
                 {
-                    "data_path": "action_result.parameter.excluded_processes",
+                    "data_path": "action_result.parameter.excluded_process_names",
                     "data_type": "string"
                 },
                 {
