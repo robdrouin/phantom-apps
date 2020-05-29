@@ -55,13 +55,6 @@
             "order": 5,
             "data_type": "timezone",
             "description": "Fireeye server timezone"
-        },
-        "seperate_artifacts": {
-            "required": false,
-            "order": 6,
-            "data_type": "boolean",
-            "default": true,
-            "description": "Seperate data into seperate artifacts. Review the App documentation for a full explination"
         }
     },
     "actions": [
