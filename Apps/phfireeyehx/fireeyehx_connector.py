@@ -1548,15 +1548,19 @@ class FireeyeHxConnector(BaseConnector):
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
 
+        # pudb.set_trace()
+
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # Get the config to get timezone parameter
         config = self.get_config()
 
+        interval_mins = int(config.get('ingest').get('interval_mins'))
+
         params = {}
 
-        params['limit'] = int(param.get(phantom.APP_JSON_CONTAINER_COUNT))
+        params['limit'] = int(2147483647)
 
         # If timezone is not set then cancel. We need the timezone to set the correct query times for ingestion.
         try:
@@ -1564,13 +1568,13 @@ class FireeyeHxConnector(BaseConnector):
         except:
             return action_result.set_status(phantom.APP_ERROR, "Asset configuration timezone is not set.")
 
-        # If it is a manual poll or first run, ingest data from the last 1 hour
+        # If it is a manual poll or first run
         if self.is_poll_now() or self._state.get('first_run', True):
-            start_time = datetime.now(pytz.timezone(tz)) - timedelta(hours=1)
+            start_time = datetime.now(pytz.timezone(tz)) - timedelta(minutes=interval_mins)
 
         # If it is a scheduled poll, ingest from last_ingestion_time
         else:
-            start_time = self._state.get('last_ingestion_time', datetime.now(pytz.timezone(tz)) - timedelta(hours=1))
+            start_time = datetime.strptime(self._state.get('last_ingestion_time', datetime.now(pytz.timezone(tz)) - timedelta(minutes=interval_mins)), "%Y-%m-%dT%H:%M:%S.%fZ")
 
         # End time is current time stamp
         end_time = datetime.now(pytz.timezone(tz))
@@ -1652,9 +1656,11 @@ class FireeyeHxConnector(BaseConnector):
         """
         container_dict = dict()
 
-        container_dict['name'] = '{alert_name}'.format(alert_name=alert['assessment'])
-        container_dict['source_data_identifier'] = container_dict['name']
-        container_dict['description'] = alert['assessment']
+        container_dict['name'] = "{alert_name}".format(alert_name=alert['assessment'])
+        container_dict['source_data_identifier'] = "{alert_group_id}".format(alert_group_id=alert['_id'])
+        container_dict['description'] = "{assessment} detected on host {host} for the file {file}".format(assessment=alert['assessment'],
+                                                                                                        host=alert['grouped_by']['host']['hostname'],
+                                                                                                        file=alert['file_full_path'])
 
         container_creation_status, container_creation_msg, container_id = self.save_container(container=container_dict)
 
