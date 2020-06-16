@@ -870,14 +870,19 @@ class FireeyeHxConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
+        params = {}
+
+        params['limit'] = param.get('limit')
+        params['offset'] = param.get('offset')
+
         name = param.get('name', None)
-        search_data = {'limit': 100}
+
         if name is not None:
-            search_data['name'] = name
+            params['name'] = name
 
         endpoint = FIREEYE_LIST_HOST_SET_ENDPOINT
 
-        ret_val, response = self._make_rest_call(endpoint, action_result, params=search_data)
+        ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details

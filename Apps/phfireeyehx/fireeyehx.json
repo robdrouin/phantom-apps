@@ -2761,6 +2761,22 @@
                     "description": "Host set name for filtering",
                     "data_type": "string",
                     "primary": false
+                },
+                "limit": {
+                    "order": 1,
+                    "required": false,
+                    "description": "Limit the number of hosts returned. (HX Defaults to 50)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 50
+                },
+                "offset": {
+                    "order": 2,
+                    "required": false,
+                    "description": "Specifies which record to start with in the response. (HX Defaults to 0)",
+                    "data_type": "numeric",
+                    "primary": false,
+                    "default": 0
                 }
             },
             "output": [
@@ -2777,8 +2793,16 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*._id",
-                    "data_type": "string",
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.entries.*._id",
+                    "data_type": "numeric",
                     "contains": [
                         "fireeye hostsetid"
                     ],
@@ -2789,24 +2813,32 @@
                     "column_name": "ID"
                 },
                 {
-                    "data_path": "action_result.data.*._revision",
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.entries.*._revision",
+                    "data_type": "string",
+                    "column_order": 3,
+                    "column_name": "Revision"
                 },
                 {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.entries.*.name",
+                    "data_type": "string",
+                    "column_order": 1,
+                    "column_name": "Name"
                 },
                 {
-                    "data_path": "action_result.data.*.type",
+                    "data_path": "action_result.data.*.entries.*.type",
                     "example_values": [
                         "venn",
                         "static"
                     ],
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_order": 2,
+                    "column_name": "Type"
                 },
                 {
-                    "data_path": "action_result.data.*.url",
-                    "data_type": "string"
+                    "data_path": "action_result.data.*.entries.*.url",
+                    "data_type": "string",
+                    "column_order": 4,
+                    "column_name": "URL"
                 },
                 {
                     "data_path": "action_result.data",
@@ -2839,7 +2871,8 @@
             "render": {
                 "type": "table"
             }
-        }, {
+        },
+        {
             "action": "get device group",
             "read_only": true,
             "description": "List endpoints in a host set",
@@ -2849,7 +2882,7 @@
                 "host_set_id": {
                     "required": true,
                     "description": "ID of the Host Set",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "fireeyehx hostsetid"
                     ],
@@ -2868,14 +2901,14 @@
                 },
                 {
                     "data_path": "action_result.parameter.host_set_id",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "fireeyehx hostsetid"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*._id",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "fireeyehx agentid"
                     ],
