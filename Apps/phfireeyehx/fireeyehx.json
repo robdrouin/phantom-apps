@@ -2804,7 +2804,7 @@
                     "data_path": "action_result.data.*.entries.*._id",
                     "data_type": "numeric",
                     "contains": [
-                        "fireeye hostsetid"
+                        "fireeyehx hostsetid"
                     ],
                     "example_values": [
                         1069
@@ -3657,7 +3657,12 @@
                     "example_values": [
                         "E8kw2d9uRcjgkfDjWKQqnv"
                     ],
-                    "data_type": "string"
+                    "contains": [
+                        "fireeyehx agentid"
+                    ],
+                    "data_type": "string",
+                    "column_order": 9,
+                    "column_name": "Host ID"
                 },
                 {
                     "data_path": "action_result.data.*.entries.*.host.url",
@@ -3729,7 +3734,6 @@
                     "data_type": "numeric"
                 },
                 {
-                    
                     "data_path": "action_result.data.*.entries.*.request_actor.username",
                     "contains": [
                         "user name"

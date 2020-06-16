@@ -16,7 +16,7 @@ FIREEYE_LIST_HOST_SET_ENDPOINT = 'host_sets'
 FIREEYE_GET_HOST_SET_ENDPOINT = 'host_sets/{hostSetId}'
 # FIREEYE_HOST_SET_STATIC_ENDPOINT = 'host_sets/static'
 # FIREEYE_HOST_SET_DYNAMIC_ENDPOINT = 'host_sets/dynamic'
-FIREEYE_HOST_SET_LIST_HOST_ENDPOINT = 'host_set/{hostSetId}/hosts'
+FIREEYE_HOST_SET_LIST_HOST_ENDPOINT = 'host_sets/{hostSetId}/hosts'
 # Search endpoint
 # FIREEYE_LIST_SEARCHES_ENDPOINT = 'searches'
 # FIREEYE_LIST_SEARCHES_INFO_ENDPOINT = 'searches/counts'
