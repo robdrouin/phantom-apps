@@ -1560,6 +1560,7 @@ class FireeyeHxConnector(BaseConnector):
 
         params = {}
 
+        # Maximum limit of 32-bit signed binary integer. Limit imposed on FE Console.
         params['limit'] = int(2147483647)
 
         # If timezone is not set then cancel. We need the timezone to set the correct query times for ingestion.
@@ -1743,6 +1744,10 @@ class FireeyeHxConnector(BaseConnector):
             else:
                 cef[last_alert] = alert['last_alert'][last_alert]
 
+        # Transform the Alert id into its own field name so we can add a type to it
+        cef['alert_id'] = cef['_id']
+        del cef['_id']
+
         # Transform the hosts id into its own field name so we can add a type to it
         cef['agent']['host_id'] = cef['agent']['_id']
         del cef['agent']['_id']
@@ -1753,7 +1758,7 @@ class FireeyeHxConnector(BaseConnector):
         # Remove the data we just parse. No need to be there anymore when processing the other artifacts.
         del alert['last_alert']
 
-        cef_types["_id"] = ["fireeyehx alert id"]
+        cef_types["alert_id"] = ["fireeyehx alert id"]
         cef_types["md5sum"] = ["fileHash", "fileHashMd5"]
         cef_types["sha256sum"] = ["fileHashSha256"]
         cef_types["sha1sum"] = ["fileHashSha1"]
@@ -1836,7 +1841,7 @@ class FireeyeHxConnector(BaseConnector):
         # Get all the information about the host
         endpoint = FIREEYE_GET_HOSTS_ENDPOINT.format(agentId=alert.get("last_alert").get("agent").get("_id"))
 
-        ret_val, host_data = self._make_rest_call(endpoint, action_result)
+        host_data = self._make_rest_call(endpoint, action_result)
 
         temp_dict = {}
         cef = {}
@@ -1893,6 +1898,7 @@ class FireeyeHxConnector(BaseConnector):
             'quarantine_device': self._handle_quarantine_device,
             'unquarantine_device': self._handle_unquarantine_device,
             'start_acquisition': self._handle_start_acquisition,
+            'start_quarantine_acquisition': self._handle_start_acquisition,
             'get_acquisition_status': self._handle_get_acquisition_status,
             'list_file_acquisitions': self._handle_list_file_acquisitions,
             'list_quarantine_acquisitions': self._handle_list_quarantine_acquisitions,
