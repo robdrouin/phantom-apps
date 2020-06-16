@@ -447,7 +447,7 @@
                     "data_path": "action_result.data.*.last_exploit_block",
                     "example_values": [
                         "2012-01-12T22:36:22Z"
-                        ,
+                    ],
                     "data_type": "string"
                 },
                 {
