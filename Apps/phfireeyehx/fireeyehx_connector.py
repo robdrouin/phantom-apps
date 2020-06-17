@@ -405,7 +405,14 @@ class FireeyeHxConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        endpoint = FIREEYE_GET_HOSTS_ACQUISITIONS_ENDPOINT.format(agentId=param.get('agent_id'))
+        agent_id = param.get('agent_id')
+
+        if param.get('acquisition_type') == "File":
+            endpoint = FIREEYE_LIST_ACQUISITION_FILES_HOST_ENDPOINT.format(agentId=agent_id)
+        elif param.get('acquisition_type') == "Quarantine":
+            endpoint = FIREEYE_LIST_QUARANTINE_FILES_HOST_ENDPOINT.format(agentId=agent_id)
+        elif param.get('acquisition_type') == "Triage":
+            endpoint = FIREEYE_LIST_TRIAGE_HOST_ENDPOINT.format(agentId=agent_id)
 
         ret_val, response = self._make_rest_call(endpoint, action_result)
 
@@ -423,7 +430,7 @@ class FireeyeHxConnector(BaseConnector):
         # BaseConnector will create a textual message based off of the summary dictionary
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_start_acquisition(self, param):
+    def _handle_start_file_acquisition(self, param):
         # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -443,6 +450,34 @@ class FireeyeHxConnector(BaseConnector):
         endpoint = FIREEYE_CREATE_ACQUISITION_ENDPOINT.format(agentId=agent_id)
 
         ret_val, response = self._make_rest_call(endpoint, action_result, method='post', data=file_acq_data)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_start_quarantine_acquisition(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        quarantineId = param.get('quarantine_id')
+
+        endpoint = FIREEYE_CREATE_QUARANTINE_ACQUISITION_ENDPOINT.format(quarantineId=quarantineId)
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, method='post')
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -514,6 +549,7 @@ class FireeyeHxConnector(BaseConnector):
 
         params['limit'] = param.get('limit')
         params['offset'] = param.get('offset')
+        params['sort'] = "_id:descending"
 
         if agent_id is not None:
             params['host._id'] = agent_id
@@ -1548,6 +1584,32 @@ class FireeyeHxConnector(BaseConnector):
         # BaseConnector will create a textual message based off of the summary dictionary
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_quarantine_files(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        endpoint = FIREEYE_LIST_QUARANTINE_FILES_ENDPOINT
+
+        ret_val, response = self._make_rest_call(endpoint, action_result)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_on_poll(self, param):
         # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
@@ -1902,8 +1964,8 @@ class FireeyeHxConnector(BaseConnector):
             'set_quarantine_approved': self._handle_set_quarantine_approved,
             'quarantine_device': self._handle_quarantine_device,
             'unquarantine_device': self._handle_unquarantine_device,
-            'start_acquisition': self._handle_start_acquisition,
-            'start_quarantine_acquisition': self._handle_start_acquisition,
+            'start_file_acquisition': self._handle_start_file_acquisition,
+            'start_quarantine_acquisition': self._handle_start_quarantine_acquisition,
             'get_acquisition_status': self._handle_get_acquisition_status,
             'list_file_acquisitions': self._handle_list_file_acquisitions,
             'list_quarantine_acquisitions': self._handle_list_quarantine_acquisitions,
