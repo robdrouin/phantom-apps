@@ -2015,7 +2015,7 @@ class FireeyeHxConnector(BaseConnector):
         config = self.get_config()
         self._host = config.get('hx_hostname')
         self._port = config.get('hx_port')
-        self._base_url = self._host + ':' + self._port
+        self._base_url = "{}:{}".format(self._host, self._port)
         self._header = {
             'X-Requested-With': 'REST API',
             'Content-type': 'application/json',
