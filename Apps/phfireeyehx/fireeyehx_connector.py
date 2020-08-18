@@ -1671,7 +1671,9 @@ class FireeyeHxConnector(BaseConnector):
 
         # Now post process the data,  uncomment code as you deem fit
         # Add the response into the data section
+        print(alerts_list)
         response = self._flatten_response_data(alerts_list)
+        print(response)
         action_result.add_data(response)
 
         if response:
@@ -1726,7 +1728,7 @@ class FireeyeHxConnector(BaseConnector):
 
         container_dict['name'] = "{alert_name}".format(alert_name=alert['assessment'])
         container_dict['source_data_identifier'] = "{alert_group_id}".format(alert_group_id=alert['_id'])
-        container_dict['description'] = "{assessment} detected on host {host} for the file {file}".format(assessment=alert['assessment'],
+        container_dict['description'] = "FireEye HX alert for {assessment} detected on host {host} for the file {file}".format(assessment=alert['assessment'],
                                                                                                         host=alert['grouped_by']['host']['hostname'],
                                                                                                         file=alert['file_full_path'])
 

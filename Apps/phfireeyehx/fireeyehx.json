@@ -11,7 +11,7 @@
     "product_version_regex": ".*",
     "publisher": "Phantom",
     "license": "Copyright (c) 2020 Splunk Inc.",
-    "app_version": "2.0.0",
+    "app_version": "2.0.1",
     "utctime_updated": "2020-03-31T15:16:54.000000Z",
     "package_name": "phantom_fireeyehx",
     "main_module": "fireeyehx_connector.pyc",
