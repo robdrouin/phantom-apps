@@ -1671,9 +1671,7 @@ class FireeyeHxConnector(BaseConnector):
 
         # Now post process the data,  uncomment code as you deem fit
         # Add the response into the data section
-        print(alerts_list)
         response = self._flatten_response_data(alerts_list)
-        print(response)
         action_result.add_data(response)
 
         if response:
