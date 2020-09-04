@@ -1868,10 +1868,10 @@
             }
         },
         {
-            "action": "set quarantine approved",
+            "action": "approve quarantine",
             "read_only": false,
             "description": "Approve containment request for host",
-            "identifier": "set_quarantine_approved",
+            "identifier": "approve_quarantine",
             "type": "contain",
             "parameters": {
                 "agent_id": {
@@ -6303,6 +6303,435 @@
                     ],
                     "column_order": 0,
                     "column_name": "Alert Group ID"
+                },
+                {
+                    "data_path": "action_result.data.*._id",
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx alertgroup id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.acknowledgement.acknowledged",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.acknowledgement.acknowledged_by",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.acknowledgement.acknowledged_time",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.acknowledgement.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.acknowledgement.comment_update_time",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assessment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.created_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.details",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.dispositions",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.file_full_path",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.first_event_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.generic_alert_badge",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.generic_alert_label",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.detected_by",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.file-path",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.host._id",
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx agentid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.host.hostname",
+                    "data_type": "string",
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.host.primary_ip_address",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.host.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.infection-name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.grouped_by.*.md5sum",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.has_fp_disposition",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*._id",
+                    "data_type": "numeric",
+                    "contains": [
+                        "fireeyehx alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.agent._id",
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx agentid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.agent.containment_state",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.agent.hostname",
+                    "data_type": "string",
+                    "contains": [
+                        "host name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.agent.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.condition",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.decorator_sources",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.decorator_statuses",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.decorators",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.detections.*.detection",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.os-details.*.$.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.os-details.*.$.*.os-arch",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.os-details.*.$.*.os-language",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.os-details.*.$.*.patch",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.os-details.*.$.*.version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scan-statistics.*.total-scan-time-in-ms",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scan-type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.actor-process.*.path",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.actor-process.*.pid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.actor-process.*.path",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.actor-process.*.user.*.domain",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.actor-process.*.user.*.username",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.file-path",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.file-event.*.sub-type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.scanned-object.*.scanned-object-type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.alert-version",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.content-version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.correlation-id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.engine-version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.mg-content-version",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.mg-engine-version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.product-version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.timestamp",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.whitelist-content-version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.whitelist-schema-version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.xmlns",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.xmlns:xsi",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.event_values.*.system-data.*.xsi:schemaLocation",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.is_false_positive",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.matched_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.md5values",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.reported_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.resolution",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.source",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_alert.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.last_event_at",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.route",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.source",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.stats.*.events",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "example_values": [
+                        "Important data: value"
+                    ],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "example_values": [
+                        1
+                    ],
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "example_values": [
+                        1
+                    ],
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)",
+            "render": {
+                "type": "table"
+            }
+        },
+        {
+            "action": "update alert group",
+            "identifier": "update_alert_group",
+            "read_only": true,
+            "description": "Updates the alert group(s) for Acknowledge or Unacknowledge status",
+            "type": "investigate",
+            "parameters": {
+                "alert_group_id": {
+                    "required": true,
+                    "description": "ID(s) of the alert group to update. Comma seperated list allowed",
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx alertgroup id"
+                    ],
+                    "allow_list": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "acknowledge": {
+                    "required": true,
+                    "description": "Status to update the alert groups(s) with",
+                    "data_type": "boolean",
+                    "value_list": [
+                        "True",
+                        "False"
+                    ],
+                    "primary": false,
+                    "order": 1
+                },
+                "comment": {
+                    "required": false,
+                    "description": "Comment to add for the alert group(s)",
+                    "data_type": "string",
+                    "primary": false,
+                    "order": 2
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "example_values": [
+                        "success"
+                    ],
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.alert_group_id",
+                    "data_type": "string",
+                    "contains": [
+                        "fireeyehx alertgroup id"
+                    ],
+                    "example_values": [
+                        "3B5F121536786496889B17"
+                    ],
+                    "column_order": 0,
+                    "column_name": "Alert Group ID"
+                },
+                {
+                    "data_path": "action_result.parameter.acknowledge",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.parameter.comment",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*._id",

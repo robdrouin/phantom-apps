@@ -871,7 +871,7 @@ class FireeyeHxConnector(BaseConnector):
         # BaseConnector will create a textual message based off of the summary dictionary
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_set_quarantine_approved(self, param):
+    def _handle_approve_quarantine(self, param):
         # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -1099,6 +1099,49 @@ class FireeyeHxConnector(BaseConnector):
         endpoint = FIREEYE_ALERT_GROUP_ENDPOINT.format(alertGroupId=param.get('alert_group_id'))
 
         ret_val, response = self._make_rest_call(endpoint, action_result)
+
+        if (phantom.is_fail(ret_val)):
+            # the call to the 3rd party device or service failed, action result should contain all the error details
+            # for now the return is commented out, but after implementation, return from here
+            return action_result.get_status()
+
+        # Now post process the data,  uncomment code as you deem fit
+        # Add the response into the data section
+        response = self._flatten_response_data(response)
+        action_result.add_data(response)
+
+        # Return success, no need to set the message, only the status
+        # BaseConnector will create a textual message based off of the summary dictionary
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_update_alert_group(self, param):
+        # Implement the handler here
+        # use self.save_progress(...) to send progress messages back to the platform
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        params = {}
+        ids = param.get("alert_group_id", None).split(',')
+
+        if param.get("acknowledge") == "True":
+            acknowledged = True
+        else:
+            acknowledged = False
+
+        comment = param.get("comment", "N/A")
+
+        if len(ids) > 1:
+            ids = ids = ",".join(ids)
+            params = {"alert_ids": [ids], "acknowledgement": {"acknowledged": acknowledged, "comment": comment}}
+            endpoint = FIREEYE_LIST_ALERT_GROUPS_ENDPOINT
+        else:
+            ids = ",".join(ids)
+            params = {"acknowledgement": {"acknowledged": acknowledged, "comment": comment}}
+            endpoint = FIREEYE_ALERT_GROUP_ENDPOINT.format(alertGroupId=ids)
+
+        ret_val, response = self._make_rest_call(endpoint, action_result, method='patch', json=params)
 
         if (phantom.is_fail(ret_val)):
             # the call to the 3rd party device or service failed, action result should contain all the error details
@@ -1961,7 +2004,7 @@ class FireeyeHxConnector(BaseConnector):
             'test_connectivity': self._handle_test_connectivity,
             'get_version': self._handle_get_version,
             'get_quarantine_status': self._handle_get_quarantine_status,
-            'set_quarantine_approved': self._handle_set_quarantine_approved,
+            'approve_quarantine': self._handle_approve_quarantine,
             'quarantine_device': self._handle_quarantine_device,
             'unquarantine_device': self._handle_unquarantine_device,
             'start_file_acquisition': self._handle_start_file_acquisition,
@@ -1982,6 +2025,7 @@ class FireeyeHxConnector(BaseConnector):
             'get_host_acquisitions': self._handle_get_host_acquisitions,
             'get_alert': self._handle_get_alert,
             'suppress_alert': self._handle_suppress_alert,
+            'update_alert_group': self._handle_update_alert_group,
             'list_alerts': self._handle_list_alerts,
             'list_alert_groups': self._handle_list_alert_groups,
             'get_alert_group': self._handle_get_alert_group,
