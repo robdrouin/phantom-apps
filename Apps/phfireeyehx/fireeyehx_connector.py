@@ -1666,7 +1666,7 @@ class FireeyeHxConnector(BaseConnector):
         # Get the config to get timezone parameter
         config = self.get_config()
 
-        interval_mins = int(config.get('ingest').get('interval_mins'))
+        interval_mins = int(config.get('ingest').get('interval_mins', 1))
 
         params = {}
 
